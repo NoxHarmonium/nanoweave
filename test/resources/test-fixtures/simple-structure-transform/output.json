@@ -1,0 +1,25 @@
+{
+  "orderDetails": {
+    "firstName": "John",
+    "middleName": "Bartholomew",
+    "lastName": "Smith",
+    "title": "Mr",
+    "streetName": "Fake House, 123 Fake St",
+    "city": "Fakington",
+    "state": "Fakenstien",
+    "postcode": "123fake",
+    "country": "Fakaria",
+    "entries": [
+      {
+        "orderId": "123456",
+        "productId": "654321",
+        "quantity": 4,
+        "totalCost": "4.12"
+      }
+    ]
+  },
+  "stringTest": "test",
+  "floatTest": 1.2,
+  "boolTest": true,
+  "nilTest": null
+}

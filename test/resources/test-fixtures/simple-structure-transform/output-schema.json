@@ -1,0 +1,177 @@
+{
+  "$id": "http://example.com/example.json",
+  "type": "object",
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "properties": {
+    "orderDetails": {
+      "$id": "/properties/orderDetails",
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "$id": "/properties/orderDetails/properties/firstName",
+          "type": "string",
+          "title": "The Firstname Schema ",
+          "default": "",
+          "examples": [
+            "John"
+          ]
+        },
+        "middleName": {
+          "$id": "/properties/orderDetails/properties/middleName",
+          "type": "string",
+          "title": "The Middlename Schema ",
+          "default": "",
+          "examples": [
+            "Bartholomew"
+          ]
+        },
+        "lastName": {
+          "$id": "/properties/orderDetails/properties/lastName",
+          "type": "string",
+          "title": "The Lastname Schema ",
+          "default": "",
+          "examples": [
+            "Smith"
+          ]
+        },
+        "title": {
+          "$id": "/properties/orderDetails/properties/title",
+          "type": "string",
+          "title": "The Title Schema ",
+          "default": "",
+          "examples": [
+            "Mr"
+          ]
+        },
+        "streetName": {
+          "$id": "/properties/orderDetails/properties/streetName",
+          "type": "string",
+          "title": "The Streetname Schema ",
+          "default": "",
+          "examples": [
+            "Fake House, 123 Fake St"
+          ]
+        },
+        "city": {
+          "$id": "/properties/orderDetails/properties/city",
+          "type": "string",
+          "title": "The City Schema ",
+          "default": "",
+          "examples": [
+            "Fakington"
+          ]
+        },
+        "state": {
+          "$id": "/properties/orderDetails/properties/state",
+          "type": "string",
+          "title": "The State Schema ",
+          "default": "",
+          "examples": [
+            "Fakenstien"
+          ]
+        },
+        "postcode": {
+          "$id": "/properties/orderDetails/properties/postcode",
+          "type": "string",
+          "title": "The Postcode Schema ",
+          "default": "",
+          "examples": [
+            "123fake"
+          ]
+        },
+        "country": {
+          "$id": "/properties/orderDetails/properties/country",
+          "type": "string",
+          "title": "The Country Schema ",
+          "default": "",
+          "examples": [
+            "Fakaria"
+          ]
+        },
+        "entries": {
+          "$id": "/properties/orderDetails/properties/entries",
+          "type": "array",
+          "items": {
+            "$id": "/properties/orderDetails/properties/entries/items",
+            "type": "object",
+            "properties": {
+              "orderId": {
+                "$id": "/properties/orderDetails/properties/entries/items/properties/orderId",
+                "type": "string",
+                "title": "The Orderid Schema ",
+                "default": "",
+                "examples": [
+                  "123456"
+                ]
+              },
+              "productId": {
+                "$id": "/properties/orderDetails/properties/entries/items/properties/productId",
+                "type": "string",
+                "title": "The Productid Schema ",
+                "default": "",
+                "examples": [
+                  "654321"
+                ]
+              },
+              "quantity": {
+                "$id": "/properties/orderDetails/properties/entries/items/properties/quantity",
+                "type": "integer",
+                "title": "The Quantity Schema ",
+                "default": 0,
+                "examples": [
+                  "654321"
+                ]
+              },
+              "totalCost": {
+                "$id": "/properties/orderDetails/properties/entries/items/properties/totalCost",
+                "type": "string",
+                "title": "The Totalcost Schema ",
+                "default": "",
+                "examples": [
+                  "4.12"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "stringTest": {
+      "$id": "/properties/stringTest",
+      "type": "string",
+      "title": "The Stringtest Schema ",
+      "default": "",
+      "examples": [
+        "test"
+      ]
+    },
+    "floatTest": {
+      "$id": "/properties/floatTest",
+      "type": "number",
+      "title": "The Floattest Schema ",
+      "default": 0,
+      "examples": [
+        1.2000000476837158
+      ]
+    },
+    "boolTest": {
+      "$id": "/properties/boolTest",
+      "type": "boolean",
+      "title": "The Booltest Schema ",
+      "default": false,
+      "examples": [
+        true
+      ]
+    },
+    "nilTest": {
+      "$id": "/properties/nilTest",
+      "type": "null",
+      "title": "The Niltest Schema ",
+      "default": null,
+      "examples": [
+        null
+      ]
+    }
+  }
+}

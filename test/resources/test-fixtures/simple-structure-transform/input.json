@@ -1,0 +1,23 @@
+{
+  "person": {
+    "first_name": "John",
+    "middle_name": "Bartholomew",
+    "last_name": "Smith",
+    "salutation": "Mr"
+  },
+  "address": {
+    "street_name": "Fake House, 123 Fake St",
+    "suburb": "Fakington",
+    "state": "Fakenstien",
+    "postcode": "123fake",
+    "country": "Fakaria"
+  },
+  "orders": [
+    {
+      "order_id": "123456",
+      "product_id": "654321",
+      "quantity": 4,
+      "total_cost": "4.12"
+    }
+  ]
+}
