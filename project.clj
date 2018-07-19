@@ -10,9 +10,9 @@
                  [org.clojure/data.json "0.2.6"]]
   :main ^:skip-aot jweave.core
   :target-path "target/%s"
-
+  :plugins [[lein-zprint "0.3.9"]]
   :profiles {
              :uberjar {:aot :all}
-              :dev {:resource-paths ["test/resources"]}
+             :dev {:resource-paths ["test/resources"]}
              }
   )

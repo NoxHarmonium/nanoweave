@@ -6,23 +6,19 @@
         jweave.parser.ast)
   (:require [clojure.data.json :as json]))
 
-; Test with
-; lein run -i test\resources\test-fixtures\simple-structure-transform\input.json -o output.json -j test\resources\test-fixtures\simple-structure-transform\transform.jweave transform
+(defn resolve-ast
+  [ast input]
+  (postwalk #(if (satisfies? Resolvable %) (resolve % input) %) ast))
 
-(defn resolve-ast [ast input]
-  (postwalk
-    #(if (satisfies? Resolvable %) (resolve % input) %)
-    ast))
+(defn transform
+  [input jweave]
+  (let [ast (value jvalue jweave)
+        result (resolve-ast ast input)]
+    result))
 
-(defn transform [input, jweave]
-  (def ast (value jvalue jweave))
-  (def result (resolve-ast ast input))
-  result)
-
-(defn transform-files [input-file, output-file, jweave-file]
-  (def input (json/read-str (slurp input-file)))
-  (def jweave (slurp jweave-file))
-  (def output (json/write-str (transform input jweave)))
-  (spit output-file output))
-
-
+(defn transform-files
+  [input-file output-file jweave-file]
+  (let [input (json/read-str (slurp input-file))
+        jweave (slurp jweave-file)
+        output (json/write-str (transform input jweave))]
+    (spit output-file output)))
