@@ -11,10 +11,10 @@
     "country": "Fakaria",
     "entries": [
       {
-        "orderId": "123456",
-        "productId": "654321",
+        "order_id": "123456",
+        "product_id": "654321",
         "quantity": 4,
-        "totalCost": "4.12"
+        "total_cost": "4.12"
       }
     ]
   },

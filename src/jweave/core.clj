@@ -62,5 +62,5 @@
     (if exit-message
       (exit (if ok? 0 1) exit-message)
       (case action
-        "transform"  (parser/transform (:input options) (:output options) (:jweave options))
+        "transform"  (parser/transform-files (:input options) (:output options) (:jweave options))
         ))))

@@ -1,1 +1,25 @@
-{"nilTest":null,"boolTest":true,"floatTest":1.2,"orderDetails":{"postcode":"123fake","country":"Fakaria","city":"Fakington","lastName":"Smith","middleName":"Bartholomew","firstName":"John","title":"Mr","entries":[{"order_id":"123456","product_id":"654321","quantity":4,"total_cost":"4.12"}],"state":"Fakenstien","streetName":"Fake House, 123 Fake St"},"stringTest":"test"}
+{
+  "nilTest":null,
+  "boolTest":true,
+  "floatTest":1.2,
+  "orderDetails":{
+    "postcode":"123fake",
+    "country":"Fakaria",
+    "city":"Fakington",
+    "lastName":"Smith",
+    "middleName":"Bartholomew",
+    "firstName":"John",
+    "title":"Mr",
+    "entries":[
+      {
+        "order_id":"123456",
+        "product_id":"654321",
+        "quantity":4,
+        "total_cost":"4.12"
+      }
+    ],
+    "state":"Fakenstien",
+    "streetName":"Fake House, 123 Fake St"
+  },
+  "stringTest":"test"
+}

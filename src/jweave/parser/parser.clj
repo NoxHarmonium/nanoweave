@@ -14,9 +14,15 @@
     #(if (satisfies? Resolvable %) (resolve % input) %)
     ast))
 
-(defn transform [input-file, output-file, jweave-file]
-  (def input (json/read-str (slurp input-file)))
-  (def ast (value jvalue (slurp jweave-file)))
+(defn transform [input, jweave]
+  (def ast (value jvalue jweave))
   (def result (resolve-ast ast input))
-  (pprint result)
-  (spit output-file (json/write-str result)))
+  result)
+
+(defn transform-files [input-file, output-file, jweave-file]
+  (def input (json/read-str (slurp input-file)))
+  (def jweave (slurp jweave-file))
+  (def output (json/write-str (transform input jweave)))
+  (spit output-file output))
+
+

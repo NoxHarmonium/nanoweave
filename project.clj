@@ -10,4 +10,9 @@
                  [org.clojure/data.json "0.2.6"]]
   :main ^:skip-aot jweave.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+
+  :profiles {
+             :uberjar {:aot :all}
+              :dev {:resource-paths ["test/resources"]}
+             }
+  )
