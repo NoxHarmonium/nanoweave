@@ -1,11 +1,10 @@
 (ns jweave.parser.ast
-  (:require [schema.core :as s ;:include-macros true ;; cljs only
-            ]))
+  (:require [schema.core :as s]))
 
 (defprotocol Resolvable
   "Describes an AST node that can be resolved with an input.
   Used to transform AST trees into a final value."
-  (resolve [this input] "Takes an input and resolves it to a file value."))
+  (resolve-value [this input] "Takes an input and resolves it to a file value."))
 
 (s/defrecord StringLit [value :- s/Str])
 (s/defrecord FloatLit [value :- s/Str])
@@ -15,12 +14,12 @@
 
 (extend-protocol Resolvable
   StringLit
-    (resolve [this _] (:value this))
+    (resolve-value [this _] (:value this))
   FloatLit
-    (resolve [this _] (:value this))
+    (resolve-value [this _] (:value this))
   BoolLit
-    (resolve [this _] (:value this))
+    (resolve-value [this _] (:value this))
   NilLit
-    (resolve [this _] (:value this))
+    (resolve-value [this _] (:value this))
   ExprPropAccess
-    (resolve [this input] (reduce #(get %1 %2) input (:value this))))
+    (resolve-value [this input] (reduce #(get %1 %2) input (:value this))))

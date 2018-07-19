@@ -1,9 +1,8 @@
 (ns ^{:doc "The jweave transform parser.", :author "Sean Dawson"}
     jweave.parser.definitions
-  (:use [blancas.kern.core] [blancas.kern.lexer.basic] [jweave.parser.ast])
-  (:require jweave.parser.ast)
-  (:import [jweave.parser.ast StringLit FloatLit BoolLit NilLit
-            ExprPropAccess]))
+  (:use [blancas.kern.core]
+        [blancas.kern.lexer.basic]
+        [jweave.parser.ast]))
 
 ; -- Grammar --
 ; pair          ::=  string ':' (json | expr)

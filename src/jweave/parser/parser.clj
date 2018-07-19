@@ -1,18 +1,17 @@
 (ns jweave.parser.parser
-  (:use blancas.kern.core
-        clojure.pprint
-        jweave.parser.definitions
-        clojure.walk
-        jweave.parser.ast)
-  (:require [clojure.data.json :as json]))
+  (:use [clojure.walk :only [postwalk]])
+  (:require [blancas.kern.core :as kern]
+            [clojure.data.json :as json]
+            [jweave.parser.ast :as ast]
+            [jweave.parser.definitions :as def]))
 
 (defn resolve-ast
   [ast input]
-  (postwalk #(if (satisfies? Resolvable %) (resolve % input) %) ast))
+  (postwalk #(if (satisfies? ast/Resolvable %) (ast/resolve-value % input) %) ast))
 
 (defn transform
   [input jweave]
-  (let [ast (value jvalue jweave)
+  (let [ast (kern/value def/jvalue jweave)
         result (resolve-ast ast input)]
     result))
 

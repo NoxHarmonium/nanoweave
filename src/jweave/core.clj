@@ -3,7 +3,6 @@
             [clojure.string :as string]
             [clojure.java.io :as io]
             [jweave.parser.parser :as parser])
-  (:use clojure.pprint)
   (:gen-class))
 
 (def cli-options
