@@ -1,8 +1,8 @@
-(ns ^{:doc "The jweave transform parser.", :author "Sean Dawson"}
-    jweave.parser.definitions
+(ns ^{:doc "The nanoweave transform parser.", :author "Sean Dawson"}
+    nanoweave.parser.definitions
   (:use [blancas.kern.core]
         [blancas.kern.lexer.basic]
-        [jweave.parser.ast]))
+        [nanoweave.parser.ast]))
 
 ; -- Grammar --
 ; pair          ::=  string ':' (json | expr)

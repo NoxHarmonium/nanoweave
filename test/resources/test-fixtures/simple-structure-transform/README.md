@@ -1,7 +1,7 @@
 # Simple Structure Transform
 
 Passing this test is the first milestone
-for the jweave project.
+for the nanoweave project.
 
 It is a simple structural transform 
 that does not transform

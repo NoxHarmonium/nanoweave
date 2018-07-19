@@ -1,16 +1,16 @@
-(ns jweave.core
+(ns nanoweave.core
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as string]
             [clojure.java.io :as io]
-            [jweave.parser.parser :as parser])
+            [nanoweave.parser.parser :as parser])
   (:gen-class))
 
 (def cli-options
   [["-i" "--input PATH" "Path to input file" :validate
     [#(.exists (io/as-file %1)) "Input path must exist"]]
    ["-o" "--output PATH" "Path to output file"]
-   ["-j" "--jweave PATH" "Path to jweave definition file" :validate
-    [#(.exists (io/as-file %1)) "jweave definition path must exist"]]
+   ["-n" "--nweave PATH" "Path to nanoweave definition file" :validate
+    [#(.exists (io/as-file %1)) "nweave definition path must exist"]]
    ["-v" nil
     "Verbosity level; may be specified multiple times to increase value" :id
     :verbosity :default 0 :assoc-fn (fn [m k _] (update-in m [k] inc))]
@@ -19,8 +19,8 @@
 (defn usage
   [options-summary]
   (->>
-    ["Performs actions on an input file according to a given jweave definition file ."
-     "" "Usage: jweave [options] transform" "" "Options:" options-summary ""
+    ["Performs actions on an input file according to a given nanoweave definition file."
+     "" "Usage: nanoweave [options] transform" "" "Options:" options-summary ""
      "Actions:" "  transform\tTransforms the given input file" ""]
     (string/join \newline)))
 
@@ -57,4 +57,4 @@
       (case action
         "transform" (parser/transform-files (:input options)
                                             (:output options)
-                                            (:jweave options))))))
+                                            (:nweave options))))))

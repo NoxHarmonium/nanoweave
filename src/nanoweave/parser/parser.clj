@@ -1,23 +1,23 @@
-(ns jweave.parser.parser
+(ns nanoweave.parser.parser
   (:use [clojure.walk :only [postwalk]])
   (:require [blancas.kern.core :as kern]
             [clojure.data.json :as json]
-            [jweave.parser.ast :as ast]
-            [jweave.parser.definitions :as def]))
+            [nanoweave.parser.ast :as ast]
+            [nanoweave.parser.definitions :as def]))
 
 (defn resolve-ast
   [ast input]
   (postwalk #(if (satisfies? ast/Resolvable %) (ast/resolve-value % input) %) ast))
 
 (defn transform
-  [input jweave]
-  (let [ast (kern/value def/jvalue jweave)
+  [input nweave]
+  (let [ast (kern/value def/jvalue nweave)
         result (resolve-ast ast input)]
     result))
 
 (defn transform-files
-  [input-file output-file jweave-file]
+  [input-file output-file nweave-file]
   (let [input (json/read-str (slurp input-file))
-        jweave (slurp jweave-file)
-        output (json/write-str (transform input jweave))]
+        nweave (slurp nweave-file)
+        output (json/write-str (transform input nweave))]
     (spit output-file output)))

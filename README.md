@@ -1,34 +1,83 @@
-# jweave
+# nanoweave
 
 A JSONesqe language for transforming 
 the structure and values of documents.
 
-The intended use of this project 
-is in APIs that connect different services
-that use different data formats.
+The intended use of this project
+is to create a way to
+connect different API services,
+that use different data formats,
+in an easy declarative way.
 
-## Installation
+The ultimate goal of this project
+would be to create a simple system service
+with nothing but an 
+OpenAPI or RAML API spec
+and a nanoweave file to describe
+the transformations between services.
 
-Download from http://github.com/noxharmonium/jweave.
+This is an ambitious goal
+at the moment is more of a project
+to learn Clojure and AST parsing.
+
+## Todo List
+
+As you can see here,
+there are lot of features
+I would like to implement.
+
+### Input/Output Formats
+
+- [X] JSON Support
+- [ ] XML Support
+- [ ] CSV Support
+
+### Language Features
+
+- [X] Structural Transforms
+- [ ] String Interpolation
+- [ ] Functions (Lambdas)
+- [ ] Variables
+- [ ] Logic Operators (or, and, xor)
+- [ ] Math Operators (+, -, /, *, %, ...)
+- [ ] Functional Operators (map, filter, reduce, sum, ...)
+- [ ] Scopes
+- [ ] Java Interop
+- [ ] Array Access
+- [ ] Ranges
+- [ ] Flow Control/Pattern Matching
+- [ ] Concatenation
+- [ ] Type Checking (is?)
+- [ ] Type Coercion
+- [ ] String Manipulation
+
+### Tools
+- [X] Command Line Interface
+- [ ] API Service Wrapper
+- [ ] Graphical UI For Editing nanoweave files
+- [ ] IDE Autocomplete from Schema
 
 ## Usage
 
-FIXME: explanation
-
-    $ java -jar jweave-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
+    Performs actions on an input file according to a given nanoweave definition file .
+    
+    Usage: nanoweave [options] transform
+    
+    Options:
+      -i, --input PATH   Path to input file
+      -o, --output PATH  Path to output file
+      -n, --nweave PATH  Path to nanoweave definition file
+      -v                 Verbosity level; may be specified multiple times to increase value
+      -h, --help
+    
+    Actions:
+      transform     Transforms the given input file
 
 ## Examples
 
-...
+You can run nanoweave using `lein`. 
 
-### Bugs
-
-...
-
+    lein run -i test\resources\test-fixtures\simple-structure-transform\input.json -o output.json -j test\resources\test-fixtures\simple-structure-transform\transform.nweave transform
 
 ## License
 

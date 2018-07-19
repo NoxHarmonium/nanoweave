@@ -1,4 +1,4 @@
-(ns jweave.parser.ast
+(ns nanoweave.parser.ast
   (:require [schema.core :as s]))
 
 (defprotocol Resolvable
