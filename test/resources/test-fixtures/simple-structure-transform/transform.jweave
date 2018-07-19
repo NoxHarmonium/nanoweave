@@ -1,15 +1,15 @@
 {
   "orderDetails": {
-    "firstName": input.person.first_name,
-    "middleName": input.person.middle_name,
-    "lastName": input.person.last_name,
-    "title": input.person.salutation,
-    "streetName": input.address.street_name,
-    "city": input.address.suburb,
-    "state": input.address.state,
-    "postcode": input.address.postcode,
-    "country": input.address.country,
-    "entries": input.orders
+    "firstName": person.first_name,
+    "middleName": person.middle_name,
+    "lastName": person.last_name,
+    "title": person.salutation,
+    "streetName": address.street_name,
+    "city": address.suburb,
+    "state": address.state,
+    "postcode": address.postcode,
+    "country": address.country,
+    "entries": orders
   },
   "stringTest": "test",
   "floatTest": 1.2,

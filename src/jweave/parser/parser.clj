@@ -2,12 +2,21 @@
   (:use blancas.kern.core
         clojure.pprint
         jweave.parser.definitions
-        clojure.algo.generic.functor))
+        clojure.walk
+        jweave.parser.ast)
+  (:require [clojure.data.json :as json]))
 
-(defn run-ast [ast]
-  fmap (fn [val] fn? val) ast)
+; Test with
+; lein run -i test\resources\test-fixtures\simple-structure-transform\input.json -o output.json -j test\resources\test-fixtures\simple-structure-transform\transform.jweave transform
+
+(defn resolve-ast [ast input]
+  (postwalk
+    #(if (satisfies? Resolvable %) (resolve % input) %)
+    ast))
 
 (defn transform [input-file, output-file, jweave-file]
-  (def ast (run jvalue (slurp jweave-file)))
-  (def result (run-ast ast))
-  (pprint result))
+  (def input (json/read-str (slurp input-file)))
+  (def ast (value jvalue (slurp jweave-file)))
+  (def result (resolve-ast ast input))
+  (pprint result)
+  (spit output-file (json/write-str result)))

@@ -9,8 +9,7 @@
 (def cli-options
   [["-i" "--input PATH" "Path to input file"
     :validate [#(.exists (io/as-file %1)) "Input path must exist"]]
-   ["-o" "--output PATH" "Path to output file"
-    :validate [#(.exists (io/as-file %1)) "Output path must exist"]]
+   ["-o" "--output PATH" "Path to output file"]
    ["-j" "--jweave PATH" "Path to jweave definition file"
     :validate [#(.exists (io/as-file %1)) "jweave definition path must exist"]]
    ["-v" nil "Verbosity level; may be specified multiple times to increase value"

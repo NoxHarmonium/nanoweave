@@ -6,8 +6,8 @@
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "0.3.7"]
-                 [org.clojure/algo.generic "0.1.2"]
-                 [prismatic/schema "1.1.9"]]
+                 [prismatic/schema "1.1.9"]
+                 [org.clojure/data.json "0.2.6"]]
   :main ^:skip-aot jweave.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
