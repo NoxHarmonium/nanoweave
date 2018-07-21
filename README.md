@@ -48,7 +48,7 @@ I would like to implement.
 - [ ] Array Access
 - [ ] Ranges
 - [ ] Flow Control/Pattern Matching
-- [ ] Concatenation
+- [X] Concatenation
 - [ ] Type Checking (is?)
 - [ ] Type Coercion
 - [ ] String Manipulation

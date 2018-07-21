@@ -1,6 +1,7 @@
 (ns ^{:doc "The nanoweave transform parser.", :author "Sean Dawson"}
     nanoweave.parser.definitions
   (:use [blancas.kern.core]
+        [blancas.kern.expr]
         [blancas.kern.lexer.basic]
         [nanoweave.parser.ast]))
 
@@ -18,24 +19,27 @@
 (def wrapped-bool-lit (>>= bool-lit (fn [v] (return (->BoolLit v)))))
 (def wrapped-nil-lit (>>= nil-lit (fn [_] (return (->NilLit)))))
 
+(def concat-op
+  "Parses one of the relational operators."
+  (bind [op (token "++")]
+        (return ({"++" ->ConcatOp} op))))
+
 ; Custom base parsers
 (defn dot-sep [p] (sep-by dot (lexeme p)))
 
-(declare jvalue)
+(declare expr)
 
 (def obj-ref
   "Parses the rule:  prop-access := identifier ('.' identifier)*"
   (>>= (dot-sep identifier) (fn [keys] (return (->ExprPropAccess keys)))))
 
-(def expr "Parses the rule:  expr := Identifier ('.' Identifier)*" obj-ref)
-
 (def pair
-  "Parses the rule:  pair := String ':' jvalue"
-  (bind [f string-lit _ colon v jvalue] (return [f v])))
+  "Parses the rule:  pair := String ':' expr"
+  (bind [f string-lit _ colon v expr] (return [f v])))
 
 (def array
-  "Parses the rule:  array := '[' (jvalue (',' jvalue)*)* ']'"
-  (brackets (comma-sep (fwd jvalue))))
+  "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
+  (brackets (comma-sep (fwd expr))))
 
 (def object
   "Parses the rule:  object := '{' (pair (',' pair)*)* '}'"
@@ -50,4 +54,7 @@
        wrapped-nil-lit
        array
        object
-       expr))
+       obj-ref
+       (parens (fwd expr))))
+
+(def expr (chainl1 jvalue concat-op))

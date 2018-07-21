@@ -1,0 +1,4 @@
+{
+  "name": person.salutation ++ " " ++ person.first_name ++ " " ++ person.middle_name ++ " " ++ person.last_name,
+  "saluation": person.salutation
+}

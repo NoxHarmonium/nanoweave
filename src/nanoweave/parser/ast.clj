@@ -11,8 +11,11 @@
 (s/defrecord BoolLit [value :- s/Str])
 (s/defrecord NilLit [])
 (s/defrecord ExprPropAccess [value :- [s/Str]])
+(s/defrecord ConcatOp [left :- [Resolvable] right :- [Resolvable]])
 
 (extend-protocol Resolvable
+  String
+    (resolve-value [this _] this)
   StringLit
     (resolve-value [this _] (:value this))
   FloatLit
@@ -22,4 +25,7 @@
   NilLit
     (resolve-value [this _] (:value this))
   ExprPropAccess
-    (resolve-value [this input] (reduce #(get %1 %2) input (:value this))))
+    (resolve-value [this input] (reduce #(get %1 %2) input (:value this)))
+  ConcatOp
+    (resolve-value [this input] (str (resolve-value (:left this) input)
+                                     (resolve-value (:right this) input))))

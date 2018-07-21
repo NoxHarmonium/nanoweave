@@ -1,5 +1,6 @@
 (ns nanoweave.parser.parser
-  (:use [clojure.walk :only [postwalk]])
+  (:use [clojure.walk :only [postwalk]]
+        [clojure.pprint])
   (:require [blancas.kern.core :as kern]
             [clojure.data.json :as json]
             [nanoweave.parser.ast :as ast]
@@ -11,7 +12,7 @@
 
 (defn transform
   [input nweave]
-  (let [ast (kern/value def/jvalue nweave)
+  (let [ast (kern/value def/expr nweave)
         result (resolve-ast ast input)]
     result))
 
