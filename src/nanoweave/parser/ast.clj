@@ -28,6 +28,10 @@
     (resolve-value resolver input)
     resolver))
 
+(defn handle-bin-op [this input op]
+  (op (safe-resolve-value (:left this) input)
+       (safe-resolve-value (:right this) input)))
+
 (extend-protocol Resolvable
   InputLit
   (resolve-value [_ input] input)
@@ -51,23 +55,17 @@
   (resolve-value [this input] (get (:left this)
                                    (safe-resolve-value (:right this) input)))
   ConcatOp
-  (resolve-value [this input] (str (safe-resolve-value (:left this) input)
-                                   (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input str))
   AddOp
-  (resolve-value [this input] (+ (safe-resolve-value (:left this) input)
-                                 (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input +))
   SubOp
-  (resolve-value [this input] (- (safe-resolve-value (:left this) input)
-                                 (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input -))
   MultOp
-  (resolve-value [this input] (* (safe-resolve-value (:left this) input)
-                                 (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input *))
   DivOp
-  (resolve-value [this input] (/ (safe-resolve-value (:left this) input)
-                                 (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input /))
   ModOp
-  (resolve-value [this input] (mod (safe-resolve-value (:left this) input)
-                                   (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input mod))
   NotOp
   (resolve-value [this input] (not (safe-resolve-value (:value this) input)))
   NegOp
