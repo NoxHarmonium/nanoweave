@@ -6,7 +6,6 @@
   Used to transform AST trees into a final value."
   (resolve-value [this input] "Takes an input and resolves it to a file value."))
 
-(s/defrecord InputLit [])
 (s/defrecord IdentiferLit [value :- s/Str])
 (s/defrecord StringLit [value :- s/Str])
 (s/defrecord FloatLit [value :- s/Num])
@@ -23,20 +22,32 @@
 (s/defrecord NegOp [value :- Resolvable])
 
 (defn safe-resolve-value [resolver input]
+  "Resolves the input if the given resolver is not nil and conforms to Resolvable,
+  otherwise it will just return the input."
   (if (and (some? resolver)
            (satisfies? Resolvable resolver))
     (resolve-value resolver input)
     resolver))
 
+(defn handle-prop-access [this input]
+  "A special case binary resolver.
+  If the left side is an identifier then there is no existing value to access
+  so it will get the value from scope. Otherwise it will just use the right
+  side as a key to access the left side."
+  (let [left (:left this)
+        right (:right this)]
+    (if (instance? IdentiferLit left)
+      (get (get input (:value left)) (:value right))
+      (get (safe-resolve-value left input) (:value right)))))
+
 (defn handle-bin-op [this input op]
+  "Binary resolver for generic binary operations."
   (op (safe-resolve-value (:left this) input)
-       (safe-resolve-value (:right this) input)))
+      (safe-resolve-value (:right this) input)))
 
 (extend-protocol Resolvable
-  InputLit
-  (resolve-value [_ input] input)
   IdentiferLit
-  (resolve-value [this _] (:value this))
+  (resolve-value [this _] this)
   String
   (resolve-value [this _] this)
   Double
@@ -52,7 +63,7 @@
   NilLit
   (resolve-value [_ _] nil)
   DotOp
-  (resolve-value [this input] (handle-bin-op this input get))
+  (resolve-value [this input] (handle-prop-access this input))
   ConcatOp
   (resolve-value [this input] (handle-bin-op this input str))
   AddOp

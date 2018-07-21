@@ -14,7 +14,7 @@
   [input nweave]
   (let [pstate (kern/parse def/expr nweave)
         ast (:value pstate)]
-    (resolve-ast ast input)))
+    (resolve-ast ast { "input" input })))
 
 (defn transform-files
   [input-file output-file nweave-file]

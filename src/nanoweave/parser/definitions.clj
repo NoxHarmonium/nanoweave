@@ -20,7 +20,6 @@
 (def wrapped-float-lit (>>= float-lit (fn [v] (return (->FloatLit v)))))
 (def wrapped-bool-lit (>>= bool-lit (fn [v] (return (->BoolLit v)))))
 (def wrapped-nil-lit (>>= nil-lit (fn [_] (return (->NilLit)))))
-(def wrapped-input-lit (>>= (token "input") (fn [_] (return (->InputLit)))))
 (def dot-op
   "Access operator: extract value from object."
   (bind [op (token ".")]
@@ -66,7 +65,6 @@
        wrapped-nil-lit
        array
        object
-       wrapped-input-lit
        wrapped-identifier
        (parens (fwd expr))))
    
