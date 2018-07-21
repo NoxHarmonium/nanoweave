@@ -1,9 +1,9 @@
-# Simple Structure Transform
+# Basic Arithmetic
 
-Passing this test is the first milestone
-for the nanoweave project.
+This test pretty much just checks
+if the arithmetic operators work
+and checks some basic precedence.
 
-It is a simple structural transform 
-that does not transform
-any of the values in the data,
-just their location in the document.
+A more advanced test is needed
+to really shake out bugs
+caused by order of precedence.

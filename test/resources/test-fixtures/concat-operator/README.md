@@ -1,9 +1,9 @@
-# Simple Structure Transform
+# String Concatenation
 
-Passing this test is the first milestone
-for the nanoweave project.
+This test checks that strings
+can be concatenated correctly.
 
-It is a simple structural transform 
-that does not transform
-any of the values in the data,
-just their location in the document.
+As this is a happy path test
+and currently only strings
+can be concatenated
+it is a simple test.
