@@ -22,4 +22,6 @@
   (testing "String concatination"
     (run-test-fixture "concat-operator"))
   (testing "Arithmatic"
-    (run-test-fixture "basic-arithmatic")))
+    (run-test-fixture "basic-arithmatic"))
+  (testing "Boolean Logic"
+    (run-test-fixture "boolean-logic")))

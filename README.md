@@ -40,10 +40,10 @@ I would like to implement.
 - [ ] String Interpolation
 - [ ] Functions (Lambdas)
 - [ ] Variables
-- [ ] Logic Operators (or, and, xor)
+- [X] Logic Operators (or, and, xor)
 - [X] Math Operators (+, -, /, *, %, ...)
 - [ ] Functional Operators (map, filter, reduce, sum, ...)
-- [ ] Scopes
+- [X] Scopes
 - [ ] Java Interop
 - [ ] Array Access
 - [ ] Ranges
@@ -52,6 +52,7 @@ I would like to implement.
 - [ ] Type Checking (is?)
 - [ ] Type Coercion
 - [ ] String Manipulation
+- [ ] Error handling (line number etc.)
 
 ### Tools
 - [X] Command Line Interface
