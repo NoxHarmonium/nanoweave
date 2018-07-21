@@ -52,8 +52,7 @@
   NilLit
   (resolve-value [_ _] nil)
   DotOp
-  (resolve-value [this input] (get (:left this)
-                                   (safe-resolve-value (:right this) input)))
+  (resolve-value [this input] (handle-bin-op this input get))
   ConcatOp
   (resolve-value [this input] (handle-bin-op this input str))
   AddOp
