@@ -8,13 +8,13 @@
 
 (defn resolve-ast
   [ast input]
-  (postwalk #(if (satisfies? ast/Resolvable %) (ast/resolve-value % input) %) ast))
+  (postwalk #(ast/safe-resolve-value % input) ast))
 
 (defn transform
   [input nweave]
-  (let [ast (kern/value def/expr nweave)
-        result (resolve-ast ast input)]
-    result))
+  (let [pstate (kern/parse def/expr nweave)
+        ast (:value pstate)]
+    (resolve-ast ast input)))
 
 (defn transform-files
   [input-file output-file nweave-file]

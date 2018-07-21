@@ -41,7 +41,7 @@ I would like to implement.
 - [ ] Functions (Lambdas)
 - [ ] Variables
 - [ ] Logic Operators (or, and, xor)
-- [ ] Math Operators (+, -, /, *, %, ...)
+- [X] Math Operators (+, -, /, *, %, ...)
 - [ ] Functional Operators (map, filter, reduce, sum, ...)
 - [ ] Scopes
 - [ ] Java Interop

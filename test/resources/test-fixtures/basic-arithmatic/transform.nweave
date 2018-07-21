@@ -1,0 +1,7 @@
+{
+  "output1": -input.values.two,
+  "output2": input.values.one + input.values.two - input.values.three * input.values.four / input.values.five,
+  "output3": (input.values.one + input.values.two) - input.values.three * input.values.four / input.values.five,
+  "output4": (input.values.one + input.values.two - input.values.three * input.values.four) / input.values.five,
+  "output5": ((2+3*-4)/-5) + 2 + (3) + (((4 % 2) / 3) + 4)
+}
