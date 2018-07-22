@@ -43,7 +43,7 @@ I would like to implement.
 - [X] Logic Operators (or, and, xor)
 - [X] Math Operators (+, -, /, *, %, ...)
 - [ ] Functional Operators (map, filter, reduce, sum, ...)
-- [X] Scopes
+- [ ] Scopes
 - [ ] Java Interop
 - [ ] Array Access
 - [ ] Ranges

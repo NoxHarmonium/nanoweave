@@ -22,44 +22,54 @@ nanoweave.parser.definitions
 (def wrapped-nil-lit (>>= nil-lit (fn [_] (return (->NilLit)))))
 (def dot-op
   "Access operator: extract value from object."
-  (bind [op (token ".")]
-        (return ({"." ->DotOp} op))))
+  (<?> (bind [op (token ".")]
+             (return ({"." ->DotOp} op)))
+       "property accessor (.)"))
 (def concat-op
   "Parses one of the relational operators."
-  (bind [op (token "++")]
-        (return ({"++" ->ConcatOp} op))))
+  (<?> (bind [op (token "++")]
+             (return ({"++" ->ConcatOp} op)))
+       "concat operator (++)"))
 (def wrapped-uni-op
-  "Multiplicative operator: multiplication, division, or modulo."
-  (bind [op (one-of "!-")]
-        (return ({\! ->NotOp \- ->NegOp} op))))
+  "Unary operators: not or negative."
+  (<?> (bind [op (one-of "!-")]
+             (return ({\! ->NotOp \- ->NegOp} op)))
+       "unary operator (!,-)"))
 (def wrapped-mul-op
   "Multiplicative operator: multiplication, division, or modulo."
-  (bind [op (one-of "*/%")]
-        (return ({\* ->MultOp \/ ->DivOp \% ->ModOp} op))))
+  (<?> (bind [op (one-of "*/%")]
+             (return ({\* ->MultOp \/ ->DivOp \% ->ModOp} op)))
+       "multiplication operator (*,/,%)"))
 (def wrapped-add-op
   "Additive operator: addition or subtraction."
-  (bind [op (one-of "+-")]
-        (return ({\+ ->AddOp \- ->SubOp} op))))
+  (<?> (bind [op (one-of "+-")]
+             (return ({\+ ->AddOp \- ->SubOp} op)))
+       "addition operator (+,-)"))
 (def wrapped-rel-op
-  "Relational operator: greater than etc."
-  (bind [op (token ">=" "<=" ">" "<")]
-        (return ({">=" ->GrThanEqOp "<=" ->LessThanEqOp ">" ->GrThanOp "<" ->LessThanOp} op))))
+  "Relational operator: greater than, less than"
+  (<?> (bind [op (token ">=" "<=" ">" "<")]
+             (return ({">=" ->GrThanEqOp "<=" ->LessThanEqOp ">" ->GrThanOp "<" ->LessThanOp} op)))
+       "relational operator (>=,<=,>,<)"))
 (def wrapped-eq-op
   "Equality operator: equal or not-equal"
-  (bind [op (token "==" "!=")]
-        (return ({"==" ->EqOp "!=" ->NotEqOp} op))))
+  (<?> (bind [op (token "==" "!=")]
+             (return ({"==" ->EqOp "!=" ->NotEqOp} op)))
+       "equality operator (==,!=)"))
 (def wrapped-and-op
   "Logical AND operator"
-  (bind [op (token "and")]
-        (return ({"and" ->AndOp} op))))
+  (<?> (bind [op (token "and")]
+             (return ({"and" ->AndOp} op)))
+       "and operator"))
 (def wrapped-or-op
   "Logical OR operator"
-  (bind [op (token "or")]
-        (return ({"or" ->OrOp} op))))
+  (<?> (bind [op (token "or")]
+             (return ({"or" ->OrOp} op)))
+       "or operator"))
 (def wrapped-xor-op
   "Logical XOR operator"
-  (bind [op (token "xor")]
-        (return ({"xor" ->XorOp} op))))
+  (<?> (bind [op (token "xor")]
+             (return ({"xor" ->XorOp} op)))
+       "xor operator"))
 
 (declare expr)
 
@@ -78,13 +88,13 @@ nanoweave.parser.definitions
 
 (def nweave
   "Parses a nanoweave structure."
-  (<|> wrapped-string-lit
-       wrapped-float-lit
-       wrapped-bool-lit
-       wrapped-nil-lit
-       array
-       object
-       wrapped-identifier
+  (<|> (<?> wrapped-string-lit "string")
+       (<?> wrapped-float-lit "number")
+       (<?> wrapped-bool-lit "bool")
+       (<?> wrapped-nil-lit "null")
+       (<?> array "array")
+       (<?> object "object")
+       (<?> wrapped-identifier "identifer")
        (parens (fwd expr))))
 
 ; See: http://www.difranco.net/compsci/C_Operator_Precedence_Table.htm
