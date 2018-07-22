@@ -1,0 +1,36 @@
+{
+  "lt-positive": true,
+  "lt-negative": false,
+  "gt-positive": true,
+  "gt-negative": false,
+  "lte-positive1": true,
+  "lte-negative1": false,
+  "lte-positive2": true,
+  "gte-positive1": true,
+  "gte-negative1": false,
+  "gte-positive2": true,
+  "eq-positive": true,
+  "eq-negative": false,
+  "neq-positive": true,
+  "neq-negative": false,
+  "and": {
+    "YY": true,
+    "YN": false,
+    "NY": false,
+    "NN": false
+  },
+  "or": {
+    "YY": true,
+    "YN": true,
+    "NY": true,
+    "NN": false
+  },
+  "xor": {
+    "YY": false,
+    "YN": true,
+    "NY": true,
+    "NN": false
+  },
+  "complex": true,
+  "complex2": true
+}

@@ -1,0 +1,36 @@
+{
+  "lt-positive": 1 < 2,
+  "lt-negative": 2 < 1,
+  "gt-positive": 2 > 1,
+  "gt-negative": 1 > 2,
+  "lte-positive1": 1 <= 2,
+  "lte-negative1": 2 <= 1,
+  "lte-positive2": 2 <= 2,
+  "gte-positive1": 2 >= 1,
+  "gte-negative1": 1 >= 2,
+  "gte-positive2": 2 >= 2,
+  "eq-positive": 1 == 1,
+  "eq-negative": 1 == 2,
+  "neq-positive": 1 != 2,
+  "neq-negative": 1 != 1,
+  "and": {
+    "YY": true and true,
+    "YN": true and false,
+    "NY": false and true,
+    "NN": false and false
+  },
+  "or": {
+    "YY": true or true,
+    "YN": true or false,
+    "NY": false or true,
+    "NN": false or false
+  },
+  "xor": {
+    "YY": true xor true,
+    "YN": true xor false,
+    "NY": false xor true,
+    "NN": false xor false
+  },
+  "complex": true and false or true xor false,
+  "complex2": ((input.a < 2) and input.b == input.c) and (input.d > input.a) and (input.b != input.e)
+}
