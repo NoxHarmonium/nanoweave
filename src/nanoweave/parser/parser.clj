@@ -1,9 +1,10 @@
 (ns nanoweave.parser.parser
-  (:use [clojure.walk :only [postwalk]]
+  (:use [clojure.walk :only [prewalk]]
         [clojure.pprint])
   (:require [blancas.kern.core :as kern]
             [blancas.kern.i18n :refer [i18n]]
             [clojure.data.json :as json]
+            [nanoweave.utils :refer [read-json-with-doubles]]
             [clojure.string :refer [join]]
             [nanoweave.parser.ast :as ast]
             [nanoweave.parser.definitions :as def]
@@ -11,21 +12,21 @@
 
 (defn resolve-ast
   [ast input]
-  (postwalk #(ast/safe-resolve-value % input) ast))
-
-
+  (prewalk #(ast/safe-resolve-value % input) ast))
 
 (defn transform
   [input nweave]
   (let [pstate (kern/parse def/expr nweave)]
     (if (:ok pstate)
-      (resolve-ast (:value pstate) {"input" input})
-      (err/format-error pstate))
-    ))
+      (let [ast (:value pstate)]
+        (resolve-ast ast {"input" input}))
+      ((pprint (err/format-error pstate))
+        nil))))
+
 
 (defn transform-files
   [input-file output-file nweave-file]
-  (let [input (json/read-str (slurp input-file))
+  (let [input (read-json-with-doubles (slurp input-file))
         nweave (slurp nweave-file)
         output (json/write-str (transform input nweave))]
     (spit output-file output)))

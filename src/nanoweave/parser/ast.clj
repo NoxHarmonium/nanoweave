@@ -20,7 +20,8 @@
 
 (extend-protocol Resolvable
   IdentiferLit
-  (resolve-value [this _] this)
+  (resolve-value [this input]
+    (get input (:value this)))
   StringLit
   (resolve-value [this _] (:value this))
   FloatLit
@@ -43,11 +44,8 @@
   If the left side is an identifier then there is no existing value to access
   so it will get the value from scope. Otherwise it will just use the right
   side as a key to access the left side."
-  (let [left (:left this)
-        right (:right this)]
-    (if (instance? IdentiferLit left)
-      (get (get input (:value left)) (:value right))
-      (get (safe-resolve-value left input) (:value right)))))
+  (let [left (safe-resolve-value (:left this) input)]
+    (safe-resolve-value (:right this) left)))
 
 (defn handle-bin-op [this input op]
   "Binary resolver for generic binary operations."
@@ -56,12 +54,11 @@
 
 
 ; Primitives
+
 (extend-protocol Resolvable
   String
   (resolve-value [this _] this)
   Double
-  (resolve-value [this _] this)
-  Long
   (resolve-value [this _] this))
 
 ; Unary Operators
@@ -76,6 +73,7 @@
   (resolve-value [this input] (- (safe-resolve-value (:value this) input))))
 
 ; Binary Operators
+
 (s/defrecord DotOp [left :- Resolvable right :- Resolvable])
 (s/defrecord ConcatOp [left :- Resolvable right :- Resolvable])
 
@@ -95,6 +93,8 @@
 (s/defrecord AndOp [left :- Resolvable right :- Resolvable])
 (s/defrecord OrOp [left :- Resolvable right :- Resolvable])
 (s/defrecord XorOp [left :- Resolvable right :- Resolvable])
+
+(s/defrecord MapOp [left :- Resolvable right :- Resolvable])
 
 (extend-protocol Resolvable
   DotOp
@@ -128,4 +128,21 @@
   OrOp
   (resolve-value [this input] (handle-bin-op this input #(or %1 %2)))
   XorOp
-  (resolve-value [this input] (handle-bin-op this input xor)))
+  (resolve-value [this input] (handle-bin-op this input xor))
+  MapOp
+  (resolve-value [this input] (handle-bin-op this input #(map %2 %1))))
+
+; Functions
+
+(s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
+
+(extend-protocol Resolvable
+  Lambda
+  (resolve-value [this input]
+    (let [param-list (:param-list this)
+          body (:body this)]
+      (fn [& args]
+        (assert (= (count args) (count param-list)) "incorrect number of params passed to lambda")
+        (safe-resolve-value body (merge
+                                   input
+                                   (zipmap param-list args)))))))
