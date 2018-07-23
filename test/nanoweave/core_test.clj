@@ -24,8 +24,8 @@
     (run-test-fixture "simple-structure-transform"))
   (testing "String concatination"
     (run-test-fixture "concat-operator"))
-  (testing "Arithmatic"
-    (run-test-fixture "basic-arithmatic"))
+  (testing "arithmetic"
+    (run-test-fixture "basic-arithmetic"))
   (testing "Boolean Logic"
     (run-test-fixture "boolean-logic"))
   (testing "Map Collection"
