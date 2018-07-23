@@ -6,7 +6,7 @@
             [clojure.data.json :as json]
             [nanoweave.utils :refer [read-json-with-doubles]]
             [clojure.string :refer [join]]
-            [nanoweave.parser.ast :as ast]
+            [nanoweave.ast.base :as ast]
             [nanoweave.parser.definitions :as def]
             [nanoweave.parser.errors :as err]))
 

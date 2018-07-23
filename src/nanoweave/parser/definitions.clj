@@ -3,7 +3,14 @@ nanoweave.parser.definitions
   (:use [blancas.kern.core]
         [blancas.kern.expr]
         [blancas.kern.lexer.basic]
-        [nanoweave.parser.ast]))
+        [nanoweave.ast.base]
+        [nanoweave.ast.literals]
+        [nanoweave.ast.lambda]
+        [nanoweave.ast.unary]
+        [nanoweave.ast.binary-arithmetic]
+        [nanoweave.ast.binary-functions]
+        [nanoweave.ast.binary-logic]
+        [nanoweave.ast.binary-other]))
 
 ; -- Grammar --
 ; pair          ::=  string ':' (json | expr)
