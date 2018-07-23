@@ -12,16 +12,6 @@ nanoweave.parser.definitions
         [nanoweave.ast.binary-logic]
         [nanoweave.ast.binary-other]))
 
-; -- Grammar --
-; pair          ::=  string ':' (json | expr)
-; array         ::=  '[' (json (',' json)*)* ']'
-; object        ::=  '{' (pair (',' pair)*)* '}'
-; json          ::=  string | number | object | array | true | false | null
-; expr          ::= prop-access
-; prop-access   ::= identifier ('.' identifier)*
-
-; Wrappers to convert basic types into AST types
-
 (declare expr)
 
 (def wrapped-identifier (>>= identifier (fn [v] (return (->IdentiferLit v)))))

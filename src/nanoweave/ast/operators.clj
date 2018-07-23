@@ -1,4 +1,4 @@
-(ns nanoweave.parser.operators)
+(ns nanoweave.ast.operators)
 
 ; Thanks https://github.com/mikera/core.matrix
 (defn xor

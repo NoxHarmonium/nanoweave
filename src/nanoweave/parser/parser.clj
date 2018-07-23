@@ -2,10 +2,8 @@
   (:use [clojure.walk :only [prewalk]]
         [clojure.pprint])
   (:require [blancas.kern.core :as kern]
-            [blancas.kern.i18n :refer [i18n]]
             [clojure.data.json :as json]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [clojure.string :refer [join]]
             [nanoweave.ast.base :as ast]
             [nanoweave.parser.definitions :as def]
             [nanoweave.parser.errors :as err]))

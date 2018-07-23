@@ -1,7 +1,7 @@
 (ns nanoweave.ast.binary-logic
   (:require [schema.core :as s])
   (:use nanoweave.ast.base)
-  (:use [nanoweave.parser.operators :only [xor]]))
+  (:use [nanoweave.ast.operators :only [xor]]))
 
 (s/defrecord EqOp [left :- Resolvable right :- Resolvable])
 (s/defrecord NotEqOp [left :- Resolvable right :- Resolvable])
