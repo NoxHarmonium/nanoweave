@@ -111,6 +111,17 @@ nanoweave.parser.definitions
   (bind [args argument-list _ (token "->") body lambda-body]
         (return (->Lambda args body))))
 
+(def no-args-lambda
+  "A self contained function with no params definition"
+  (bind [_ (token "#") body lambda-body]
+        (return (->NoArgsLambda body))))
+(def digit-string-lit (lexeme (<+> (many1 digit))))
+(def no-args-lambda-param
+  "A parameter in a function that has no params definition.
+  Just resolves to an identifier for now but might be extended later."
+  (bind [prefix (token "%") val digit-string-lit]
+        (return (->IdentiferLit (str prefix val)))))
+
 
 (def nweave
   "Parses a nanoweave structure."
@@ -120,7 +131,8 @@ nanoweave.parser.definitions
        (<?> wrapped-nil-lit "null")
        (<?> array "array")
        (<?> object "object")
-       (<?> wrapped-identifier "identifer")
+       (<?> (<|> wrapped-identifier no-args-lambda-param) "identifer")
+       (<:> no-args-lambda)
        (<:> lambda)
        (parens (fwd expr))))
 

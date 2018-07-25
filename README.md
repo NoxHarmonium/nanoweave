@@ -38,11 +38,11 @@ I would like to implement.
 
 - [X] Structural Transforms
 - [ ] String Interpolation
-- [ ] Functions (Lambdas)
+- [X] Functions (Lambdas)
 - [ ] Variables
 - [X] Logic Operators (or, and, xor)
 - [X] Math Operators (+, -, /, *, %, ...)
-- [ ] Functional Operators (map, filter, reduce, sum, ...)
+- [X] Basic Functional Operators (map, filter, reduce)
 - [ ] Scopes
 - [ ] Java Interop
 - [ ] Array Access

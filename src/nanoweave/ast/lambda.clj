@@ -3,13 +3,19 @@
   (:use nanoweave.ast.base))
 
 (s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
+(s/defrecord NoArgsLambda [body :- Resolvable])
 
 (defn- check-param-count [args, param-list]
   (let [args-count (count args) param-list-count (count param-list)]
     (assert (= (count args) (count param-list))
             (str "incorrect number of params passed to lambda.
             Expected " param-list-count " Got " args-count
-            " (" (map type args) ")"))))
+                 " (" (map type args) ")"))))
+
+(defn- generate-params [count]
+  "For lambdas that don't have arguments specified,
+  this generates the parameters used as arguments."
+  (map #(str "%" (+ %1 1)) (range count)))
 
 (extend-protocol Resolvable
   Lambda
@@ -21,3 +27,13 @@
         (safe-resolve-value body (merge
                                    input
                                    (zipmap param-list args)))))))
+
+(extend-protocol Resolvable
+  NoArgsLambda
+  (resolve-value [this input]
+    (let [body (:body this)]
+      (fn [& args]
+        (let [param-list (generate-params (count args))]
+          (safe-resolve-value body (merge
+                                     input
+                                     (zipmap param-list args))))))))
