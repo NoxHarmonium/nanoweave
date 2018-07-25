@@ -18,7 +18,7 @@
     (if (:ok pstate)
       (let [ast (:value pstate)]
         (resolve-ast ast {"input" input}))
-      ((pprint (err/format-error pstate))
+      ((println (err/format-error pstate))
         nil))))
 
 

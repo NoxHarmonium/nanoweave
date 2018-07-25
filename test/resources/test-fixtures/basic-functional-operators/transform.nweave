@@ -1,0 +1,9 @@
+{
+    "result": input.test_list
+        map (num) -> (num + 2)
+        filter (num) -> (num > 3)
+        reduce (prev, next) -> (prev + next),
+    "result2": ["a", "b", "c", "c", "d"]
+        filter (str) -> (str == "c")
+        reduce (prev, next) -> (prev ++ next)
+}

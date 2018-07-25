@@ -7,6 +7,8 @@
 (s/defrecord FloatLit [value :- s/Num])
 (s/defrecord BoolLit [value :- s/Bool])
 (s/defrecord NilLit [])
+(s/defrecord ArrayLit [value :- [Resolvable]])
+
 
 (extend-protocol Resolvable
   IdentiferLit
@@ -19,4 +21,7 @@
   BoolLit
   (resolve-value [this _] (:value this))
   NilLit
-  (resolve-value [_ _] nil))
+  (resolve-value [_ _] nil)
+  ArrayLit
+  (resolve-value [this input]
+    (map #(safe-resolve-value %1 input) (:value this))))

@@ -19,6 +19,8 @@
     (println "Running test fixture: " test-folder)
     (is (= expected actual))))
 
+; Future work: work out how to dynamically create tests based on test-fixtures directory
+; A simple loop didn't work, I'll probably need a macro
 (deftest io-tests
   (testing "Structure Transformation"
     (run-test-fixture "simple-structure-transform"))
@@ -29,4 +31,6 @@
   (testing "Boolean Logic"
     (run-test-fixture "boolean-logic"))
   (testing "Map Collection"
-    (run-test-fixture "map-collection")))
+    (run-test-fixture "map-collection"))
+  (testing "Basic Functional Operators"
+    (run-test-fixture "basic-functional-operators")))

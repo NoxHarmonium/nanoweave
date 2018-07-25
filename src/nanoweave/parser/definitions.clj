@@ -14,6 +14,18 @@ nanoweave.parser.definitions
 
 (declare expr)
 
+(def pair
+  "Parses the rule:  pair := String ':' expr"
+  (bind [f string-lit _ colon v expr] (return [f v])))
+(def array
+  "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
+  (brackets (bind [members (comma-sep (fwd expr))]
+                  (return (->ArrayLit members)))))
+(def object
+  "Parses the rule:  object := '{' (pair (',' pair)*)* '}'"
+  (braces (bind [members (comma-sep pair)]
+                (return (apply hash-map (reduce concat [] members))))))
+
 (def wrapped-identifier (>>= identifier (fn [v] (return (->IdentiferLit v)))))
 (def wrapped-string-lit (>>= string-lit (fn [v] (return (->StringLit v)))))
 (def wrapped-float-lit (>>= float-lit (fn [v] (return (->FloatLit (double v))))))
@@ -69,31 +81,36 @@ nanoweave.parser.definitions
   (<?> (bind [op (token "xor")]
              (return ({"xor" ->XorOp} op)))
        "xor operator"))
+
 (def map-op
   "Map sequence operator"
   (<?> (bind [op (token "map")]
              (return ({"map" ->MapOp} op)))
        "map operator"))
+(def filter-op
+  "Filter sequence operator"
+  (<?> (bind [op (token "filter")]
+             (return ({"filter" ->FilterOp} op)))
+       "filter operator"))
+(def reduce-op
+  "Reduce sequence operator"
+  (<?> (bind [op (token "reduce")]
+             (return ({"reduce" ->ReduceOp} op)))
+       "reduce operator"))
+(def fun-ops (<|> map-op filter-op reduce-op))
 
 
 (def argument-list
   "A list of arguments for a lambda"
   (parens (bind [args (comma-sep identifier)]
                 (return args))))
+(def lambda-body
+  (<|> (parens (fwd expr)) object))
 (def lambda
   "A self contained function"
-  (bind [args argument-list _ (token "->") body (fwd expr)]
+  (bind [args argument-list _ (token "->") body lambda-body]
         (return (->Lambda args body))))
-(def pair
-  "Parses the rule:  pair := String ':' expr"
-  (bind [f string-lit _ colon v expr] (return [f v])))
-(def array
-  "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
-  (brackets (comma-sep (fwd expr))))
-(def object
-  "Parses the rule:  object := '{' (pair (',' pair)*)* '}'"
-  (braces (bind [members (comma-sep pair)]
-                (return (apply hash-map (reduce concat [] members))))))
+
 
 (def nweave
   "Parses a nanoweave structure."
@@ -119,6 +136,6 @@ nanoweave.parser.definitions
 (def eq-group (chainl1 rel-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
-(def fun-group (chainl1 xor-group map-op))
-(def expr (chainl1 fun-group wrapped-or-op))
+(def fun-group (chainl1 xor-group fun-ops))
+(def expr (chainr1 fun-group wrapped-or-op))
 
