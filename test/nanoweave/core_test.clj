@@ -6,7 +6,8 @@
             [clojure.data.json :as json]
             [clojure.pprint :as pp]
             [clojure.walk :refer [prewalk]]
-            [nanoweave.utils :refer [read-json-with-doubles]]))
+            [nanoweave.utils :refer [read-json-with-doubles]]
+            [nanoweave.parser.parser :as parser]))
 
 (defn run-test-fixture [test-folder]
   (let [input-file (io/resource (str "test-fixtures/" test-folder "/input.json"))
@@ -15,7 +16,7 @@
         input (read-json-with-doubles (slurp input-file))
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
-        actual (nanoweave.parser.parser/transform input nweave)]
+        actual (parser/transform input nweave parser/resolve-ast)]
     (println "Running test fixture: " test-folder)
     (is (= expected actual))))
 

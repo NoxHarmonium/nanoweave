@@ -2,7 +2,8 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as string]
             [clojure.java.io :as io]
-            [nanoweave.parser.parser :as parser])
+            [nanoweave.parser.parser :as parser]
+            [nanoweave.diagnostics.ast-dumper :as dumper])
   (:gen-class))
 
 (def cli-options
@@ -21,7 +22,8 @@
   (->>
     ["Performs actions on an input file according to a given nanoweave definition file."
      "" "Usage: nanoweave [options] transform" "" "Options:" options-summary ""
-     "Actions:" "  transform\tTransforms the given input file" ""]
+     "Actions:" "  transform\tTransforms the given input file"
+     "dump-ast\tDumps the nweave AST to a file" ""]
     (string/join \newline)))
 
 (defn error-msg
@@ -42,7 +44,7 @@
       errors                                                ; errors => exit with description of errors
       {:exit-message (error-msg errors)}
       ;; custom validation on arguments
-      (and (= 1 (count arguments)) (#{"transform"} (first arguments)))
+      (and (= 1 (count arguments)) (#{"transform" "dump-ast"} (first arguments)))
       {:action (first arguments), :options options}
       :else                                                 ; failed custom validation => exit with usage summary
       {:exit-message (usage summary)})))
@@ -57,4 +59,7 @@
       (case action
         "transform" (parser/transform-files (:input options)
                                             (:output options)
-                                            (:nweave options))))))
+                                            (:nweave options))
+        "dump-ast" (dumper/dump-ast-as-graphviz (:input options)
+                                                (:output options)
+                                                (:nweave options))))))
