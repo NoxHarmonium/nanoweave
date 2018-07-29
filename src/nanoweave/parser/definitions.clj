@@ -141,13 +141,13 @@ nanoweave.parser.definitions
 ; it shares the '+' token
 (def member-selection-group (chainl1 nweave dot-op))
 (def unary-group (prefix1 member-selection-group wrapped-uni-op))
-(def concat-group (chainl1 unary-group concat-op))
+(def fun-group (chainl1 unary-group fun-ops))
+(def concat-group (chainl1 fun-group concat-op))
 (def mul-group (chainl1 concat-group wrapped-mul-op))
 (def add-group (chainl1 mul-group wrapped-add-op))
 (def rel-group (chainl1 add-group wrapped-rel-op))
 (def eq-group (chainl1 rel-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
-(def fun-group (chainl1 xor-group fun-ops))
-(def expr (chainr1 fun-group wrapped-or-op))
+(def expr (chainl1 xor-group wrapped-or-op))
 
