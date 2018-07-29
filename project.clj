@@ -11,6 +11,7 @@
                  [rhizome "0.2.9"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
+  :jvm-opts ["-Djava.awt.headless=true"]
   :plugins [[lein-zprint "0.3.9"]]
   :profiles {
              :uberjar {:aot :all}
