@@ -1,5 +1,8 @@
 language: clojure
 
+before_install:
+  - "sudo apt-get install graphviz"
+
 script:
   - lein test
   - lein run dump-ast -i test/resources/test-fixtures/concat-operator/input.json -n test/resources/test-fixtures/concat-operator/transform.nweave -o ast.png
