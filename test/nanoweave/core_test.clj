@@ -34,4 +34,6 @@
   (testing "Map Collection"
     (run-test-fixture "map-collection"))
   (testing "Basic Functional Operators"
-    (run-test-fixture "basic-functional-operators")))
+    (run-test-fixture "basic-functional-operators"))
+  (testing "Basic Variables"
+    (run-test-fixture "basic-variables")))

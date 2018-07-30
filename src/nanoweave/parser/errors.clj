@@ -7,10 +7,10 @@
 ; because the methods were not made public
 
 ;; Error types.
-(def- err-system   0) ;; Used in satisfy for specific unexpected input.
-(def- err-unexpect 1) ;; Used on any unexpected input to show a message.
-(def- err-expect   2) ;; Used to show a message of what's expected.
-(def- err-message 3) ;; Used for any kind of message from client code.
+(def- err-system 0)                                         ;; Used in satisfy for specific unexpected input.
+(def- err-unexpect 1)                                       ;; Used on any unexpected input to show a message.
+(def- err-expect 2)                                         ;; Used to show a message of what's expected.
+(def- err-message 3)                                        ;; Used for any kind of message from client code.
 
 (defn- make-err-system
   "Makes a message of type err-system."

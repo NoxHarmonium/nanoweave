@@ -15,7 +15,7 @@
   (if (and (some? resolver)
            (satisfies? Resolvable resolver))
     (resolve-value resolver input)
-    resolver))
+    (str (type resolver))))
 
 (defn handle-prop-access [this input]
   "A special case binary resolver.

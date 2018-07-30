@@ -6,6 +6,7 @@ nanoweave.parser.definitions
         [nanoweave.ast.base]
         [nanoweave.ast.literals]
         [nanoweave.ast.lambda]
+        [nanoweave.ast.scope]
         [nanoweave.ast.unary]
         [nanoweave.ast.binary-arithmetic]
         [nanoweave.ast.binary-functions]
@@ -123,9 +124,27 @@ nanoweave.parser.definitions
         (return (->IdentiferLit (str prefix val)))))
 
 
+(def variable-binding
+  (bind [target identifier
+         _ (token "=")
+         body (fwd expr)]
+        (return (partial ->Binding target body))))
+
+(def binding-list
+  (bind [bindings (comma-sep variable-binding)]
+        (return (reduce comp bindings))))
+
+(def with-scope
+  (bind [_ (token "with")
+         bindings binding-list
+         _ (token ":")
+         body (fwd expr)]
+        (return (->WithScope (bindings body)))))
+
 (def nweave
   "Parses a nanoweave structure."
-  (<|> (<?> wrapped-string-lit "string")
+  (<|> with-scope
+       (<?> wrapped-string-lit "string")
        (<?> wrapped-float-lit "number")
        (<?> wrapped-bool-lit "bool")
        (<?> wrapped-nil-lit "null")

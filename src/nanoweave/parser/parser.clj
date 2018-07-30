@@ -6,11 +6,12 @@
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.ast.base :as ast]
             [nanoweave.parser.definitions :as def]
-            [nanoweave.parser.errors :as err]))
+            [nanoweave.parser.errors :as err]
+            [nanoweave.ast.primatives]))
 
 (defn resolve-ast
   [ast input]
-  (prewalk #(ast/safe-resolve-value % input) ast))
+  (ast/safe-resolve-value ast input))
 
 (defn parse-nweave-definition [nweave-definition]
   (kern/parse def/expr nweave-definition))

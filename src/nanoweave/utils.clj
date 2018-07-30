@@ -9,3 +9,14 @@
    it simple for now."
   (let [json-map (json/read-str string)]
     (prewalk #(if (number? %1) (double %1) %1) json-map)))
+
+; From https://github.com/Prismatic/plumbing/
+(defn map-vals
+  "Build map k -> (f v) for [k v] in map, preserving the initial type"
+  [f m]
+  (cond
+    (sorted? m)
+    (reduce-kv (fn [out-m k v] (assoc out-m k (f v))) (sorted-map) m)
+    (map? m)
+    (persistent! (reduce-kv (fn [out-m k v] (assoc! out-m k (f v))) (transient {}) m))
+    :else nil))
