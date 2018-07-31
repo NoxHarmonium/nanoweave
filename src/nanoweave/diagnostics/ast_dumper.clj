@@ -27,7 +27,7 @@
   {:label (if (map? node) (cond
                             (primative-lit? node) (:value node)
                             :else (type node)
-                            ) node)})
+                            ) (type node))})
 
 (defn- describe-edge [src, dest]
   {:label (cond (map? src) (first
