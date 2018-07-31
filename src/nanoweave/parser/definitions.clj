@@ -1,4 +1,4 @@
-(ns ^{:doc "The nanoweave transform parser.", :author "Sean Dawson"}
+(ns ^{:doc "The nanoweave parser definitions.", :author "Sean Dawson"}
 nanoweave.parser.definitions
   (:use [blancas.kern.core]
         [blancas.kern.expr]
@@ -14,39 +14,59 @@ nanoweave.parser.definitions
         [nanoweave.ast.binary-logic]
         [nanoweave.ast.binary-other]))
 
+; Forward declarations
+
 (declare expr)
+
+; JSON Elements
 
 (def pair
   "Parses the rule:  pair := String ':' expr"
-  (bind [f string-lit _ colon v expr] (return [f v])))
+  (<?> (bind [f string-lit
+              _ colon
+              v expr] (return [f v]))
+       "pair"))
 (def array
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
-  (brackets (bind [members (comma-sep (fwd expr))]
-                  (return (->ArrayLit members)))))
+  (<?> (brackets (bind [members (comma-sep (fwd expr))]
+                       (return (->ArrayLit members))))
+       "array"))
 (def object
   "Parses the rule:  object := '{' (pair (',' pair)*)* '}'"
-  (braces (bind [members (comma-sep pair)]
-                (return (apply hash-map (reduce concat [] members))))))
+  (<?> (braces (bind [members (comma-sep pair)]
+                     (return (apply hash-map (reduce concat [] members)))))
+       "object"))
 
-(def wrapped-identifier (>>= identifier (fn [v] (return (->IdentiferLit v)))))
-(def wrapped-float-lit (>>= float-lit (fn [v] (return (->FloatLit (double v))))))
-(def wrapped-bool-lit (>>= bool-lit (fn [v] (return (->BoolLit v)))))
-(def wrapped-nil-lit (>>= nil-lit (fn [_] (return (->NilLit)))))
-(def dot-op
-  "Access operator: extract value from object."
-  (<?> (bind [op (token ".")]
-             (return ({"." ->DotOp} op)))
-       "property accessor (.)"))
-(def concat-op
-  "Parses one of the relational operators."
-  (<?> (bind [op (token "++")]
-             (return ({"++" ->ConcatOp} op)))
-       "concat operator (++)"))
+; Wrapped Primatives
+
+(def wrapped-identifier
+  (<?> (bind [v identifier]
+             (return (->IdentiferLit v)))
+       "identifier"))
+(def wrapped-float-lit
+  "Wraps a float-lit parser so it returns an AST record rather than a float."
+  (<?> (bind [v float-lit]
+             (return (->FloatLit (double v))))
+       "float"))
+(def wrapped-bool-lit
+  "Wraps a bool-lit parser so it returns an AST record rather than a bool."
+  (<?> (bind [v bool-lit] (return (->BoolLit v)))
+       "boolean"))
+(def wrapped-nil-lit
+  "Wraps an nil-lit parser so it returns an AST record rather than a null."
+  (<?> (bind [_ nil-lit] (return (->NilLit)))
+       "null"))
+
+; Unary Operators
+
 (def wrapped-uni-op
   "Unary operators: not or negative."
   (<?> (bind [op (one-of "!-")]
              (return ({\! ->NotOp \- ->NegOp} op)))
        "unary operator (!,-)"))
+
+; Arithmetic Binary Operators
+
 (def wrapped-mul-op
   "Multiplicative operator: multiplication, division, or modulo."
   (<?> (bind [op (one-of "*/%")]
@@ -57,6 +77,9 @@ nanoweave.parser.definitions
   (<?> (bind [op (one-of "+-")]
              (return ({\+ ->AddOp \- ->SubOp} op)))
        "addition operator (+,-)"))
+
+; Logical Binary Operators
+
 (def wrapped-rel-op
   "Relational operator: greater than, less than"
   (<?> (bind [op (token ">=" "<=" ">" "<")]
@@ -83,6 +106,8 @@ nanoweave.parser.definitions
              (return ({"xor" ->XorOp} op)))
        "xor operator"))
 
+; Functional Binary Operators
+
 (def map-op
   "Map sequence operator"
   (<?> (bind [op (token "map")]
@@ -98,83 +123,122 @@ nanoweave.parser.definitions
   (<?> (bind [op (token "reduce")]
              (return ({"reduce" ->ReduceOp} op)))
        "reduce operator"))
-(def fun-ops (<|> map-op filter-op reduce-op))
 
+(def fun-ops
+  "Matches any of the functional binary operators (they have the same precidence)"
+  (<|> map-op filter-op reduce-op))
+
+; Lambdas
 
 (def argument-list
   "A list of arguments for a lambda"
-  (parens (bind [args (comma-sep identifier)]
-                (return args))))
+  (<?> (parens (bind [args (comma-sep identifier)]
+                     (return args)))
+       "lambda argument list"))
 (def lambda-body
-  (<|> (parens (fwd expr)) object))
+  "The body of a lambda that is executed when the lambda is called"
+  (<?> (<|> (parens (fwd expr)) object)
+       "lambda body"))
 (def lambda
-  "A self contained function"
-  (bind [args argument-list _ (token "->") body lambda-body]
-        (return (->Lambda args body))))
-
+  "A self contained function that binds an expression to arguments"
+  (<?> (bind [args argument-list
+              _ (token "->")
+              body lambda-body]
+             (return (->Lambda args body)))
+       "lambda"))
 (def no-args-lambda
   "A self contained function with no params definition"
-  (bind [_ (token "#") body lambda-body]
-        (return (->NoArgsLambda body))))
-(def digit-string-lit (lexeme (<+> (many1 digit))))
+  (<?> (bind [_ (token "#")
+              body lambda-body]
+             (return (->NoArgsLambda body)))
+       "lambda"))
+(def digit-string-lit
+  "Parses a continous string of digits to a trimmed string"
+  (lexeme (<+> (many1 digit))))
 (def no-args-lambda-param
   "A parameter in a function that has no params definition.
   Just resolves to an identifier for now but might be extended later."
-  (bind [prefix (token "%") val digit-string-lit]
-        (return (->IdentiferLit (str prefix val)))))
+  (<?> (bind [prefix (token "%")
+              val digit-string-lit]
+             (return (->IdentiferLit (str prefix val))))
+       "lambda parameter"))
+(def fun-call
+  "Calls a lambda with specified params"
+  (<?> (bind [fun wrapped-identifier
+              args (parens (comma-sep (fwd expr)))]
+             (return (->FunCall fun args)))
+       "function call"))
 
+; Other Binary Operators
+
+(def dot-op
+  "Access operator: extract value from object."
+  (<?> (bind [op (token ".")]
+             (return ({"." ->DotOp} op)))
+       "property accessor (.)"))
+(def concat-op
+  "Parses one of the relational operators."
+  (<?> (bind [op (token "++")]
+             (return ({"++" ->ConcatOp} op)))
+       "concat operator (++)"))
+
+; Scopes
 
 (def variable-binding
-  (bind [target identifier
-         _ (token "=")
-         body (fwd expr)]
-        (return (partial ->Binding target body))))
-
+  "Parses a binding of an expression result to a variable"
+  (<?> (bind [target identifier
+              _ (token "=")
+              body (fwd expr)]
+             (return (partial ->Binding target body)))
+       "variable binding"))
 (def binding-list
-  (bind [bindings (comma-sep variable-binding)]
-        (return (reduce comp bindings))))
-
+  "Parses multiple variable bindings separated by commas to a sequence"
+  (<?> (bind [bindings (comma-sep variable-binding)]
+             (return (reduce comp bindings)))
+       "binding list"))
 (def with-scope
-  (bind [_ (token "with")
-         bindings binding-list
-         _ (token ":")
-         body (fwd expr)]
-        (return (->Expression (bindings body)))))
+  "Creates a new scope that has variables that are bound in the binding list"
+  (<?> (bind [_ (token "with")
+              bindings binding-list
+              _ (token ":")
+              body (fwd expr)]
+             (return (->Expression (bindings body))))
+       "with statement"))
+
+; Interpolated String
 
 (def interpolated-string-expression
+  "Parses an expression embedded within a string"
   (<?> (bind [_ (token* "#{")
               body (fwd expr)
               _ (token* "}")]
              (return (->Expression body))) "interpolated string expression"))
-
-
 (def interpolated-string
-  "Parses string literals delimited by double quotes."
+  "Parses string literals and embedded expressions delimited by double quotes"
   (lexeme (between (sym* \")
-           (<?> (sym* \") "end interpolated string")
-           (many (<|>
-                   interpolated-string-expression
-                   (<+> (many (java-char [\" \#]))))))))
+                   (<?> (sym* \") "end string")
+                   (many (<|>
+                           interpolated-string-expression
+                           (<+> (many (java-char [\" \#]))))))))
+(def wrapped-interpolated-string
+  "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
+  (<?> (bind [v interpolated-string]
+             (return (->InterpolatedString v)))
+       "string"))
 
-
-(def wrapped-interpolated-string (>>= interpolated-string (fn [v] (return (->InterpolatedString v)))))
-
-(def fun-call
-  (bind [fun wrapped-identifier
-         args (parens (comma-sep (fwd expr)))]
-        (return (->FunCall fun args))))
+; Root Definition
 
 (def nweave
   "Parses a nanoweave structure."
   (<|> with-scope
-       (<?> wrapped-interpolated-string "interpolated string")
-       (<?> wrapped-float-lit "number")
-       (<?> wrapped-bool-lit "bool")
-       (<?> wrapped-nil-lit "null")
-       (<?> array "array")
-       (<?> object "object")
+       wrapped-interpolated-string
+       wrapped-float-lit
+       wrapped-bool-lit
+       wrapped-nil-lit
+       array
+       object
        (<:> fun-call)
-       (<?> (<|> wrapped-identifier no-args-lambda-param) "identifer")
+       (<|> wrapped-identifier no-args-lambda-param)
        (<:> no-args-lambda)
        (<:> lambda)
        (parens (fwd expr))))
