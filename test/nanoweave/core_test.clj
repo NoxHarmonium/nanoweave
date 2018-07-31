@@ -10,6 +10,7 @@
             [nanoweave.parser.parser :as parser]))
 
 (defn run-test-fixture [test-folder]
+  (println "Running test fixture: " test-folder)
   (let [input-file (io/resource (str "test-fixtures/" test-folder "/input.json"))
         expected-file (io/resource (str "test-fixtures/" test-folder "/output.json"))
         nweave-file (io/resource (str "test-fixtures/" test-folder "/transform.nweave"))
@@ -17,7 +18,6 @@
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
         actual (parser/transform input nweave parser/resolve-ast)]
-    (println "Running test fixture: " test-folder)
     (is (= expected actual))))
 
 ; Future work: work out how to dynamically create tests based on test-fixtures directory
