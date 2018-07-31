@@ -3,7 +3,8 @@
   (:use nanoweave.ast.base))
 
 (s/defrecord Binding [target :- Resolvable value :- Resolvable body :- Resolvable])
-(s/defrecord WithScope [body :- Resolvable])
+(s/defrecord Expression [body :- Resolvable])
+(s/defrecord InterpolatedString [body :- [Resolvable]])
 
 (extend-protocol Resolvable
   Binding
@@ -13,6 +14,11 @@
           value (safe-resolve-value (:value this) input)
           merged-input (merge input {target value})]
       (safe-resolve-value body merged-input)))
-  WithScope
+  Expression
   (resolve-value [this input]
-    (safe-resolve-value (:body this) input)))
+    (safe-resolve-value (:body this) input))
+  InterpolatedString
+  (resolve-value [this input]
+    (let [elements (:body this)]
+      (apply str
+             (map #(safe-resolve-value % input) elements)))))

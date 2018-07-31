@@ -1,0 +1,5 @@
+with a = input.a, b = input.b: {
+  "simple": a ++ "#{a} #{b}" ++ " |",
+  "inside-binding": with x = "#{input.a} #{input.c}": x ++ " end",
+  "complex": "something #{with y = input.b: ((y+3*-4)/-5) + 2 + (3) + (((4 % 2) / 3) + 4)} else"
+}

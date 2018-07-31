@@ -36,4 +36,6 @@
   (testing "Basic Functional Operators"
     (run-test-fixture "basic-functional-operators"))
   (testing "Basic Variables"
-    (run-test-fixture "basic-variables")))
+    (run-test-fixture "basic-variables"))
+  (testing "String Interpolation"
+    (run-test-fixture "string-interpolation")))

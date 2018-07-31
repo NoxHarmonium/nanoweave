@@ -2,7 +2,8 @@
 nanoweave.parser.definitions
   (:use [blancas.kern.core]
         [blancas.kern.expr]
-        [blancas.kern.lexer.basic]
+        [blancas.kern.lexer.java-style]
+        [nanoweave.parser.custom-lexing]
         [nanoweave.ast.base]
         [nanoweave.ast.literals]
         [nanoweave.ast.lambda]
@@ -28,7 +29,6 @@ nanoweave.parser.definitions
                 (return (apply hash-map (reduce concat [] members))))))
 
 (def wrapped-identifier (>>= identifier (fn [v] (return (->IdentiferLit v)))))
-(def wrapped-string-lit (>>= string-lit (fn [v] (return (->StringLit v)))))
 (def wrapped-float-lit (>>= float-lit (fn [v] (return (->FloatLit (double v))))))
 (def wrapped-bool-lit (>>= bool-lit (fn [v] (return (->BoolLit v)))))
 (def wrapped-nil-lit (>>= nil-lit (fn [_] (return (->NilLit)))))
@@ -139,12 +139,30 @@ nanoweave.parser.definitions
          bindings binding-list
          _ (token ":")
          body (fwd expr)]
-        (return (->WithScope (bindings body)))))
+        (return (->Expression (bindings body)))))
+
+(def interpolated-string-expression
+  (<?> (bind [_ (token* "#{")
+              body (fwd expr)
+              _ (token* "}")]
+             (return (->Expression body))) "interpolated string expression"))
+
+
+(def interpolated-string
+  "Parses string literals delimited by double quotes."
+  (lexeme (between (sym* \")
+           (<?> (sym* \") "end interpolated string")
+           (many (<|>
+                   interpolated-string-expression
+                   (<+> (many (java-char [\" \#]))))))))
+
+
+(def wrapped-interpolated-string (>>= interpolated-string (fn [v] (return (->InterpolatedString v)))))
 
 (def nweave
   "Parses a nanoweave structure."
   (<|> with-scope
-       (<?> wrapped-string-lit "string")
+       (<?> wrapped-interpolated-string "interpolated string")
        (<?> wrapped-float-lit "number")
        (<?> wrapped-bool-lit "bool")
        (<?> wrapped-nil-lit "null")
