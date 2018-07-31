@@ -30,10 +30,12 @@
                             ) node)})
 
 (defn- describe-edge [src, dest]
-  {:label (when (map? src) (first
+  {:label (cond (map? src) (first
                              (map (fn [[k _]] k)
                                   (filter (fn [[_ v]] (= v dest)) src))
-                             ))})
+                             )
+                (vector? src)
+                  (.indexOf src dest))})
 
 (defn- ast-map-to-graphviz [ast filename]
   (pp/pprint ast)
