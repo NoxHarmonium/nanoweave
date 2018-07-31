@@ -37,7 +37,7 @@ I would like to implement.
 ### Language Features
 
 - [X] Structural Transforms
-- [ ] String Interpolation
+- [X] String Interpolation
 - [X] Functions (Lambdas)
 - [X] Variables
 - [X] Logic Operators (or, and, xor)
