@@ -219,7 +219,7 @@ nanoweave.parser.definitions
                    (<?> (sym* \") "end string")
                    (many (<|>
                            interpolated-string-expression
-                           (<+> (many (java-char [\" \#]))))))))
+                           (<+> (many (string-char [\" \#]))))))))
 (def wrapped-interpolated-string
   "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
   (<?> (bind [v interpolated-string]

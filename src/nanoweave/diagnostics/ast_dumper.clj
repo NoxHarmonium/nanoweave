@@ -1,4 +1,6 @@
-(ns nanoweave.diagnostics.ast-dumper
+(ns
+  ^{:doc "AST dumper diagnostic tool.", :author "Sean Dawson"}
+  nanoweave.diagnostics.ast-dumper
   (:use
     [rhizome.viz]
     [nanoweave.ast.base]
@@ -35,7 +37,7 @@
                                   (filter (fn [[_ v]] (= v dest)) src))
                              )
                 (vector? src)
-                  (.indexOf src dest))})
+                (.indexOf src dest))})
 
 (defn- ast-map-to-graphviz [ast filename]
   (pp/pprint ast)
@@ -50,6 +52,8 @@
 (defn- process-ast [ast _] ast)
 
 (defn dump-ast-as-graphviz [input-file output-file nweave-file]
+  "Takes an input file and a nanoweave definition and outputs a graphical
+representation of the AST in PNG format to the output file"
   (let [input (read-json-with-doubles (slurp input-file))
         nweave (slurp nweave-file)
         output (parser/transform input nweave process-ast)]

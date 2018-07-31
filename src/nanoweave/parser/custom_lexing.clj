@@ -1,4 +1,5 @@
-(ns nanoweave.parser.custom-lexing
+(ns ^{:doc "Custom lexers to help with parsing.", :author "Sean Dawson"}
+nanoweave.parser.custom-lexing
   (:use [blancas.kern.core]
         [blancas.kern.expr]
         [blancas.kern.lexer.java-style]))
@@ -6,9 +7,7 @@
 ; Duplicates blancas.kern.lexer but I couldn't work out another way
 ; to create a custom string type because they are all private in Kern.
 
-
 (def space-ascii 32)
-
 
 (def- esc-oct
       "Parses an octal escape code; the result is the encoded char."
@@ -18,7 +17,6 @@
                (if (<= n 0377)
                  (return (char n))
                  (fail "bad octal sequence"))))))
-
 
 (def- esc-char
       "Parses an escape code for a basic char."
@@ -31,7 +29,7 @@
       (>>= (<+> (>> (sym* \u) (times 4 hex-digit)))
            (fn [x] (return (aget (Character/toChars (Integer/parseInt x 16)) 0)))))
 
-(defn java-char
+(defn string-char
   "Parses an unquoted Java character literal. Characters in terminators must be escaped."
   [terminators]
   (<?> (<|> (satisfy #(and (not (some (partial = %) terminators)) (not= % \\) (>= (int %) space-ascii)))
