@@ -196,14 +196,14 @@ nanoweave.parser.definitions
   (<?> (bind [bindings (comma-sep variable-binding)]
              (return (reduce comp bindings)))
        "binding list"))
-(def with-scope
+(def let-scope
   "Creates a new scope that has variables that are bound in the binding list"
-  (<?> (bind [_ (token "with")
+  (<?> (bind [_ (token "let")
               bindings binding-list
               _ (token ":")
               body (fwd expr)]
              (return (->Expression (bindings body))))
-       "with statement"))
+       "let statement"))
 
 ; Interpolated String
 
@@ -230,7 +230,7 @@ nanoweave.parser.definitions
 
 (def nweave
   "Parses a nanoweave structure."
-  (<|> with-scope
+  (<|> let-scope
        wrapped-interpolated-string
        wrapped-float-lit
        wrapped-bool-lit
