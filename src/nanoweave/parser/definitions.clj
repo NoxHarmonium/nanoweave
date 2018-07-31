@@ -159,6 +159,11 @@ nanoweave.parser.definitions
 
 (def wrapped-interpolated-string (>>= interpolated-string (fn [v] (return (->InterpolatedString v)))))
 
+(def fun-call
+  (bind [fun wrapped-identifier
+         args (parens (comma-sep (fwd expr)))]
+        (return (->FunCall fun args))))
+
 (def nweave
   "Parses a nanoweave structure."
   (<|> with-scope
@@ -168,6 +173,7 @@ nanoweave.parser.definitions
        (<?> wrapped-nil-lit "null")
        (<?> array "array")
        (<?> object "object")
+       (<:> fun-call)
        (<?> (<|> wrapped-identifier no-args-lambda-param) "identifer")
        (<:> no-args-lambda)
        (<:> lambda)

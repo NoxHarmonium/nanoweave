@@ -1,0 +1,4 @@
+with test_fn = #(%1 + %2): {
+  "result1": test_fn(1, 2),
+  "result2": with test_fn2 = (first_arg, second_arg) -> (first_arg ++ " " ++ second_arg): test_fn2("first", "second")
+}

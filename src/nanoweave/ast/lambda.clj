@@ -4,6 +4,7 @@
 
 (s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
 (s/defrecord NoArgsLambda [body :- Resolvable])
+(s/defrecord FunCall [target :- Resolvable args :- [Resolvable]])
 
 (defn- check-param-count [args, param-list]
   (let [args-count (count args) param-list-count (count param-list)]
@@ -26,9 +27,7 @@
         (check-param-count args param-list)
         (safe-resolve-value body (merge
                                    input
-                                   (zipmap param-list args)))))))
-
-(extend-protocol Resolvable
+                                   (zipmap param-list args))))))
   NoArgsLambda
   (resolve-value [this input]
     (let [body (:body this)]
@@ -36,4 +35,9 @@
         (let [param-list (generate-params (count args))]
           (safe-resolve-value body (merge
                                      input
-                                     (zipmap param-list args))))))))
+                                     (zipmap param-list args)))))))
+  FunCall
+  (resolve-value [this input]
+    (let [target (safe-resolve-value (:target this) input)
+          args (safe-resolve-value (:args this) input)]
+      (apply target args))))

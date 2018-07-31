@@ -38,4 +38,6 @@
   (testing "Basic Variables"
     (run-test-fixture "basic-variables"))
   (testing "String Interpolation"
-    (run-test-fixture "string-interpolation")))
+    (run-test-fixture "string-interpolation"))
+  (testing "Function Calling"
+    (run-test-fixture "function-calling")))
