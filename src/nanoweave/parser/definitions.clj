@@ -110,18 +110,18 @@ nanoweave.parser.definitions
 
 (def map-op
   "Map sequence operator"
-  (<?> (bind [op (token "map")]
-             (return ({"map" ->MapOp} op)))
+  (<?> (bind [_ (token "map")]
+             (return ->MapOp))
        "map operator"))
 (def filter-op
   "Filter sequence operator"
-  (<?> (bind [op (token "filter")]
-             (return ({"filter" ->FilterOp} op)))
+  (<?> (bind [_ (token "filter")]
+             (return ->FilterOp))
        "filter operator"))
 (def reduce-op
   "Reduce sequence operator"
-  (<?> (bind [op (token "reduce")]
-             (return ({"reduce" ->ReduceOp} op)))
+  (<?> (bind [_ (token "reduce")]
+             (return ->ReduceOp))
        "reduce operator"))
 
 (def fun-ops
@@ -162,11 +162,10 @@ nanoweave.parser.definitions
               val digit-string-lit]
              (return (->IdentiferLit (str prefix val))))
        "lambda parameter"))
-(def fun-call
+(def function-arguments
   "Calls a lambda with specified params"
-  (<?> (bind [fun wrapped-identifier
-              args (parens (comma-sep (fwd expr)))]
-             (return (->FunCall fun args)))
+  (<?> (bind [args (parens (comma-sep (fwd expr)))]
+             (return #(->FunCall %1 args)))
        "function call"))
 
 ; Other Binary Operators
@@ -237,7 +236,6 @@ nanoweave.parser.definitions
        wrapped-nil-lit
        array
        object
-       (<:> fun-call)
        (<|> wrapped-identifier no-args-lambda-param)
        (<:> no-args-lambda)
        (<:> lambda)
@@ -247,7 +245,8 @@ nanoweave.parser.definitions
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
 (def member-selection-group (chainl1 nweave dot-op))
-(def unary-group (prefix1 member-selection-group wrapped-uni-op))
+(def apply-group (postfix1 member-selection-group function-arguments))
+(def unary-group (prefix1 apply-group wrapped-uni-op))
 (def fun-group (chainl1 unary-group fun-ops))
 (def concat-group (chainl1 fun-group concat-op))
 (def mul-group (chainl1 concat-group wrapped-mul-op))
