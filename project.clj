@@ -12,7 +12,7 @@
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :jvm-opts ["-Djava.awt.headless=true"]
-  :plugins [[lein-zprint "0.3.9"]]
+  :plugins [[lein-codox "0.10.4"]]
   :profiles {
              :uberjar {:aot :all}
              :dev {:resource-paths ["test/resources"]}

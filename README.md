@@ -45,7 +45,7 @@ I would like to implement.
 - [X] Basic Functional Operators (map, filter, reduce)
 - [X] Scopes
 - [ ] Java Interop
-- [ ] Array Access
+- [X] Array Access
 - [ ] Ranges
 - [ ] Flow Control/Pattern Matching
 - [X] Concatenation

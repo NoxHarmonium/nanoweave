@@ -162,7 +162,7 @@ nanoweave.parser.definitions
               val digit-string-lit]
              (return (->IdentiferLit (str prefix val))))
        "lambda parameter"))
-(def function-arguments
+(def function-call
   "Calls a lambda with specified params"
   (<?> (bind [args (parens (comma-sep (fwd expr)))]
              (return #(->FunCall %1 args)))
@@ -203,6 +203,11 @@ nanoweave.parser.definitions
               body (fwd expr)]
              (return (->Expression (bindings body))))
        "let statement"))
+(def indexing
+  "Indexes a map or a sequence by a key"
+  (<?> (bind [key (brackets (fwd expr))]
+             (return #(->Indexing %1 key)))
+       "indexing"))
 
 ; Interpolated String
 
@@ -245,7 +250,7 @@ nanoweave.parser.definitions
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
 (def member-selection-group (chainl1 nweave dot-op))
-(def apply-group (postfix1 member-selection-group function-arguments))
+(def apply-group (postfix1 member-selection-group (<|> function-call indexing)))
 (def unary-group (prefix1 apply-group wrapped-uni-op))
 (def fun-group (chainl1 unary-group fun-ops))
 (def concat-group (chainl1 fun-group concat-op))

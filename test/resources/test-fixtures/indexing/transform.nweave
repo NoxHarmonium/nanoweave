@@ -1,0 +1,7 @@
+let a = input.a, b = input.b: {
+  "result1": a[1] + b["c"][1],
+  "result2": a[2]["z"],
+  "result3": let key = "c": b[key][1],
+  "result4": b["c"][2][1],
+  "result5": a[a[0] + a[1]]
+}

@@ -40,4 +40,6 @@
   (testing "String Interpolation"
     (run-test-fixture "string-interpolation"))
   (testing "Function Calling"
-    (run-test-fixture "function-calling")))
+    (run-test-fixture "function-calling"))
+  (testing "Indexing"
+    (run-test-fixture "indexing")))

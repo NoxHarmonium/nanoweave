@@ -5,6 +5,7 @@
 (s/defrecord Binding [target :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])
 (s/defrecord InterpolatedString [body :- [Resolvable]])
+(s/defrecord Indexing [target :- Resolvable key :- Resolvable])
 
 (extend-protocol Resolvable
   Binding
@@ -21,4 +22,13 @@
   (resolve-value [this input]
     (let [elements (:body this)]
       (apply str
-             (map #(safe-resolve-value % input) elements)))))
+             (map #(safe-resolve-value % input) elements))))
+  Indexing
+  (resolve-value [this input]
+    (let [target (safe-resolve-value (:target this) input)
+          key (safe-resolve-value (:key this) input)]
+      (cond
+        (map? target) (target key)
+        (sequential? target) (nth target key)
+        (string? target) (str (nth target key))
+        :else nil))))
