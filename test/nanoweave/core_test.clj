@@ -42,4 +42,6 @@
   (testing "Function Calling"
     (run-test-fixture "function-calling"))
   (testing "Indexing"
-    (run-test-fixture "indexing")))
+    (run-test-fixture "indexing"))
+  (testing "Ranges"
+    (run-test-fixture "ranges")))

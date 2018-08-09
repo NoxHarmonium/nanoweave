@@ -172,14 +172,24 @@ nanoweave.parser.definitions
 
 (def dot-op
   "Access operator: extract value from object."
-  (<?> (bind [op (token ".")]
-             (return ({"." ->DotOp} op)))
+  (<?> (bind [_ (token ".")]
+             (return ->DotOp))
        "property accessor (.)"))
 (def concat-op
   "Parses one of the relational operators."
-  (<?> (bind [op (token "++")]
-             (return ({"++" ->ConcatOp} op)))
+  (<?> (bind [_ (token "++")]
+             (return ->ConcatOp))
        "concat operator (++)"))
+(def open-range-op
+  "Parses an open range expression."
+  (<?> (bind [_ (token "until")]
+             (return ->OpenRangeOp))
+       "open range expression (until)"))
+(def closed-range-op
+  "Parses an closed range expression."
+  (<?> (bind [_ (token "to")]
+             (return ->ClosedRangeOp))
+       "closed range expression (to)"))
 
 ; Scopes
 
@@ -250,14 +260,17 @@ nanoweave.parser.definitions
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
 (def member-selection-group (chainl1 nweave dot-op))
-(def apply-group (postfix1 member-selection-group (<|> function-call indexing)))
+(def apply-group (postfix1 member-selection-group
+                           (<|> function-call indexing)))
 (def unary-group (prefix1 apply-group wrapped-uni-op))
 (def fun-group (chainl1 unary-group fun-ops))
 (def concat-group (chainl1 fun-group concat-op))
 (def mul-group (chainl1 concat-group wrapped-mul-op))
 (def add-group (chainl1 mul-group wrapped-add-op))
 (def rel-group (chainl1 add-group wrapped-rel-op))
-(def eq-group (chainl1 rel-group wrapped-eq-op))
+(def range-group (chainl1 rel-group
+                          (<|> open-range-op closed-range-op)))
+(def eq-group (chainl1 range-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
 (def expr (chainl1 xor-group wrapped-or-op))

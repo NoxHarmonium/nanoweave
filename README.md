@@ -46,7 +46,7 @@ I would like to implement.
 - [X] Scopes
 - [ ] Java Interop
 - [X] Array Access
-- [ ] Ranges
+- [X] Ranges
 - [ ] Flow Control/Pattern Matching
 - [X] Concatenation
 - [ ] Type Checking (is?)

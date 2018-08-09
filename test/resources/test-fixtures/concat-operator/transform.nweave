@@ -1,5 +1,6 @@
 {
   "simple": "a" ++ "b" ++ "c",
   "name": input.person.salutation ++ " " ++ input.person.first_name ++ " " ++ input.person.middle_name ++ " " ++ input.person.last_name,
-  "saluation": input.person.salutation
+  "saluation": input.person.salutation,
+  "lists": [1, 2, 3, 4] ++ ["a", "b", input.person.salutation]
 }

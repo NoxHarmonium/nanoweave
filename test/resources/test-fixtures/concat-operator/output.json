@@ -1,5 +1,6 @@
 {
   "name": "Mr John Bartholomew Smith",
   "saluation": "Mr",
-  "simple": "abc"
+  "simple": "abc",
+  "lists": [1, 2, 3, 4, "a", "b", "Mr"]
 }

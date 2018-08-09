@@ -1,0 +1,8 @@
+let a = input.a, b = input.b: {
+  "result1": (0 to 3)[1],
+  "result2": a[0] until a[3],
+  "result3": 0 to 3,
+  "result4": 1 until b["c"][0],
+  "result5": 1+2 to 3+4,
+  "result6": (1 to 2) ++ (3 to 4) == [1, 2, 3, 4]
+}
