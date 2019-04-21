@@ -1,5 +1,6 @@
 (ns nanoweave.ast.lambda
-  (:require [schema.core :as s])
+  (:require [schema.core :as s]
+            [nanoweave.java-interop :as j])
   (:use nanoweave.ast.base))
 
 (s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
@@ -26,18 +27,21 @@
       (fn [& args]
         (check-param-count args param-list)
         (safe-resolve-value body (merge
-                                   input
-                                   (zipmap param-list args))))))
+                                  input
+                                  (zipmap param-list args))))))
   NoArgsLambda
   (resolve-value [this input]
     (let [body (:body this)]
       (fn [& args]
         (let [param-list (generate-params (count args))]
           (safe-resolve-value body (merge
-                                     input
-                                     (zipmap param-list args)))))))
+                                    input
+                                    (zipmap param-list args)))))))
   FunCall
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)
           args (safe-resolve-value (:args this) input)]
-      (apply target args))))
+      (cond
+        (fn? target) (apply target args)
+        (instance? java.lang.Class target) (j/call-java-constructor target args)
+        :else (throw (Exception. (str "Not sure how to call [" (type target) "]")))))))

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/NoxHarmonium/nanoweave.svg?branch=master)](https://travis-ci.org/NoxHarmonium/nanoweave)
 
-A JSONesqe language for transforming 
+A JSONesqe language for transforming
 the structure and values of documents.
 
 The intended use of this project
@@ -13,7 +13,7 @@ in an easy declarative way.
 
 The ultimate goal of this project
 would be to create a simple system service
-with nothing but an 
+with nothing but an
 OpenAPI or RAML API spec
 and a nanoweave file to describe
 the transformations between services.
@@ -30,32 +30,33 @@ I would like to implement.
 
 ### Input/Output Formats
 
-- [X] JSON Support
+- [x] JSON Support
 - [ ] XML Support
 - [ ] CSV Support
 
 ### Language Features
 
-- [X] Structural Transforms
-- [X] String Interpolation
-- [X] Functions (Lambdas)
-- [X] Variables
-- [X] Logic Operators (or, and, xor)
-- [X] Math Operators (+, -, /, *, %, ...)
-- [X] Basic Functional Operators (map, filter, reduce)
-- [X] Scopes
-- [ ] Java Interop
-- [X] Array Access
-- [X] Ranges
+- [x] Structural Transforms
+- [x] String Interpolation
+- [x] Functions (Lambdas)
+- [x] Variables
+- [x] Logic Operators (or, and, xor)
+- [x] Math Operators (+, -, /, \*, %, ...)
+- [x] Basic Functional Operators (map, filter, reduce)
+- [x] Scopes
+- [x] Java Interop
+- [x] Array Access
+- [x] Ranges
 - [ ] Flow Control/Pattern Matching
-- [X] Concatenation
+- [x] Concatenation
 - [ ] Type Checking (is?)
 - [ ] Type Coercion
 - [ ] String Manipulation
 - [ ] Error handling (line number etc.)
 
 ### Tools
-- [X] Command Line Interface
+
+- [x] Command Line Interface
 - [ ] API Service Wrapper
 - [ ] Graphical UI For Editing nanoweave files
 - [ ] IDE Autocomplete from Schema
@@ -63,22 +64,22 @@ I would like to implement.
 ## Usage
 
     Performs actions on an input file according to a given nanoweave definition file .
-    
+
     Usage: nanoweave [options] transform
-    
+
     Options:
       -i, --input PATH   Path to input file
       -o, --output PATH  Path to output file
       -n, --nweave PATH  Path to nanoweave definition file
       -v                 Verbosity level; may be specified multiple times to increase value
       -h, --help
-    
+
     Actions:
       transform     Transforms the given input file
 
 ## Examples
 
-You can run nanoweave using `lein`. 
+You can run nanoweave using `lein`.
 
     lein run -i test\resources\test-fixtures\simple-structure-transform\input.json -o output.json -j test\resources\test-fixtures\simple-structure-transform\transform.nweave transform
 

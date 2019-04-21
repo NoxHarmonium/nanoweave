@@ -1,7 +1,6 @@
 (ns nanoweave.parser.parser
   ^{:doc "The parser for nanoweave.", :author "Sean Dawson"}
-  (:use [clojure.walk :only [prewalk]]
-        [clojure.pprint])
+  (:use [clojure.pprint])
   (:require [blancas.kern.core :as kern]
             [clojure.data.json :as json]
             [nanoweave.utils :refer [read-json-with-doubles]]

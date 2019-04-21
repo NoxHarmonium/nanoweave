@@ -1,1 +1,7 @@
-{ "noargs": "should be lower case" }
+{
+  "noargs constructor": 0,
+  "args": "a",
+  "noargs": "should be lower case",
+  "static": [0, 1, 2],
+  "args constructor": "2 Mar 1901 18:05:06 GMT"
+}

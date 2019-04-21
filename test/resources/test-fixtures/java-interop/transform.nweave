@@ -1,3 +1,7 @@
 let javaString = import "java.lang.String": {
-  "noargs": "should BE lower CASE".toUpperCase().toLowerCase()
+  "noargs": "should BE lower CASE".toUpperCase().toLowerCase(),
+  "noargs constructor": javaString().length(),
+  "args": "a,b,c".split(",")[0],
+  "static": (import "java.util.Arrays").asList([0, 1, 2]),
+  "args constructor": (import "java.util.Date")(1, 2, 3, 4, 5, 6).toGMTString()
 }

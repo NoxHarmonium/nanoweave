@@ -31,8 +31,8 @@
           key (safe-resolve-value (:key this) input)]
       (cond
         (map? target) (target key)
-        (sequential? target) (nth target key)
         (string? target) (str (nth target key))
+        (seqable? target) (nth target key)
         :else nil)))
   ImportOp
   (resolve-value [this _]
