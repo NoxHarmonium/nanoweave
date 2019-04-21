@@ -9,7 +9,8 @@
                  [prismatic/schema "1.1.9"]
                  [org.clojure/data.json "0.2.6"]
                  [rhizome "0.2.9"]
-                 [org.clojure/tools.namespace "0.2.7"]]
+                 [org.clojure/tools.namespace "0.2.7"]
+                 [diff-eq "0.2.3"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :jvm-opts ["-Djava.awt.headless=true"]

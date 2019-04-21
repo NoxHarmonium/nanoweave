@@ -9,6 +9,11 @@
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.parser.parser :as parser]))
 
+;; Patch the eq function to provide diffs for object comparisons
+(do
+  (require 'diff-eq.core)
+  (diff-eq.core/diff!))
+
 (defn run-test-fixture [test-folder]
   (println "Running test fixture: " test-folder)
   (let [input-file (io/resource (str "test-fixtures/" test-folder "/input.json"))
