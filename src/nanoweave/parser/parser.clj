@@ -30,7 +30,7 @@
        (let [ast (:value pstate)]
          (transform-fn ast {"input" input}))
        ((println (err/format-error pstate))
-         nil)))))
+        nil)))))
 
 (defn transform-files
   "Transforms text from an input file with a given nanoweave

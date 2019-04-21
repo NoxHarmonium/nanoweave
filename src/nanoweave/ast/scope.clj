@@ -1,11 +1,13 @@
 (ns nanoweave.ast.scope
-  (:require [schema.core :as s])
+  (:require [schema.core :as s]
+            [nanoweave.utils :refer [dynamically-load-class]])
   (:use nanoweave.ast.base))
 
 (s/defrecord Binding [target :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])
 (s/defrecord InterpolatedString [body :- [Resolvable]])
 (s/defrecord Indexing [target :- Resolvable key :- Resolvable])
+(s/defrecord ImportOp [class-name :- Resolvable])
 
 (extend-protocol Resolvable
   Binding
@@ -31,4 +33,9 @@
         (map? target) (target key)
         (sequential? target) (nth target key)
         (string? target) (str (nth target key))
-        :else nil))))
+        :else nil)))
+  ImportOp
+  (resolve-value [this _]
+    (let [class-name (:class-name this)
+          class (dynamically-load-class class-name)]
+      class)))

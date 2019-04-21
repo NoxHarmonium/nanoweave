@@ -20,3 +20,10 @@
     (map? m)
     (persistent! (reduce-kv (fn [out-m k v] (assoc! out-m k (f v))) (transient {}) m))
     :else nil))
+
+(defn dynamically-load-class
+  "Loads a Java class into the current namespace and returns it"
+  [class-name]
+  (.importClass (the-ns *ns*)
+                (clojure.lang.RT/classForName class-name))
+  (clojure.lang.RT/classForName class-name))

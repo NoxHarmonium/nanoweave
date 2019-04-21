@@ -44,4 +44,6 @@
   (testing "Indexing"
     (run-test-fixture "indexing"))
   (testing "Ranges"
-    (run-test-fixture "ranges")))
+    (run-test-fixture "ranges"))
+  (testing "Java Interop"
+    (run-test-fixture "java-interop")))

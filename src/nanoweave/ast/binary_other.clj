@@ -17,9 +17,9 @@
   (resolve-value [this input]
     (let [left (safe-resolve-value (:left this) input)
           right (safe-resolve-value (:right this) input)]
-    (if
-      (all-sequential? [left right]) ((comp vec concat) left right)
-      (str left right))))
+      (if
+       (all-sequential? [left right]) ((comp vec concat) left right)
+       (str left right))))
   OpenRangeOp
   (resolve-value [this input] (handle-bin-op this input (comp vec range)))
   ClosedRangeOp

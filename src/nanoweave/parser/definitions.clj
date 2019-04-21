@@ -1,5 +1,5 @@
 (ns ^{:doc "The nanoweave parser definitions.", :author "Sean Dawson"}
-nanoweave.parser.definitions
+ nanoweave.parser.definitions
   (:use [blancas.kern.core]
         [blancas.kern.expr]
         [blancas.kern.lexer.java-style]
@@ -218,6 +218,12 @@ nanoweave.parser.definitions
   (<?> (bind [key (brackets (fwd expr))]
              (return #(->Indexing %1 key)))
        "indexing"))
+(def import-statement
+  "Imports a JVM class into scope"
+  (<?> (bind [_ (token "import")
+              class string-lit]
+             (return (->ImportOp class)))
+       "import"))
 
 ; Interpolated String
 
@@ -232,8 +238,8 @@ nanoweave.parser.definitions
   (lexeme (between (sym* \")
                    (<?> (sym* \") "end string")
                    (many (<|>
-                           interpolated-string-expression
-                           (<+> (many (string-char [\" \#]))))))))
+                          interpolated-string-expression
+                          (<+> (many (string-char [\" \#]))))))))
 (def wrapped-interpolated-string
   "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
   (<?> (bind [v interpolated-string]
@@ -244,28 +250,31 @@ nanoweave.parser.definitions
 
 (def nweave
   "Parses a nanoweave structure."
-  (<|> let-scope
-       wrapped-interpolated-string
-       wrapped-float-lit
-       wrapped-bool-lit
-       wrapped-nil-lit
-       array
-       object
-       (<|> wrapped-identifier no-args-lambda-param)
-       (<:> no-args-lambda)
-       (<:> lambda)
-       (parens (fwd expr))))
+  (<|>
+   let-scope
+   import-statement
+   wrapped-interpolated-string
+   wrapped-float-lit
+   wrapped-bool-lit
+   wrapped-nil-lit
+   array
+   object
+   (<|> wrapped-identifier no-args-lambda-param)
+   (<:> no-args-lambda)
+   (<:> lambda)
+   (parens (fwd expr))))
+
 
 ; See: http://www.difranco.net/compsci/C_Operator_Precedence_Table.htm
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
-(def member-selection-group (chainl1 nweave dot-op))
-(def apply-group (postfix1 member-selection-group
+(def apply-group (postfix1 nweave
                            (<|> function-call indexing)))
-(def unary-group (prefix1 apply-group wrapped-uni-op))
-(def fun-group (chainl1 unary-group fun-ops))
-(def concat-group (chainl1 fun-group concat-op))
-(def mul-group (chainl1 concat-group wrapped-mul-op))
+(def fun-group (chainl1 apply-group fun-ops))
+(def member-access-group (chainl1 fun-group dot-op))
+(def concat-group (chainl1 member-access-group concat-op))
+(def unary-group (prefix1 concat-group wrapped-uni-op))
+(def mul-group (chainl1 unary-group wrapped-mul-op))
 (def add-group (chainl1 mul-group wrapped-add-op))
 (def rel-group (chainl1 add-group wrapped-rel-op))
 (def range-group (chainl1 rel-group
@@ -274,4 +283,3 @@ nanoweave.parser.definitions
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
 (def expr (chainl1 xor-group wrapped-or-op))
-
