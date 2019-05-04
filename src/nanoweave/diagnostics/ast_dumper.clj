@@ -1,14 +1,14 @@
 (ns
-  ^{:doc "AST dumper diagnostic tool.", :author "Sean Dawson"}
-  nanoweave.diagnostics.ast-dumper
+ ^{:doc "AST dumper diagnostic tool.", :author "Sean Dawson"}
+ nanoweave.diagnostics.ast-dumper
   (:use
-    [rhizome.viz]
-    [nanoweave.ast.base]
-    [nanoweave.ast.literals])
+   [rhizome.viz]
+   [nanoweave.ast.base]
+   [nanoweave.ast.literals])
   (:require
-    [nanoweave.utils :refer [read-json-with-doubles]]
-    [nanoweave.parser.parser :as parser]
-    [clojure.pprint :as pp])
+   [nanoweave.utils :refer [read-json-with-doubles]]
+   [nanoweave.parser.parser :as parser]
+   [clojure.pprint :as pp])
   (:import (nanoweave.ast.literals StringLit FloatLit BoolLit NilLit ArrayLit)))
 
 (defn- primative-lit? [val]
@@ -28,14 +28,14 @@
 (defn- describe-node [node]
   {:label (if (map? node) (cond
                             (primative-lit? node) (:value node)
-                            :else (type node)
-                            ) (type node))})
+                            :else (type node))
+              (cond (instance? java.lang.String node) node
+                    :else (type node)))})
 
 (defn- describe-edge [src, dest]
   {:label (cond (map? src) (first
-                             (map (fn [[k _]] k)
-                                  (filter (fn [[_ v]] (= v dest)) src))
-                             )
+                            (map (fn [[k _]] k)
+                                 (filter (fn [[_ v]] (= v dest)) src)))
                 (vector? src)
                 (.indexOf src dest))})
 

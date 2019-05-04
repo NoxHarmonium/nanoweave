@@ -3,5 +3,9 @@ let javaString = import "java.lang.String": {
   "noargs constructor": javaString().length(),
   "args": "a,b,c".split(",")[0],
   "static": (import "java.util.Arrays").asList([0, 1, 2]),
-  "args constructor": (import "java.util.Date")(1, 2, 3, 4, 5, 6).toGMTString()
+  "precedence": let String = import "java.lang.String",
+    Calendar = import "java.util.Calendar",
+    TimeZone = import "java.util.TimeZone",
+    Locale = import "java.util.Locale",
+    timeZone = TimeZone.getTimeZone("GMT"): Calendar.getInstance(timeZone, Locale.US).getCalendarType()
 }

@@ -28,7 +28,7 @@
   Indexing
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)
-          key (safe-resolve-value (:key this) input)]
+          key (first (safe-resolve-value (:key this) input))]
       (cond
         (map? target) (target key)
         (string? target) (str (nth target key))
