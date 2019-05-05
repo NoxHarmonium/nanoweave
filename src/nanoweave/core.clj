@@ -20,11 +20,11 @@
 (defn usage
   [options-summary]
   (->>
-    ["Performs actions on an input file according to a given nanoweave definition file."
-     "" "Usage: nanoweave [options] transform" "" "Options:" options-summary ""
-     "Actions:" "  transform\tTransforms the given input file"
-     "dump-ast\tDumps the nweave AST to a file" ""]
-    (string/join \newline)))
+   ["Performs actions on an input file according to a given nanoweave definition file."
+    "" "Usage: nanoweave [options] transform" "" "Options:" options-summary ""
+    "Actions:" "  transform\tTransforms the given input file"
+    "dump-ast\tDumps the nweave AST to a file" ""]
+   (string/join \newline)))
 
 (defn error-msg
   [errors]

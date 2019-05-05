@@ -24,7 +24,7 @@
   "Parses the rule:  pair := String ':' expr"
   (<?> (bind [f string-lit
               _ colon
-              v expr] (return [f v]))
+              v (fwd expr)] (return [f v]))
        "pair"))
 (def array
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
@@ -148,7 +148,7 @@
        "lambda"))
 (def no-args-lambda
   "A self contained function with no params definition"
-  (<?> (bind [_ (token "#")
+  (<?> (bind [_ (sym \#)
               body lambda-body]
              (return (->NoArgsLambda body)))
        "lambda"))
@@ -158,21 +158,27 @@
 (def no-args-lambda-param
   "A parameter in a function that has no params definition.
   Just resolves to an identifier for now but might be extended later."
-  (<?> (bind [prefix (token "%")
+  (<?> (bind [prefix (sym \%)
               val digit-string-lit]
              (return (->IdentiferLit (str prefix val))))
        "lambda parameter"))
 (def function-call
-  "Calls a lambda with specified params"
-  (<?> (bind [args (parens (comma-sep (fwd expr)))]
-             (return #(->FunCall %1 args)))
-       "function call"))
+  "Calls a lambda/java function with specified params.
+   This parser is constructed differently from the others so
+   that function calling can be treated as a binary operation
+   without having an explicit operator."
+  (bind [ahead (look-ahead (sym \())]
+        (if ahead
+          (return ->FunCall)
+          (fail "expected ("))))
+
 
 ; Other Binary Operators
 
+
 (def dot-op
   "Access operator: extract value from object."
-  (<?> (bind [_ (token ".")]
+  (<?> (bind [_ dot]
              (return ->DotOp))
        "property accessor (.)"))
 (def concat-op
@@ -196,7 +202,7 @@
 (def variable-binding
   "Parses a binding of an expression result to a variable"
   (<?> (bind [target identifier
-              _ (token "=")
+              _ (sym \=)
               body (fwd expr)]
              (return (partial ->Binding target body)))
        "variable binding"))
@@ -209,15 +215,20 @@
   "Creates a new scope that has variables that are bound in the binding list"
   (<?> (bind [_ (token "let")
               bindings binding-list
-              _ (token ":")
+              _ colon
               body (fwd expr)]
              (return (->Expression (bindings body))))
        "let statement"))
 (def indexing
-  "Indexes a map or a sequence by a key"
-  (<?> (bind [key (brackets (fwd expr))]
-             (return #(->Indexing %1 key)))
-       "indexing"))
+  "Indexes a map or a sequence by a key.
+  This parser is constructed differently from the others so
+   that indexing can be treated as a binary operation
+   without having an explicit operator."
+  (bind [ahead (look-ahead (sym \[))]
+        (if ahead
+          (return ->Indexing)
+          (fail "expected ["))))
+
 (def import-statement
   "Imports a JVM class into scope"
   (<?> (bind [_ (token "import")
@@ -262,16 +273,18 @@
    (<|> wrapped-identifier no-args-lambda-param)
    (<:> no-args-lambda)
    (<:> lambda)
-   (parens (fwd expr))))
+   (<:> (parens (fwd expr)))
+   (parens (comma-sep (fwd expr)))))
 
 
 ; See: http://www.difranco.net/compsci/C_Operator_Precedence_Table.htm
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
-(def apply-group (postfix1 nweave
-                           (<|> function-call indexing)))
-(def fun-group (chainl1 apply-group fun-ops))
-(def member-access-group (chainl1 fun-group dot-op))
+
+
+(def fun-group (chainl1 nweave fun-ops))
+(def member-access-group (chainl1 fun-group
+                                  (<|> dot-op (<:> function-call) (<:> indexing))))
 (def concat-group (chainl1 member-access-group concat-op))
 (def unary-group (prefix1 concat-group wrapped-uni-op))
 (def mul-group (chainl1 unary-group wrapped-mul-op))

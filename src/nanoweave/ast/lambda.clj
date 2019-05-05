@@ -40,8 +40,9 @@
   FunCall
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)
-          args (safe-resolve-value (:args this) input)]
+          raw-args (safe-resolve-value (:args this) input)
+          args (if (seq? raw-args) raw-args [raw-args])] ; TODO: Find a more idiomatic way to do this
       (cond
         (fn? target) (apply target args)
         (instance? java.lang.Class target) (j/call-java-constructor target args)
-        :else (throw (Exception. (str "Not sure how to call [" (type target) "]")))))))
+        :else (throw (Exception. (str "Not sure how to call [" target "]")))))))

@@ -30,4 +30,4 @@
   (resolve-value [_ _] nil)
   ArrayLit
   (resolve-value [this input]
-    (map #(safe-resolve-value %1 input) (:value this))))
+    (into [] (map #(safe-resolve-value %1 input) (:value this)))))

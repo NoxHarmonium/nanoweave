@@ -1,6 +1,6 @@
 (ns
-  ^{:doc "Error handling functions.", :author "Sean Dawson"}
-  nanoweave.parser.errors
+ ^{:doc "Error handling functions.", :author "Sean Dawson"}
+ nanoweave.parser.errors
   (:require [blancas.kern.core :refer :all]
             [blancas.kern.i18n :refer :all]
             [clojure.string :refer [join]]))
@@ -18,21 +18,17 @@
   "Makes a message of type err-system."
   [pos text] (->PError pos (list (->PMessage err-system text))))
 
-
 (defn- make-err-unexpect
   "Makes a message of type err-unexpect."
   [pos text] (->PError pos (list (->PMessage err-unexpect text))))
-
 
 (defn- make-err-expect
   "Makes a message of type err-expect."
   [pos text] (->PError pos (list (->PMessage err-expect text))))
 
-
 (defn- make-err-message
   "Makes a message of type err-message."
   [pos text] (->PError pos (list (->PMessage err-message text))))
-
 
 (defn- get-msg
   "Get the text from message types system, unexpect, and message."
@@ -42,7 +38,6 @@
     (cond (= type err-system) (fmt :unexpected text)
           (= type err-unexpect) (fmt :unexpected text)
           (= type err-message) text)))
-
 
 (defn- get-msg-expect
   "Get the text from a list of messages of type expect."
@@ -55,21 +50,19 @@
         cnt (count opts)]
     (fmt :expecting (if (= cnt 1) (first opts) (show opts)))))
 
-
 (defn- get-msg-list
   "Gets the text of error messages as a list."
   [{msgs :msgs}]
   (let [ms (distinct msgs)]
     (concat
-      (let [lst (filter #(= (:type %) err-system) ms)]
-        (reduce #(conj %1 (get-msg %2)) [] lst))
-      (let [lst (filter #(= (:type %) err-unexpect) ms)]
-        (reduce #(conj %1 (get-msg %2)) [] lst))
-      (let [lst (filter #(= (:type %) err-expect) ms)]
-        (if (empty? lst) lst (list (get-msg-expect lst))))
-      (let [lst (filter #(= (:type %) err-message) ms)]
-        (reduce #(conj %1 (get-msg %2)) [] lst)))))
-
+     (let [lst (filter #(= (:type %) err-system) ms)]
+       (reduce #(conj %1 (get-msg %2)) [] lst))
+     (let [lst (filter #(= (:type %) err-unexpect) ms)]
+       (reduce #(conj %1 (get-msg %2)) [] lst))
+     (let [lst (filter #(= (:type %) err-expect) ms)]
+       (if (empty? lst) lst (list (get-msg-expect lst))))
+     (let [lst (filter #(= (:type %) err-message) ms)]
+       (reduce #(conj %1 (get-msg %2)) [] lst)))))
 
 (defn- get-msg-str
   "Gets the text of error messages separated by \\n."
