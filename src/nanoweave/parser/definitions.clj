@@ -172,7 +172,6 @@
           (return ->FunCall)
           (fail "expected ("))))
 
-
 ; Other Binary Operators
 
 
@@ -199,9 +198,33 @@
 
 ; Scopes
 
+(def list-pattern-match
+  "parses an expression that pattern matches against a list"
+  (<?> (bind [match (brackets (comma-sep identifier))]
+             (return ->MapPatternMatchOp match))
+       "list pattern match"))
+(def map-pattern-match
+  "parses an expression that pattern matches against a map structure"
+  (<?> (bind [match (braces (comma-sep identifier))]
+             (return (->ListPatternMatchOp match)))
+       "map pattern match"))
+(def variable-match
+  "parses an expression that pattern matches against a single variable"
+  (<?> (bind [match identifier]
+             (return (->VariableMatchOp match)))
+       "variable"))
+
+(def binding-target
+  "parses the target of a variable binding"
+  (<?> (<|>
+        list-pattern-match
+        map-pattern-match
+        variable-match)
+       "variable binding target"))
+
 (def variable-binding
-  "Parses a binding of an expression result to a variable"
-  (<?> (bind [target identifier
+  "Parses a binding of an expression result to a target"
+  (<?> (bind [target binding-target
               _ (sym \=)
               body (fwd expr)]
              (return (partial ->Binding target body)))
@@ -276,11 +299,9 @@
    (<:> (parens (fwd expr)))
    (parens (comma-sep (fwd expr)))))
 
-
 ; See: http://www.difranco.net/compsci/C_Operator_Precedence_Table.htm
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
-
 
 (def fun-group (chainl1 nweave fun-ops))
 (def member-access-group (chainl1 fun-group

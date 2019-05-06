@@ -3,19 +3,22 @@
             [nanoweave.utils :refer [dynamically-load-class]])
   (:use nanoweave.ast.base))
 
-(s/defrecord Binding [target :- Resolvable value :- Resolvable body :- Resolvable])
+(s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])
 (s/defrecord InterpolatedString [body :- [Resolvable]])
 (s/defrecord Indexing [target :- Resolvable key :- Resolvable])
 (s/defrecord ImportOp [class-name :- Resolvable])
+(s/defrecord ListPatternMatchOp [targets :- [Resolvable]])
+(s/defrecord MapPatternMatchOp [targets :- [Resolvable]])
+(s/defrecord VariableMatchOp [target :- Resolvable])
 
 (extend-protocol Resolvable
   Binding
   (resolve-value [this input]
     (let [body (:body this)
-          target (safe-resolve-value (:target this) input)
+          match (safe-resolve-value (:match this) input)
           value (safe-resolve-value (:value this) input)
-          merged-input (merge input {target value})]
+          merged-input (merge input {match value})]
       (safe-resolve-value body merged-input)))
   Expression
   (resolve-value [this input]
@@ -38,4 +41,7 @@
   (resolve-value [this _]
     (let [class-name (:class-name this)
           class (dynamically-load-class class-name)]
-      class)))
+      class))
+  VariableMatchOp
+  (resolve-value [this input]
+    (safe-resolve-value (:target this) input)))
