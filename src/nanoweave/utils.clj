@@ -27,3 +27,11 @@
   (.importClass (the-ns *ns*)
                 (clojure.lang.RT/classForName class-name))
   (clojure.lang.RT/classForName class-name))
+
+
+; Thanks: https://stackoverflow.com/a/27914262
+
+
+(defn contains-many? [m ks]
+  "Checks if a map m contains all the keys in sequence ks"
+  (every? #(contains? m %) ks))

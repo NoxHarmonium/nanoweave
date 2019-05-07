@@ -201,12 +201,12 @@
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
   (<?> (bind [match (brackets (comma-sep identifier))]
-             (return ->MapPatternMatchOp match))
+             (return (->ListPatternMatchOp match)))
        "list pattern match"))
 (def map-pattern-match
   "parses an expression that pattern matches against a map structure"
   (<?> (bind [match (braces (comma-sep identifier))]
-             (return (->ListPatternMatchOp match)))
+             (return (->MapPatternMatchOp match)))
        "map pattern match"))
 (def variable-match
   "parses an expression that pattern matches against a single variable"

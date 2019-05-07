@@ -16,6 +16,7 @@
   (resolve-value [this input]
     (let [key (:value this)]
       (cond
+        (nil? input) input
         (map? input) (get input key)
         (j/matches-reflect-type? input key clojure.reflect.Method) (j/wrap-java-fn input key)
         (j/matches-reflect-type? input key clojure.reflect.Field) (j/get-java-field input key)

@@ -1,6 +1,7 @@
 (ns nanoweave.ast.scope
   (:require [schema.core :as s]
-            [nanoweave.utils :refer [dynamically-load-class]])
+            [clojure.string :as str]
+            [nanoweave.utils :refer [dynamically-load-class contains-many?]])
   (:use nanoweave.ast.base))
 
 (s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
@@ -16,9 +17,9 @@
   Binding
   (resolve-value [this input]
     (let [body (:body this)
-          match (safe-resolve-value (:match this) input)
           value (safe-resolve-value (:value this) input)
-          merged-input (merge input {match value})]
+          associated-values (safe-resolve-value (:match this) value)
+          merged-input (merge input associated-values)]
       (safe-resolve-value body merged-input)))
   Expression
   (resolve-value [this input]
@@ -42,6 +43,25 @@
     (let [class-name (:class-name this)
           class (dynamically-load-class class-name)]
       class))
+  ListPatternMatchOp
+  (resolve-value [this input]
+    (let [binding-names (safe-resolve-value (:targets this) input)]
+      (if (and (seqable? binding-names) (vector? input))
+        (let [binding-count (count binding-names)
+              input-count (count input)]
+          (if (= binding-count input-count)
+            (zipmap binding-names input)
+            (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))))))
+        (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input)))))))
+  MapPatternMatchOp
+  (resolve-value [this input]
+    (let [binding-names (safe-resolve-value (:targets this) input)]
+      (if (and (seqable? binding-names) (map? input))
+        (if (contains-many? input binding-names)
+          (into {} (map #(assoc {} % (get input %)) binding-names))
+          (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input)))))
+        (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] can only bind maps but found " (type input)))))))
   VariableMatchOp
   (resolve-value [this input]
-    (safe-resolve-value (:target this) input)))
+    (let [binding-name (safe-resolve-value (:target this) input)]
+      {binding-name input})))

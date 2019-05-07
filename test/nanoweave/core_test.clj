@@ -51,4 +51,6 @@
   (testing "Ranges"
     (run-test-fixture "ranges"))
   (testing "Java Interop"
-    (run-test-fixture "java-interop")))
+    (run-test-fixture "java-interop"))
+  (testing "Pattern Matching"
+    (run-test-fixture "pattern-matching")))
