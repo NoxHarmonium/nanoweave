@@ -12,6 +12,8 @@
 (s/defrecord ListPatternMatchOp [targets :- [Resolvable]])
 (s/defrecord MapPatternMatchOp [targets :- [Resolvable]])
 (s/defrecord VariableMatchOp [target :- Resolvable])
+(s/defrecord When [clauses :- [Resolvable]])
+(s/defrecord WhenClause [condition :- Resolvable body :- Resolvable])
 
 (extend-protocol Resolvable
   Binding
@@ -64,4 +66,12 @@
   VariableMatchOp
   (resolve-value [this input]
     (let [binding-name (safe-resolve-value (:target this) input)]
-      {binding-name input})))
+      {binding-name input}))
+  When
+  (resolve-value [this input]
+    (letfn [(find-matching-clause [clauses]
+              (first (filter #(safe-resolve-value (:condition %) input) clauses)))]
+      (let [clauses (:clauses this)
+            matching-clause (find-matching-clause clauses)]
+        (safe-resolve-value (:body matching-clause) input)))))
+

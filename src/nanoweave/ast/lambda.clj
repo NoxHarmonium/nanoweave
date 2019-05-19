@@ -24,18 +24,20 @@
   (resolve-value [this input]
     (let [param-list (:param-list this)
           body (:body this)]
-      (fn [& args]
+      (fn [_input & args]
         (check-param-count args param-list)
         (safe-resolve-value body (merge
                                   input
+                                  _input
                                   (zipmap param-list args))))))
   NoArgsLambda
   (resolve-value [this input]
     (let [body (:body this)]
-      (fn [& args]
+      (fn [_input & args]
         (let [param-list (generate-params (count args))]
           (safe-resolve-value body (merge
                                     input
+                                    _input
                                     (zipmap param-list args)))))))
   FunCall
   (resolve-value [this input]
@@ -43,6 +45,6 @@
           raw-args (safe-resolve-value (:args this) input)
           args (if (seq? raw-args) raw-args [raw-args])] ; TODO: Find a more idiomatic way to do this
       (cond
-        (fn? target) (apply target args)
+        (fn? target) (apply target (cons input args))
         (instance? java.lang.Class target) (j/call-java-constructor target args)
-        :else (throw (Exception. (str "Not sure how to call [" target "]")))))))
+        :else (throw (Exception. (str "Not sure how to call [" target "(" (type target) ")]")))))))

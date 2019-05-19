@@ -37,7 +37,7 @@
                      (return (apply hash-map (reduce concat [] members)))))
        "object"))
 
-; Wrapped Primatives
+; Wrapped Primitives
 
 (def wrapped-identifier
   (<?> (bind [v identifier]
@@ -58,7 +58,6 @@
        "null"))
 
 ; Unary Operators
-
 (def wrapped-uni-op
   "Unary operators: not or negative."
   (<?> (bind [op (one-of "!-")]
@@ -153,7 +152,7 @@
              (return (->NoArgsLambda body)))
        "lambda"))
 (def digit-string-lit
-  "Parses a continous string of digits to a trimmed string"
+  "Parses a continuous string of digits to a trimmed string"
   (lexeme (<+> (many1 digit))))
 (def no-args-lambda-param
   "A parameter in a function that has no params definition.
@@ -242,6 +241,25 @@
               body (fwd expr)]
              (return (->Expression (bindings body))))
        "let statement"))
+(def when-clause
+  "An expression and an associated body that will be evaluated if the expression evaluates truthy"
+  (<?> (bind [condition (fwd expr)
+              _ colon
+              body (fwd expr)]
+             (return (->WhenClause condition body)))
+     "when clause"))
+(def when-scope
+  "A flow control construct that will take a branch if an expression evaluates truthy"
+  (<?> (bind [_ (token "when")
+              clauses (parens (many1 when-clause))]
+             (return (->When clauses)))
+       "when statement"))
+(def else
+  "Always evaluates to true, used in a when clause to always execute a clause"
+  (<?> (bind [_ (token "else")]
+             (return (->BoolLit true)))
+       "else"))
+
 (def indexing
   "Indexes a map or a sequence by a key.
   This parser is constructed differently from the others so
@@ -286,10 +304,12 @@
   "Parses a nanoweave structure."
   (<|>
    let-scope
+   when-scope
    import-statement
    wrapped-interpolated-string
    wrapped-float-lit
    wrapped-bool-lit
+   else
    wrapped-nil-lit
    array
    object

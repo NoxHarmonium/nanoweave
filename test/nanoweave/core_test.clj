@@ -53,4 +53,6 @@
   (testing "Java Interop"
     (run-test-fixture "java-interop"))
   (testing "Pattern Matching"
-    (run-test-fixture "pattern-matching")))
+    (run-test-fixture "pattern-matching"))
+  (testing "Flow Control"
+    (run-test-fixture "flow-control")))

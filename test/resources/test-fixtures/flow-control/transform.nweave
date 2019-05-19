@@ -1,0 +1,7 @@
+{
+  "fib(33)": let fib = (x) -> (when (
+    x < 3: 1
+    else: fib(x - 1) + fib(x - 2)
+  )): fib(33)
+}
+
