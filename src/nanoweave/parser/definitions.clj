@@ -247,7 +247,7 @@
               _ colon
               body (fwd expr)]
              (return (->WhenClause condition body)))
-     "when clause"))
+       "when clause"))
 (def when-scope
   "A flow control construct that will take a branch if an expression evaluates truthy"
   (<?> (bind [_ (token "when")
@@ -259,6 +259,19 @@
   (<?> (bind [_ (token "else")]
              (return (->BoolLit true)))
        "else"))
+(def match-clause
+  "A pattern match expression and an associated body that will be evaluated if the match succeeds"
+  (<?> (bind [match binding-target
+              _ colon
+              body (fwd expr)]
+             (return (->MatchClause match body)))
+       "match clause"))
+(def match-scope
+  "A match construct will take a branch if a pattern matches and passes in the matched variables"
+  (<?> (bind [_ (token "match")
+              clauses (comma-sep match-clause)]
+             (return (->Match clauses)))
+       "match statement"))
 
 (def indexing
   "Indexes a map or a sequence by a key.

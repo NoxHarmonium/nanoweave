@@ -14,13 +14,15 @@
 (s/defrecord VariableMatchOp [target :- Resolvable])
 (s/defrecord When [clauses :- [Resolvable]])
 (s/defrecord WhenClause [condition :- Resolvable body :- Resolvable])
+(s/defrecord Match [clauses :- [Resolvable]])
+(s/defrecord MatchClause [match :- Resolvable body :- Resolvable])
 
 (extend-protocol Resolvable
   Binding
   (resolve-value [this input]
     (let [body (:body this)
           value (safe-resolve-value (:value this) input)
-          associated-values (safe-resolve-value (:match this) value)
+          associated-values (:bindings (safe-resolve-value (:match this) value))
           merged-input (merge input associated-values)]
       (safe-resolve-value body merged-input)))
   Expression
@@ -52,26 +54,35 @@
         (let [binding-count (count binding-names)
               input-count (count input)]
           (if (= binding-count input-count)
-            (zipmap binding-names input)
-            (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))))))
-        (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input)))))))
+            {:ok true :bindings (zipmap binding-names input)}
+            {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))}))
+        {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input))})))
   MapPatternMatchOp
   (resolve-value [this input]
     (let [binding-names (safe-resolve-value (:targets this) input)]
       (if (and (seqable? binding-names) (map? input))
         (if (contains-many? input binding-names)
-          (into {} (map #(assoc {} % (get input %)) binding-names))
-          (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input)))))
-        (throw (Exception. (str "Binding pattern [" (str/join ", " binding-names) "] can only bind maps but found " (type input)))))))
+          {:ok true :bindings (into {} (map #(assoc {} % (get input %)) binding-names))}
+          {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))})
+        {:ok false :bindings (str "Binding pattern [" (str/join ", " binding-names) "] can only bind maps but found " (type input))})))
   VariableMatchOp
   (resolve-value [this input]
     (let [binding-name (safe-resolve-value (:target this) input)]
-      {binding-name input}))
+      {:ok true :bindings {binding-name input}}))
   When
   (resolve-value [this input]
     (letfn [(find-matching-clause [clauses]
               (first (filter #(safe-resolve-value (:condition %) input) clauses)))]
       (let [clauses (:clauses this)
             matching-clause (find-matching-clause clauses)]
+        (safe-resolve-value (:body matching-clause) input))))
+  Match
+  (resolve-value [this input]
+    (letfn [(find-matching-clause [clauses]
+              (let [matches (map #(assoc {} :body (:body %) :match-result (safe-resolve-value (:match %) input)) clauses)]
+                (first (filter #(-> % :match-result :ok) matches))))]
+      (let [clauses (:clauses this)
+            matching-clause (find-matching-clause clauses)
+            merged-input (merge input (-> matching-clause :match-result :bindings))]
         (safe-resolve-value (:body matching-clause) input)))))
 

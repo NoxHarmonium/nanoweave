@@ -13,7 +13,7 @@
 (extend-protocol Resolvable
   MapOp
   (resolve-value [this input]
-      (handle-bin-op this input #(map (wrap-lambda input %2) %1))))
+    (handle-bin-op this input #(map (wrap-lambda input %2) %1))))
 
 (extend-protocol Resolvable
   FilterOp
