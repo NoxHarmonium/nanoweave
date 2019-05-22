@@ -251,7 +251,7 @@
 (def when-scope
   "A flow control construct that will take a branch if an expression evaluates truthy"
   (<?> (bind [_ (token "when")
-              clauses (parens (many1 when-clause))]
+              clauses (comma-sep when-clause)]
              (return (->When clauses)))
        "when statement"))
 (def else
