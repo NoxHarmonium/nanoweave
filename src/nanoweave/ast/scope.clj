@@ -12,9 +12,10 @@
 (s/defrecord ListPatternMatchOp [targets :- [Resolvable]])
 (s/defrecord MapPatternMatchOp [targets :- [Resolvable]])
 (s/defrecord VariableMatchOp [target :- Resolvable])
+(s/defrecord LiteralMatchOp [target :- Resolvable])
 (s/defrecord When [clauses :- [Resolvable]])
 (s/defrecord WhenClause [condition :- Resolvable body :- Resolvable])
-(s/defrecord Match [clauses :- [Resolvable]])
+(s/defrecord Match [clauses :- [Resolvable] target :- Resolvable])
 (s/defrecord MatchClause [match :- Resolvable body :- Resolvable])
 
 (extend-protocol Resolvable
@@ -50,39 +51,56 @@
   ListPatternMatchOp
   (resolve-value [this input]
     (let [binding-names (safe-resolve-value (:targets this) input)]
-      (if (and (seqable? binding-names) (vector? input))
-        (let [binding-count (count binding-names)
-              input-count (count input)]
-          (if (= binding-count input-count)
-            {:ok true :bindings (zipmap binding-names input)}
-            {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))}))
-        {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input))})))
+      (if (and (seqable? binding-names) (seqable? input))
+        (let [head-length (- (count binding-names) 1)
+              [head tail] (split-at head-length input)
+              head-bindings (zipmap binding-names head)
+              tail-bindings {(last binding-names) (vec tail)}]
+          {:ok true
+           :bindings (merge head-bindings tail-bindings)})
+        {:ok false
+         :error (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input))})))
   MapPatternMatchOp
   (resolve-value [this input]
     (let [binding-names (safe-resolve-value (:targets this) input)]
       (if (and (seqable? binding-names) (map? input))
         (if (contains-many? input binding-names)
-          {:ok true :bindings (into {} (map #(assoc {} % (get input %)) binding-names))}
-          {:ok false :error (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))})
-        {:ok false :bindings (str "Binding pattern [" (str/join ", " binding-names) "] can only bind maps but found " (type input))})))
+          {:ok true
+           :bindings (into {} (map #(assoc {} % (get input %)) binding-names))}
+          {:ok false
+           :error (str "Binding pattern [" (str/join ", " binding-names) "] does not match size of input " (str/join ", " input))})
+        {:ok false
+         :error (str "Binding pattern [" (str/join ", " binding-names) "] can only bind maps but found " (type input))})))
   VariableMatchOp
   (resolve-value [this input]
     (let [binding-name (safe-resolve-value (:target this) input)]
       {:ok true :bindings {binding-name input}}))
+  LiteralMatchOp
+  (resolve-value [this input]
+    (let [value (safe-resolve-value (:target this) input)]
+      {:ok (= value input) :bindings {}}))
   When
   (resolve-value [this input]
     (letfn [(find-matching-clause [clauses]
-              (first (filter #(safe-resolve-value (:condition %) input) clauses)))]
+              (let [clauses-that-match
+                    (filter #(safe-resolve-value (:condition %) input) clauses)]
+                (when (empty? clauses-that-match) (throw (AssertionError. (str "Pattern match not exhaustive for input [" input "]"))))
+                (first clauses-that-match)))]
       (let [clauses (:clauses this)
             matching-clause (find-matching-clause clauses)]
         (safe-resolve-value (:body matching-clause) input))))
   Match
   (resolve-value [this input]
-    (letfn [(find-matching-clause [clauses]
-              (let [matches (map #(assoc {} :body (:body %) :match-result (safe-resolve-value (:match %) input)) clauses)]
-                (first (filter #(-> % :match-result :ok) matches))))]
-      (let [clauses (:clauses this)
-            matching-clause (find-matching-clause clauses)
+    (letfn [(find-matching-clause [target clauses]
+              (let [clauses-with-match-results
+                    (map #(assoc % :match-result (safe-resolve-value (:match %) target)) clauses)
+                    clauses-that-match
+                    (filter #(-> % :match-result :ok) clauses-with-match-results)]
+                (when (empty? clauses-that-match) (throw (AssertionError. (str "Pattern match not exhaustive for input [" target "]"))))
+                (first clauses-that-match)))]
+      (let [target (safe-resolve-value (:target this) input)
+            clauses (:clauses this)
+            matching-clause (find-matching-clause target clauses)
             merged-input (merge input (-> matching-clause :match-result :bindings))]
-        (safe-resolve-value (:body matching-clause) input)))))
+        (safe-resolve-value (:body matching-clause) merged-input)))))
 

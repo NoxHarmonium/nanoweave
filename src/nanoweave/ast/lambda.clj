@@ -6,6 +6,7 @@
 (s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
 (s/defrecord NoArgsLambda [body :- Resolvable])
 (s/defrecord FunCall [target :- Resolvable args :- [Resolvable]])
+(s/defrecord ArgList [arguments :- [Resolvable]])
 
 (defn- check-param-count [args, param-list]
   (let [args-count (count args) param-list-count (count param-list)]
@@ -26,10 +27,11 @@
           body (:body this)]
       (fn [_input & args]
         (check-param-count args param-list)
-        (safe-resolve-value body (merge
-                                  input
-                                  _input
-                                  (zipmap param-list args))))))
+        (let [merged-input (merge
+                            input
+                            _input
+                            (zipmap param-list args))]
+          (safe-resolve-value body merged-input)))))
   NoArgsLambda
   (resolve-value [this input]
     (let [body (:body this)]
@@ -42,9 +44,13 @@
   FunCall
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)
-          raw-args (safe-resolve-value (:args this) input)
-          args (if (seq? raw-args) raw-args [raw-args])] ; TODO: Find a more idiomatic way to do this
+          args (safe-resolve-value (:args this) input)
+          resolved-args (get args :resolved-arguments [args])]
       (cond
-        (fn? target) (apply target (cons input args))
-        (instance? java.lang.Class target) (j/call-java-constructor target args)
-        :else (throw (Exception. (str "Not sure how to call [" target "(" (type target) ")]")))))))
+        (fn? target) (apply target (cons input resolved-args))
+        (instance? java.lang.Class target) (j/call-java-constructor target resolved-args)
+        :else (throw (Exception. (str "Not sure how to call [" target "(" (type target) ")]"))))))
+  ArgList
+  (resolve-value [this input]
+    (let [arguments (:arguments this)]
+      {:resolved-arguments (map #(safe-resolve-value % input) arguments)})))

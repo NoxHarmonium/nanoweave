@@ -124,7 +124,7 @@
        "reduce operator"))
 
 (def fun-ops
-  "Matches any of the functional binary operators (they have the same precidence)"
+  "Matches any of the functional binary operators (they have the same precedence)"
   (<|> map-op filter-op reduce-op))
 
 ; Lambdas
@@ -199,7 +199,7 @@
 
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
-  (<?> (bind [match (brackets (comma-sep identifier))]
+  (<?> (bind [match (parens (comma-sep identifier))]
              (return (->ListPatternMatchOp match)))
        "list pattern match"))
 (def map-pattern-match
@@ -211,14 +211,20 @@
   "parses an expression that pattern matches against a single variable"
   (<?> (bind [match identifier]
              (return (->VariableMatchOp match)))
-       "variable"))
+       "variable pattern match"))
+(def literal-match
+  "pareses an expression that pattern matches against a literal variable"
+  (<?> (bind [match (fwd expr)]
+             (return (->LiteralMatchOp match)))
+       "literal pattern match"))
 
 (def binding-target
   "parses the target of a variable binding"
   (<?> (<|>
         list-pattern-match
         map-pattern-match
-        variable-match)
+        variable-match
+        literal-match)
        "variable binding target"))
 
 (def variable-binding
@@ -269,8 +275,8 @@
 (def match-scope
   "A match construct will take a branch if a pattern matches and passes in the matched variables"
   (<?> (bind [_ (token "match")
-              clauses (comma-sep match-clause)]
-             (return (->Match clauses)))
+              clauses (parens (comma-sep match-clause))]
+             (return (partial ->Match clauses)))
        "match statement"))
 
 (def indexing
@@ -289,8 +295,15 @@
               class string-lit]
              (return (->ImportOp class)))
        "import"))
+(def function-arguments
+  "A list of expressions passed to function application"
+  (<?> (bind [arguments (comma-sep (fwd expr))]
+             (return (->ArgList arguments)))
+       "function arguments"))
+
 
 ; Interpolated String
+
 
 (def interpolated-string-expression
   "Parses an expression embedded within a string"
@@ -330,7 +343,7 @@
    (<:> no-args-lambda)
    (<:> lambda)
    (<:> (parens (fwd expr)))
-   (parens (comma-sep (fwd expr)))))
+   (parens function-arguments)))
 
 ; See: http://www.difranco.net/compsci/C_Operator_Precedence_Table.htm
 ; Concat group needs to be higher than add group because
@@ -349,4 +362,5 @@
 (def eq-group (chainl1 range-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
-(def expr (chainl1 xor-group wrapped-or-op))
+(def or-group (chainl1 xor-group wrapped-or-op))
+(def expr (postfix1 or-group match-scope))

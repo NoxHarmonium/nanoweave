@@ -14,13 +14,15 @@
 (extend-protocol Resolvable
   IdentiferLit
   (resolve-value [this input]
-    (let [key (:value this)]
-      (cond
-        (nil? input) input
-        (map? input) (get input key)
-        (j/matches-reflect-type? input key clojure.reflect.Method) (j/wrap-java-fn input key)
-        (j/matches-reflect-type? input key clojure.reflect.Field) (j/get-java-field input key)
-        :else (throw (Exception. (str "Not sure how to resolve key [" key "] on [" (type input) "]"))))))
+    (let [key (:value this)
+          resolved-value
+          (cond
+            (nil? input) input
+            (map? input) (get input key)
+            (j/matches-reflect-type? input key clojure.reflect.Method) (j/wrap-java-fn input key)
+            (j/matches-reflect-type? input key clojure.reflect.Field) (j/get-java-field input key)
+            :else (throw (Exception. (str "Not sure how to resolve key [" key "] on [" (type input) "]"))))]
+      resolved-value))
   StringLit
   (resolve-value [this _] (:value this))
   FloatLit
