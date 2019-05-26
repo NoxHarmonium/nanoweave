@@ -2,11 +2,12 @@
   (:require [clojure.walk :refer [prewalk]]
             [clojure.data.json :as json]))
 
-(defn read-json-with-doubles [string]
+(defn read-json-with-doubles
   "Reads JSON but makes sure that numbers are read as doubles.
    In nanoweave we currently deal with all numbers as doubles,
    like in Javascript. This may change in the future but keeps
    it simple for now."
+  [string]
   (let [json-map (json/read-str string)]
     (prewalk #(if (number? %1) (double %1) %1) json-map)))
 
@@ -32,6 +33,7 @@
 ; Thanks: https://stackoverflow.com/a/27914262
 
 
-(defn contains-many? [m ks]
+(defn contains-many?
   "Checks if a map m contains all the keys in sequence ks"
+  [m ks]
   (every? #(contains? m %) ks))

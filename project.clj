@@ -17,6 +17,7 @@
   :plugins [[lein-codox "0.10.4"]
             [cider/cider-nrepl "0.21.1"]]
   :profiles {:uberjar {:aot :all}
-             :dev {:resource-paths ["test/resources"]}})
+             :dev {:resource-paths ["test/resources"]}}
+  :eastwood {:config-files ["lint_config.clj"]})
 
 

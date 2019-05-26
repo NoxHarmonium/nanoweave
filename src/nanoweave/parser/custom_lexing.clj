@@ -1,8 +1,8 @@
 (ns ^{:doc "Custom lexers to help with parsing.", :author "Sean Dawson"}
  nanoweave.parser.custom-lexing
-  (:use [blancas.kern.core]
-        [blancas.kern.expr]
-        [blancas.kern.lexer.java-style]))
+  (:require [blancas.kern.core :refer :all]
+            [blancas.kern.expr :refer :all]
+            [blancas.kern.lexer.java-style :refer :all]))
 
 ; Duplicates blancas.kern.lexer but I couldn't work out another way
 ; to create a custom string type because they are all private in Kern.

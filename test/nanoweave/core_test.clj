@@ -7,12 +7,12 @@
             [clojure.pprint :as pp]
             [clojure.walk :refer [prewalk]]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.parser.parser :as parser]))
+            [nanoweave.parser.parser :as parser]
+            [diff-eq.core :as de]))
+
 
 ;; Patch the eq function to provide diffs for object comparisons
-(do
-  (require 'diff-eq.core)
-  (diff-eq.core/diff!))
+(de/diff!)
 
 (defn run-test-fixture [test-folder]
   (println "Running test fixture: " test-folder)

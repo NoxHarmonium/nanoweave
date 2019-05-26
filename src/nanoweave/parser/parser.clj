@@ -1,12 +1,12 @@
 (ns nanoweave.parser.parser
   ^{:doc "The parser for nanoweave.", :author "Sean Dawson"}
-  (:use [clojure.pprint])
   (:require [blancas.kern.core :as kern]
             [clojure.data.json :as json]
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.ast.base :as ast]
             [nanoweave.parser.definitions :as def]
             [nanoweave.parser.errors :as err]
+            [clojure.pprint :refer [pprint]]
             [nanoweave.ast.primatives]))
 
 (defn resolve-ast
@@ -14,8 +14,9 @@
   [ast input]
   (ast/safe-resolve-value ast input))
 
-(defn parse-nweave-definition [nweave-definition]
+(defn parse-nweave-definition
   "Takes a string with an nanoweave definition and parses it to an AST tree"
+  [nweave-definition]
   (kern/parse def/expr nweave-definition))
 
 (defn transform

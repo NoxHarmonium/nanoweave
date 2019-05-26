@@ -1,8 +1,8 @@
 (ns nanoweave.ast.scope
   (:require [schema.core :as s]
             [clojure.string :as str]
-            [nanoweave.utils :refer [dynamically-load-class contains-many?]])
-  (:use nanoweave.ast.base))
+            [nanoweave.ast.base :refer [Resolvable safe-resolve-value]]
+            [nanoweave.utils :refer [dynamically-load-class contains-many?]]))
 
 (s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])

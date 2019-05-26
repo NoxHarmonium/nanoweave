@@ -1,6 +1,6 @@
 (ns nanoweave.ast.unary
-  (:require [schema.core :as s])
-  (:use nanoweave.ast.base))
+  (:require [schema.core :as s]
+            [nanoweave.ast.base :refer [Resolvable safe-resolve-value]]))
 
 (s/defrecord NotOp [value :- Resolvable])
 (s/defrecord NegOp [value :- Resolvable])

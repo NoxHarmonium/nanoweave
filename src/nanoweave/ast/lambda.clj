@@ -1,23 +1,26 @@
 (ns nanoweave.ast.lambda
   (:require [schema.core :as s]
-            [nanoweave.java-interop :as j])
-  (:use nanoweave.ast.base))
+            [nanoweave.ast.base :refer [Resolvable safe-resolve-value]]
+            [nanoweave.java-interop :as j]))
 
 (s/defrecord Lambda [param-list :- [s/Str] body :- Resolvable])
 (s/defrecord NoArgsLambda [body :- Resolvable])
 (s/defrecord FunCall [target :- Resolvable args :- [Resolvable]])
 (s/defrecord ArgList [arguments :- [Resolvable]])
 
-(defn- check-param-count [args, param-list]
+(defn- check-param-count
+  "Checks that the expected number of arguments are passed to a function"
+  [args param-list]
   (let [args-count (count args) param-list-count (count param-list)]
     (assert (= (count args) (count param-list))
             (str "incorrect number of params passed to lambda.
             Expected " param-list-count " Got " args-count
                  " (" (map type args) ")"))))
 
-(defn- generate-params [count]
+(defn- generate-params
   "For lambdas that don't have arguments specified,
   this generates the parameters used as arguments."
+  [count]
   (map #(str "%" (+ %1 1)) (range count)))
 
 (extend-protocol Resolvable

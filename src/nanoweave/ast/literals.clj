@@ -1,8 +1,8 @@
 (ns nanoweave.ast.literals
   (:require [schema.core :as s]
             [clojure.reflect :as r]
-            [nanoweave.java-interop :as j])
-  (:use nanoweave.ast.base))
+            [nanoweave.ast.base :refer [Resolvable safe-resolve-value]]
+            [nanoweave.java-interop :as j]))
 
 (s/defrecord IdentiferLit [value :- s/Str])
 (s/defrecord StringLit [value :- s/Str])

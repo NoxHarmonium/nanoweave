@@ -1,18 +1,18 @@
 (ns ^{:doc "The nanoweave parser definitions.", :author "Sean Dawson"}
  nanoweave.parser.definitions
-  (:use [blancas.kern.core]
-        [blancas.kern.expr]
-        [blancas.kern.lexer.java-style]
-        [nanoweave.parser.custom-lexing]
-        [nanoweave.ast.base]
-        [nanoweave.ast.literals]
-        [nanoweave.ast.lambda]
-        [nanoweave.ast.scope]
-        [nanoweave.ast.unary]
-        [nanoweave.ast.binary-arithmetic]
-        [nanoweave.ast.binary-functions]
-        [nanoweave.ast.binary-logic]
-        [nanoweave.ast.binary-other]))
+  (:require [blancas.kern.core :refer :all]
+            [blancas.kern.expr :refer :all]
+            [blancas.kern.lexer.java-style :refer :all]
+            [nanoweave.parser.custom-lexing :refer :all]
+            [nanoweave.ast.base :refer :all]
+            [nanoweave.ast.literals :refer :all]
+            [nanoweave.ast.lambda :refer :all]
+            [nanoweave.ast.scope :refer :all]
+            [nanoweave.ast.unary :refer :all]
+            [nanoweave.ast.binary-arithmetic :refer :all]
+            [nanoweave.ast.binary-functions :refer :all]
+            [nanoweave.ast.binary-logic :refer :all]
+            [nanoweave.ast.binary-other :refer :all]))
 
 ; Forward declarations
 

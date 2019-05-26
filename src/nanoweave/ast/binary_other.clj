@@ -1,6 +1,6 @@
 (ns nanoweave.ast.binary-other
-  (:require [schema.core :as s])
-  (:use nanoweave.ast.base))
+  (:require [schema.core :as s]
+            [nanoweave.ast.base :refer [Resolvable handle-bin-op handle-prop-access safe-resolve-value]]))
 
 (s/defrecord DotOp [left :- Resolvable right :- Resolvable])
 (s/defrecord ConcatOp [left :- Resolvable right :- Resolvable])

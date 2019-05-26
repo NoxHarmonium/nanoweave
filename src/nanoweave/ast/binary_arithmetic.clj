@@ -1,6 +1,6 @@
 (ns nanoweave.ast.binary-arithmetic
-  (:require [schema.core :as s])
-  (:use nanoweave.ast.base))
+  (:require [schema.core :as s]
+            [nanoweave.ast.base :refer [Resolvable handle-bin-op]]))
 
 (s/defrecord AddOp [left :- Resolvable right :- Resolvable])
 (s/defrecord SubOp [left :- Resolvable right :- Resolvable])

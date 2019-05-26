@@ -1,13 +1,15 @@
 (ns nanoweave.ast.binary-functions
-  (:require [schema.core :as s])
-  (:use nanoweave.ast.base))
+  (:require [schema.core :as s]
+            [nanoweave.ast.base :refer [Resolvable handle-bin-op]]))
 
 (s/defrecord MapOp [left :- Resolvable right :- Resolvable])
 (s/defrecord FilterOp [left :- Resolvable right :- Resolvable])
 (s/defrecord ReduceOp [left :- Resolvable right :- Resolvable])
 
-(defn wrap-lambda [input lambda]
-  "Returns a function that wraps the given lambda so that it will be called with the correct signature even if passed to a standard Clojure function"
+(defn wrap-lambda
+  "Returns a function that wraps the given lambda so that it will be
+   called with the correct signature even if passed to a standard Clojure function"
+  [input lambda]
   (fn [& args] (apply lambda (cons input args))))
 
 (extend-protocol Resolvable
