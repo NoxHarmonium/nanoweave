@@ -50,16 +50,25 @@
       class))
   ListPatternMatchOp
   (resolve-value [this input]
-    (let [binding-names (safe-resolve-value (:targets this) input)]
-      (if (and (seqable? binding-names) (seqable? input))
-        (let [head-length (- (count binding-names) 1)
-              [head tail] (split-at head-length input)
-              head-bindings (zipmap binding-names head)
-              tail-bindings {(last binding-names) (vec tail)}]
-          {:ok true
-           :bindings (merge head-bindings tail-bindings)})
+    (let [bindings (:targets this)]
+      (if (and (seqable? bindings) (seqable? input))
+        (let [binding-count (count bindings)
+              input-count (count input)]
+          (if (<= (- binding-count input-count) 1)
+            (let [[head tail] (split-at (- binding-count 1) input)
+                  head-bindings (map #(safe-resolve-value %1 %2) bindings head)
+                  tail-binding (safe-resolve-value (last bindings) (vec tail))
+                  all-bindings (conj head-bindings tail-binding)
+                  errors (remove :ok all-bindings)
+                  ok (empty? errors)
+                  merged-bindings (if ok (into {} (map :bindings all-bindings)) nil)]
+              {:ok ok
+               :bindings merged-bindings
+               :error (first errors)})
+            {:ok false
+             :error (str "Binding pattern [" (str/join ", " bindings) "] has less elements than input (count: " (count input) ")")}))
         {:ok false
-         :error (str "Binding pattern [" (str/join ", " binding-names) "] can only bind arrays but found " (type input))})))
+         :error (str "Binding pattern [" (str/join ", " bindings) "] can only bind arrays but found " (type input))})))
   MapPatternMatchOp
   (resolve-value [this input]
     (let [binding-names (safe-resolve-value (:targets this) input)]

@@ -197,10 +197,21 @@
 
 ; Scopes
 
+(declare binding-target)
+(def literal-match
+  "pareses an expression that pattern matches against a literal variable"
+  (<?> (bind [match (fwd expr)]
+             (return (->LiteralMatchOp match)))
+       "literal pattern match"))
+(def variable-match
+  "parses an expression that pattern matches against a single variable"
+  (<?> (bind [match identifier]
+             (return (->VariableMatchOp match)))
+       "variable pattern match"))
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
   (<?> (bind [_ (token "^")
-              match (brackets (comma-sep identifier))]
+              match (brackets (comma-sep (fwd binding-target)))]
              (return (->ListPatternMatchOp match)))
        "list pattern match"))
 (def map-pattern-match
@@ -209,16 +220,6 @@
               match (braces (comma-sep identifier))]
              (return (->MapPatternMatchOp match)))
        "map pattern match"))
-(def variable-match
-  "parses an expression that pattern matches against a single variable"
-  (<?> (bind [match identifier]
-             (return (->VariableMatchOp match)))
-       "variable pattern match"))
-(def literal-match
-  "pareses an expression that pattern matches against a literal variable"
-  (<?> (bind [match (fwd expr)]
-             (return (->LiteralMatchOp match)))
-       "literal pattern match"))
 
 (def binding-target
   "parses the target of a variable binding"
