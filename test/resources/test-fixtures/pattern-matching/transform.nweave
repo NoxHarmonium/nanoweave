@@ -1,5 +1,6 @@
 {
-  "lists": let (a, b, c, _) = [1, 2, 3]: a ++ "-" ++ b ++ "-" ++ c,
-  "head/tail": let (head, tail) = [1, 2, 3]: "head: #{head} tail: #{tail}",
-  "maps": let { a, b, c } = { "a": 4, "b": 5, "c": 6 }: a ++ "-" ++ b ++ "-" ++ c 
+  "lists": let ^[a, b, c, _] = [1, 2, 3]: a ++ "-" ++ b ++ "-" ++ c,
+  "head/tail": let ^[head, tail] = [1, 2, 3]: "head: #{head} tail: #{tail}",
+  "maps": let ^{ a, b, c } = { "a": 4, "b": 5, "c": 6 }: a ++ "-" ++ b ++ "-" ++ c,
+  "match array": [1, 2, 3, 4] match (^[head, tail]: "correct", []: "incorrect")
 }

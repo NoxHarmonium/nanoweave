@@ -3,12 +3,12 @@
     x < 3: 1,
     else: fib(x - 1) + fib(x - 2)
   ): fib(10),
-  "match array": [1, 2, 3] match ([]: "a", [1, 2]: "b", (head, tail): "head: #{head} tail: #{tail}"),
+  "match array": [1, 2, 3] match ([]: "a", [1, 2]: "b", ^[head, tail]: "head: #{head} tail: #{tail}"),
   // Thanks: http://learnyouahaskell.com/recursion#quick-sort
   "sorted": let quicksort = (y) ->
     (y match (
       []: [],
-      (head, tail): let
+      ^[head, tail]: let
         smallerSorted = quicksort(tail filter #(%1 <= head)),
         biggerSorted = quicksort(tail filter #(%1 > head)):
           smallerSorted ++ [head] ++ biggerSorted

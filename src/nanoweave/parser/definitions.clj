@@ -199,12 +199,14 @@
 
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
-  (<?> (bind [match (parens (comma-sep identifier))]
+  (<?> (bind [_ (token "^")
+              match (brackets (comma-sep identifier))]
              (return (->ListPatternMatchOp match)))
        "list pattern match"))
 (def map-pattern-match
   "parses an expression that pattern matches against a map structure"
-  (<?> (bind [match (braces (comma-sep identifier))]
+  (<?> (bind [_ (token "^")
+              match (braces (comma-sep identifier))]
              (return (->MapPatternMatchOp match)))
        "map pattern match"))
 (def variable-match
@@ -221,8 +223,8 @@
 (def binding-target
   "parses the target of a variable binding"
   (<?> (<|>
-        list-pattern-match
-        map-pattern-match
+        (<:> list-pattern-match)
+        (<:> map-pattern-match)
         variable-match
         literal-match)
        "variable binding target"))
