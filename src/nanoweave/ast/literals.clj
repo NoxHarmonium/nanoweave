@@ -1,6 +1,5 @@
 (ns nanoweave.ast.literals
   (:require [schema.core :as s]
-            [clojure.reflect :as r]
             [nanoweave.ast.base :refer [Resolvable safe-resolve-value]]
             [nanoweave.java-interop :as j]))
 
