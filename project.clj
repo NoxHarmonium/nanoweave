@@ -7,10 +7,10 @@
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "0.4.2"]
                  [prismatic/schema "1.1.9"]
-                 [org.clojure/data.json "0.2.6"]
                  [rhizome "0.2.9"]
                  [org.clojure/tools.namespace "0.2.7"]
-                 [diff-eq "0.2.3"]]
+                 [diff-eq "0.2.3"]
+                 [cheshire "5.8.1"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :jvm-opts ["-Djava.awt.headless=true"]

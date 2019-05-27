@@ -3,7 +3,6 @@
             [nanoweave.core :refer :all]
             [clojure.data :refer [diff]]
             [clojure.java.io :as io]
-            [clojure.data.json :as json]
             [clojure.pprint :as pp]
             [clojure.walk :refer [prewalk]]
             [nanoweave.utils :refer [read-json-with-doubles]]

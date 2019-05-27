@@ -1,7 +1,7 @@
 (ns nanoweave.parser.parser
   ^{:doc "The parser for nanoweave.", :author "Sean Dawson"}
   (:require [blancas.kern.core :as kern]
-            [clojure.data.json :as json]
+            [cheshire.core :as cc]
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.ast.base :as ast]
             [nanoweave.parser.definitions :as def]
@@ -29,8 +29,7 @@
      (if (:ok pstate)
        (let [ast (:value pstate)]
          (transform-fn ast {"input" input}))
-       ((println (err/format-error pstate))
-        nil)))))
+       (throw (AssertionError. (err/format-error pstate)))))))
 
 (defn transform-files
   "Transforms text from an input file with a given nanoweave
@@ -38,5 +37,5 @@
   ([input-file output-file nweave-file]
    (let [input (read-json-with-doubles (slurp input-file))
          nweave (slurp nweave-file)
-         output (json/write-str (transform input nweave))]
+         output (cc/generate-string (transform input nweave))]
      (spit output-file output))))

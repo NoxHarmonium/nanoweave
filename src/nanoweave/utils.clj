@@ -1,6 +1,6 @@
 (ns nanoweave.utils
   (:require [clojure.walk :refer [prewalk]]
-            [clojure.data.json :as json]))
+            [cheshire.core :as cc]))
 
 (defn read-json-with-doubles
   "Reads JSON but makes sure that numbers are read as doubles.
@@ -8,7 +8,7 @@
    like in Javascript. This may change in the future but keeps
    it simple for now."
   [string]
-  (let [json-map (json/read-str string)]
+  (let [json-map (cc/parse-string string)]
     (prewalk #(if (number? %1) (double %1) %1) json-map)))
 
 ; From https://github.com/Prismatic/plumbing/
