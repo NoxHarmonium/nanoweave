@@ -93,7 +93,8 @@
     (letfn [(find-matching-clause [clauses]
               (let [clauses-that-match
                     (filter #(safe-resolve-value (:condition %) input) clauses)]
-                (when (empty? clauses-that-match) (throw (AssertionError. (str "Pattern match not exhaustive for input [" input "]"))))
+                (when (empty? clauses-that-match)
+                  (throw (AssertionError. (str "Pattern match not exhaustive for input [" input "]"))))
                 (first clauses-that-match)))]
       (let [clauses (:clauses this)
             matching-clause (find-matching-clause clauses)]
@@ -105,7 +106,9 @@
                     (map #(assoc % :match-result (safe-resolve-value (:match %) target)) clauses)
                     clauses-that-match
                     (filter #(-> % :match-result :ok) clauses-with-match-results)]
-                (when (empty? clauses-that-match) (throw (AssertionError. (str "Pattern match not exhaustive for input [" target "]"))))
+                (when (empty? clauses-that-match)
+                  (println "Match candidates: " (map #(-> % :match-result) clauses-with-match-results))
+                  (throw (AssertionError. (str "Pattern match not exhaustive for input [" target "]"))))
                 (first clauses-that-match)))]
       (let [target (safe-resolve-value (:target this) input)
             clauses (:clauses this)
