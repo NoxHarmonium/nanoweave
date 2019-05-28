@@ -22,9 +22,9 @@
 
 (def pair
   "Parses the rule:  pair := String ':' expr"
-  (<?> (bind [f string-lit
+  (<?> (bind [key (<|> string-lit identifier)
               _ colon
-              v (fwd expr)] (return [f v]))
+              value (fwd expr)] (return [key value]))
        "pair"))
 (def array
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
