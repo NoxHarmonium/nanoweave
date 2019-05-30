@@ -8,6 +8,8 @@
   (resolve-value [this _] this)
   Double
   (resolve-value [this _] this)
+  Boolean
+  (resolve-value [this _] this)
   PersistentArrayMap
   (resolve-value [this input]
     (map-vals #(safe-resolve-value % input) this))

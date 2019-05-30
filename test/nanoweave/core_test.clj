@@ -11,6 +11,8 @@
 
 
 ;; Patch the eq function to provide diffs for object comparisons
+
+
 (de/diff!)
 
 (defn run-test-fixture [test-folder]

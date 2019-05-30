@@ -4,5 +4,7 @@
     "maps": "4.0-5.0-6.0",
     "match array": "correct",
     "mix identifiers and literals": "pass: 2.0 [4.0]",
-    "nested pattern match": 10.0
+    "nested list pattern match": 10.0,
+    "key value pattern match": "match",
+    "nested map pattern match": 3.0
 }

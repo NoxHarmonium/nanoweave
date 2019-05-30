@@ -200,14 +200,26 @@
 (declare binding-target)
 (def literal-match
   "pareses an expression that pattern matches against a literal variable"
-  (<?> (bind [match (fwd expr)]
-             (return (->LiteralMatchOp match)))
+  (<?> (bind [target (fwd expr)]
+             (return (->LiteralMatchOp target)))
        "literal pattern match"))
 (def variable-match
   "parses an expression that pattern matches against a single variable"
-  (<?> (bind [match identifier]
-             (return (->VariableMatchOp match)))
+  (<?> (bind [target identifier]
+             (return (->VariableMatchOp target)))
        "variable pattern match"))
+(def key-match
+  "parses an expression that pattern matches against a key on a map"
+  (<?> (bind [target identifier]
+             (return (->KeyMatchOp target)))
+       "map key pattern match"))
+(def key-value-match
+  "parses an expression that pattern matches against a key/value pair"
+  (<?> (bind [key key-match
+              _ colon
+              value (fwd binding-target)]
+             (return (->KeyValueMatchOp key value)))
+       "map key/value pattern match"))
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
   (<?> (bind [_ (token "^")
@@ -217,7 +229,9 @@
 (def map-pattern-match
   "parses an expression that pattern matches against a map structure"
   (<?> (bind [_ (token "^")
-              match (braces (comma-sep identifier))]
+              match (braces (comma-sep (<|>
+                                        (<:> key-value-match)
+                                        key-match)))]
              (return (->MapPatternMatchOp match)))
        "map pattern match"))
 

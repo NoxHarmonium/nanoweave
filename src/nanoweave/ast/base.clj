@@ -13,10 +13,11 @@
   "Resolves the input if the given resolver is not nil and conforms to Resolvable,
   otherwise it will just return the input."
   [resolver input]
-  (if (and (some? resolver)
-           (satisfies? Resolvable resolver))
-    (resolve-value resolver input)
-    (str (type resolver))))
+  (if (some? resolver)
+    (if (satisfies? Resolvable resolver)
+      (resolve-value resolver input)
+      (println "Warning: Resolving unknown type: [" (type input) "] Will return nil"))
+    nil))
 
 (defn handle-prop-access
   "A special case binary resolver.
