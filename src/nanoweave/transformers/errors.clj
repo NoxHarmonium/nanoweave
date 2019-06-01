@@ -1,6 +1,6 @@
 (ns
  ^{:doc "Error handling functions.", :author "Sean Dawson"}
- nanoweave.parser.errors
+ nanoweave.transformers.errors
   (:require [blancas.kern.core :refer :all]
             [blancas.kern.i18n :refer :all]
             [clojure.string :refer [join]]))

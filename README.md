@@ -47,12 +47,15 @@ I would like to implement.
 - [x] Java Interop
 - [x] Array Access
 - [x] Ranges
-- [ ] Flow Control/Pattern Matching
+- [x] Flow Control/Pattern Matching
 - [x] Concatenation
 - [ ] Type Checking (is?)
 - [ ] Type Coercion
 - [ ] String Manipulation
 - [ ] Error handling (line number etc.)
+- [ ] List comprehensions
+- [ ] Set and Map Operators
+- [ ] Aggregrate (.*)
 
 ### Tools
 

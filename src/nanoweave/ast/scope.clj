@@ -1,41 +1,23 @@
-(ns nanoweave.ast.scope
+(ns ^{:doc "Syntax that represents manipulating the values available for operations."
+      :author "Sean Dawson"}
+ nanoweave.ast.scope
   (:require [schema.core :as s]
-            [nanoweave.utils :refer [dynamically-load-class]])
-  (:use nanoweave.ast.base))
+            [nanoweave.ast.base :refer [Resolvable]]))
 
-(s/defrecord Binding [target :- Resolvable value :- Resolvable body :- Resolvable])
+;; TODO: Break this up further
+
+(s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])
 (s/defrecord InterpolatedString [body :- [Resolvable]])
 (s/defrecord Indexing [target :- Resolvable key :- Resolvable])
 (s/defrecord ImportOp [class-name :- Resolvable])
-
-(extend-protocol Resolvable
-  Binding
-  (resolve-value [this input]
-    (let [body (:body this)
-          target (safe-resolve-value (:target this) input)
-          value (safe-resolve-value (:value this) input)
-          merged-input (merge input {target value})]
-      (safe-resolve-value body merged-input)))
-  Expression
-  (resolve-value [this input]
-    (safe-resolve-value (:body this) input))
-  InterpolatedString
-  (resolve-value [this input]
-    (let [elements (:body this)]
-      (apply str
-             (map #(safe-resolve-value % input) elements))))
-  Indexing
-  (resolve-value [this input]
-    (let [target (safe-resolve-value (:target this) input)
-          key (first (safe-resolve-value (:key this) input))]
-      (cond
-        (map? target) (target key)
-        (string? target) (str (nth target key))
-        (seqable? target) (nth target key)
-        :else nil)))
-  ImportOp
-  (resolve-value [this _]
-    (let [class-name (:class-name this)
-          class (dynamically-load-class class-name)]
-      class)))
+(s/defrecord ListPatternMatchOp [targets :- [Resolvable]])
+(s/defrecord MapPatternMatchOp [targets :- [Resolvable]])
+(s/defrecord VariableMatchOp [target :- Resolvable])
+(s/defrecord LiteralMatchOp [target :- Resolvable])
+(s/defrecord KeyMatchOp [target :- Resolvable])
+(s/defrecord KeyValueMatchOp [key :- Resolvable value :- Resolvable])
+(s/defrecord When [clauses :- [Resolvable]])
+(s/defrecord WhenClause [condition :- Resolvable body :- Resolvable])
+(s/defrecord Match [clauses :- [Resolvable] target :- Resolvable])
+(s/defrecord MatchClause [match :- Resolvable body :- Resolvable])

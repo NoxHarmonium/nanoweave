@@ -1,13 +1,14 @@
 (ns nanoweave.utils
   (:require [clojure.walk :refer [prewalk]]
-            [clojure.data.json :as json]))
+            [cheshire.core :as cc]))
 
-(defn read-json-with-doubles [string]
+(defn read-json-with-doubles
   "Reads JSON but makes sure that numbers are read as doubles.
    In nanoweave we currently deal with all numbers as doubles,
    like in Javascript. This may change in the future but keeps
    it simple for now."
-  (let [json-map (json/read-str string)]
+  [string]
+  (let [json-map (cc/parse-string string)]
     (prewalk #(if (number? %1) (double %1) %1) json-map)))
 
 ; From https://github.com/Prismatic/plumbing/
@@ -27,3 +28,26 @@
   (.importClass (the-ns *ns*)
                 (clojure.lang.RT/classForName class-name))
   (clojure.lang.RT/classForName class-name))
+
+
+; Thanks: https://stackoverflow.com/a/27914262
+
+
+(defn contains-many?
+  "Checks if a map m contains all the keys in sequence ks"
+  [m ks]
+  (every? #(contains? m %) ks))
+
+
+; Thanks: https://stackoverflow.com/a/20054111
+
+
+(defmacro declare-extern
+  [& syms]
+  (let [n (ns-name *ns*)]
+    `(do
+       ~@(for [s syms]
+           `(do
+              (ns ~(symbol (namespace s)))
+              (declare ~(symbol (name s)))))
+       (in-ns '~n))))

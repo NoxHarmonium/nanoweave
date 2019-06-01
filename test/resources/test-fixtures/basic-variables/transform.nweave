@@ -1,7 +1,7 @@
 let x = input.some.sort.of.deeply.nested.data.structure: {
-  "result1": x.a + x.b + x.c,
-  "result2": let x = input.some,
+  result1: x.a + x.b + x.c,
+  result2: let x = input.some,
                  y = x.sort.of: x.a + y.a + y.b + y.c,
-  "result3": let x = input.some.sort.of.deeply.nested.data.structure.a +
-                     input.some.sort.of.deeply.nested.data.structure.b: x
+  result3: let x = input.some.sort.of.deeply.nested.data.structure.a +
+                   input.some.sort.of.deeply.nested.data.structure.b: x
 }

@@ -1,15 +1,14 @@
 (ns ^{:doc "Custom lexers to help with parsing.", :author "Sean Dawson"}
- nanoweave.parser.custom-lexing
-  (:use [blancas.kern.core]
-        [blancas.kern.expr]
-        [blancas.kern.lexer.java-style]))
+ nanoweave.parsers.custom-lexing
+  (:require [blancas.kern.core :refer
+             [>>= <+> <?> <|> >> many1 return fail one-of* sym* times satisfy hex-digit oct-digit]]))
 
 ; Duplicates blancas.kern.lexer but I couldn't work out another way
 ; to create a custom string type because they are all private in Kern.
 
 (def space-ascii 32)
 
-(def- esc-oct
+(def esc-oct
   "Parses an octal escape code; the result is the encoded char."
   (>>= (<+> (many1 oct-digit))
        (fn [x]
@@ -18,13 +17,13 @@
              (return (char n))
              (fail "bad octal sequence"))))))
 
-(def- esc-char
+(def esc-char
   "Parses an escape code for a basic char."
   (let [codes (zipmap "btnfr'\"\\/" "\b\t\n\f\r'\"\\/")]
     (>>= (<?> (one-of* "btnfr'\"\\/") "escape character")
          (fn [x] (return (get codes x))))))
 
-(def- esc-uni
+(def esc-uni
   "Parses a unicode escape code; the result is the encoded char."
   (>>= (<+> (>> (sym* \u) (times 4 hex-digit)))
        (fn [x] (return (aget (Character/toChars (Integer/parseInt x 16)) 0)))))

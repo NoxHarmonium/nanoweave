@@ -1,13 +1,10 @@
 (ns
  ^{:doc "AST dumper diagnostic tool.", :author "Sean Dawson"}
  nanoweave.diagnostics.ast-dumper
-  (:use
-   [rhizome.viz]
-   [nanoweave.ast.base]
-   [nanoweave.ast.literals])
   (:require
+   [rhizome.viz :as r]
    [nanoweave.utils :refer [read-json-with-doubles]]
-   [nanoweave.parser.parser :as parser]
+   [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
   (:import (nanoweave.ast.literals StringLit FloatLit BoolLit NilLit ArrayLit)))
 
@@ -41,22 +38,23 @@
 
 (defn- ast-map-to-graphviz [ast filename]
   (pp/pprint ast)
-  (save-tree decend?
-             decend
-             ast
-             :filename filename
-             :node->descriptor describe-node
-             :edge->descriptor describe-edge))
+  (r/save-tree decend?
+               decend
+               ast
+               :filename filename
+               :node->descriptor describe-node
+               :edge->descriptor describe-edge))
 
 ; No-op
 (defn- process-ast [ast _] ast)
 
-(defn dump-ast-as-graphviz [input-file output-file nweave-file]
+(defn dump-ast-as-graphviz
   "Takes an input file and a nanoweave definition and outputs a graphical
 representation of the AST in PNG format to the output file"
+  [input-file output-file nweave-file]
   (let [input (read-json-with-doubles (slurp input-file))
         nweave (slurp nweave-file)
-        output (parser/transform input nweave process-ast)]
+        output (transformer/transform input nweave process-ast)]
     (ast-map-to-graphviz output output-file)
     ; For some reason rhizome keeps the app open
     (System/exit 0)))

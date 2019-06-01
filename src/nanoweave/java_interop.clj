@@ -19,7 +19,7 @@
     :else val))
 
 (defn wrap-java-fn [target key]
-  (fn [& args]
+  (fn [_input & args]
     (marshal-return
      (let [marshalled-args (map marshal-arg args)]
        (if (class? target)

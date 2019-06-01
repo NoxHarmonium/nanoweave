@@ -3,16 +3,17 @@
             [nanoweave.core :refer :all]
             [clojure.data :refer [diff]]
             [clojure.java.io :as io]
-            [clojure.data.json :as json]
             [clojure.pprint :as pp]
             [clojure.walk :refer [prewalk]]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.parser.parser :as parser]))
+            [nanoweave.transformers.file-transformer :as transformer]
+            [diff-eq.core :as de]))
+
 
 ;; Patch the eq function to provide diffs for object comparisons
-(do
-  (require 'diff-eq.core)
-  (diff-eq.core/diff!))
+
+
+(de/diff!)
 
 (defn run-test-fixture [test-folder]
   (println "Running test fixture: " test-folder)
@@ -22,7 +23,7 @@
         input (read-json-with-doubles (slurp input-file))
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
-        actual (parser/transform input nweave parser/resolve-ast)]
+        actual (transformer/transform input nweave)]
     (is (= expected actual))))
 
 ; Future work: work out how to dynamically create tests based on test-fixtures directory
@@ -51,4 +52,8 @@
   (testing "Ranges"
     (run-test-fixture "ranges"))
   (testing "Java Interop"
-    (run-test-fixture "java-interop")))
+    (run-test-fixture "java-interop"))
+  (testing "Pattern Matching"
+    (run-test-fixture "pattern-matching"))
+  (testing "Flow Control"
+    (run-test-fixture "flow-control")))

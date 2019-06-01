@@ -2,7 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as string]
             [clojure.java.io :as io]
-            [nanoweave.parser.parser :as parser]
+            [nanoweave.transformers.file-transformer :as transformer]
             [nanoweave.diagnostics.ast-dumper :as dumper])
   (:gen-class))
 
@@ -57,9 +57,9 @@
     (if exit-message
       (exit (if ok? 0 1) exit-message)
       (case action
-        "transform" (parser/transform-files (:input options)
-                                            (:output options)
-                                            (:nweave options))
+        "transform" (transformer/transform-files (:input options)
+                                                 (:output options)
+                                                 (:nweave options))
         "dump-ast" (dumper/dump-ast-as-graphviz (:input options)
                                                 (:output options)
                                                 (:nweave options))))))
