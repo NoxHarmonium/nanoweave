@@ -4,7 +4,7 @@
   (:require
    [rhizome.viz :as r]
    [nanoweave.utils :refer [read-json-with-doubles]]
-   [nanoweave.parser.parser :as parser]
+   [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
   (:import (nanoweave.ast.literals StringLit FloatLit BoolLit NilLit ArrayLit)))
 
@@ -54,7 +54,7 @@ representation of the AST in PNG format to the output file"
   [input-file output-file nweave-file]
   (let [input (read-json-with-doubles (slurp input-file))
         nweave (slurp nweave-file)
-        output (parser/transform input nweave process-ast)]
+        output (transformer/transform input nweave process-ast)]
     (ast-map-to-graphviz output output-file)
     ; For some reason rhizome keeps the app open
     (System/exit 0)))

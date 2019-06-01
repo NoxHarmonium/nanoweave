@@ -4,8 +4,8 @@
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class contains-many?]])
   (:import [nanoweave.ast.scope Binding Expression InterpolatedString Indexing ImportOp
-             ListPatternMatchOp MapPatternMatchOp VariableMatchOp LiteralMatchOp
-             KeyMatchOp KeyValueMatchOp When WhenClause Match MatchClause])
+            ListPatternMatchOp MapPatternMatchOp VariableMatchOp LiteralMatchOp
+            KeyMatchOp KeyValueMatchOp When WhenClause Match MatchClause])
   (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
 
 (extend-protocol Resolvable

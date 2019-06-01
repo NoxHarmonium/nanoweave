@@ -1,4 +1,6 @@
-(ns nanoweave.ast.lambda
+(ns ^{:doc "Syntax that represents operations to define functions and call them."
+      :author "Sean Dawson"}
+ nanoweave.ast.lambda
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 

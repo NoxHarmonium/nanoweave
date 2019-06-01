@@ -1,29 +1,31 @@
-(ns ^{:doc "Scope parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses operations that manipulate the values available
+            in the scope of expressions."
+      :author "Sean Dawson"}
  nanoweave.parsers.scope
   (:require [blancas.kern.core :refer [bind <|> <:> <+> <?> fwd return fail
-             look-ahead token* sym* between many ]]
+                                       look-ahead token* sym* between many]]
             [blancas.kern.lexer.java-style :refer
-              [identifier colon token brackets comma-sep
-               braces parens string-lit sym lexeme]]
+             [identifier colon token brackets comma-sep
+              braces parens string-lit sym lexeme]]
             [nanoweave.ast.scope :refer
-              [->LiteralMatchOp ->VariableMatchOp ->KeyMatchOp
-               ->KeyValueMatchOp ->ListPatternMatchOp ->MapPatternMatchOp
-               ->Binding ->Expression ->WhenClause ->When
-               ->MatchClause ->Match ->Indexing ->ImportOp ->InterpolatedString]]
+             [->LiteralMatchOp ->VariableMatchOp ->KeyMatchOp
+              ->KeyValueMatchOp ->ListPatternMatchOp ->MapPatternMatchOp
+              ->Binding ->Expression ->WhenClause ->When
+              ->MatchClause ->Match ->Indexing ->ImportOp ->InterpolatedString]]
             [nanoweave.ast.literals :refer [->BoolLit]]
             [nanoweave.utils :refer [declare-extern]]
-            [nanoweave.parser.custom-lexing :refer [string-char]]))
+            [nanoweave.parsers.custom-lexing :refer [string-char]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parser.definitions/expr)
+(declare-extern nanoweave.parsers.expr/expr)
 
 ; Scopes
 
 (declare binding-target)
 (def literal-match
   "pareses an expression that pattern matches against a literal variable"
-  (<?> (bind [target (fwd nanoweave.parser.definitions/expr)]
+  (<?> (bind [target (fwd nanoweave.parsers.expr/expr)]
              (return (->LiteralMatchOp target)))
        "literal pattern match"))
 (def variable-match
@@ -71,7 +73,7 @@
   "Parses a binding of an expression result to a target"
   (<?> (bind [target binding-target
               _ (sym \=)
-              body (fwd nanoweave.parser.definitions/expr)]
+              body (fwd nanoweave.parsers.expr/expr)]
              (return (partial ->Binding target body)))
        "variable binding"))
 (def binding-list
@@ -84,14 +86,14 @@
   (<?> (bind [_ (token "let")
               bindings binding-list
               _ colon
-              body (fwd nanoweave.parser.definitions/expr)]
+              body (fwd nanoweave.parsers.expr/expr)]
              (return (->Expression (bindings body))))
        "let statement"))
 (def when-clause
   "An expression and an associated body that will be evaluated if the expression evaluates truthy"
-  (<?> (bind [condition (fwd nanoweave.parser.definitions/expr)
+  (<?> (bind [condition (fwd nanoweave.parsers.expr/expr)
               _ colon
-              body (fwd nanoweave.parser.definitions/expr)]
+              body (fwd nanoweave.parsers.expr/expr)]
              (return (->WhenClause condition body)))
        "when clause"))
 (def when-scope
@@ -109,7 +111,7 @@
   "A pattern match expression and an associated body that will be evaluated if the match succeeds"
   (<?> (bind [match binding-target
               _ colon
-              body (fwd nanoweave.parser.definitions/expr)]
+              body (fwd nanoweave.parsers.expr/expr)]
              (return (->MatchClause match body)))
        "match clause"))
 (def match-scope
@@ -141,7 +143,7 @@
 (def interpolated-string-expression
   "Parses an expression embedded within a string"
   (<?> (bind [_ (token* "#{")
-              body (fwd nanoweave.parser.definitions/expr)
+              body (fwd nanoweave.parsers.expr/expr)
               _ (token* "}")]
              (return (->Expression body))) "interpolated string expression"))
 (def interpolated-string

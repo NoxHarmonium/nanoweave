@@ -1,4 +1,7 @@
-(ns nanoweave.ast.binary-arithmetic
+(ns ^{:doc "Syntax that represents arithmetic operations that can
+            be done on two expressions."
+      :author "Sean Dawson"}
+ nanoweave.ast.binary-arithmetic
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 

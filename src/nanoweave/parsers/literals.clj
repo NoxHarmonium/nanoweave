@@ -1,8 +1,9 @@
-(ns ^{:doc "The nanoweave parser definitions.", :author "Sean Dawson"}
- nanoweave.parsers.primatives
+(ns ^{:doc "Pareses literal values."
+      :author "Sean Dawson"}
+ nanoweave.parsers.literals
   (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer
-              [identifier float-lit bool-lit nil-lit]]
+             [identifier float-lit bool-lit nil-lit]]
             [nanoweave.ast.literals :refer [->IdentiferLit ->FloatLit ->BoolLit ->NilLit]]))
 
 ; Wrapped Primitives

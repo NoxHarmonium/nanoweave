@@ -6,7 +6,7 @@
             [clojure.pprint :as pp]
             [clojure.walk :refer [prewalk]]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.parser.parser :as parser]
+            [nanoweave.transformers.file-transformer :as transformer]
             [diff-eq.core :as de]))
 
 
@@ -23,7 +23,7 @@
         input (read-json-with-doubles (slurp input-file))
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
-        actual (parser/transform input nweave parser/resolve-ast)]
+        actual (transformer/transform input nweave)]
     (is (= expected actual))))
 
 ; Future work: work out how to dynamically create tests based on test-fixtures directory

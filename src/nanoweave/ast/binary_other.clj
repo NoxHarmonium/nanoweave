@@ -1,4 +1,6 @@
-(ns nanoweave.ast.binary-other
+(ns ^{:doc "Syntax that represents miscellaneous operations that can be done on two expressions."
+      :author "Sean Dawson"}
+ nanoweave.ast.binary-other
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 

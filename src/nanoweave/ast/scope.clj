@@ -1,6 +1,10 @@
-(ns nanoweave.ast.scope
+(ns ^{:doc "Syntax that represents manipulating the values available for operations."
+      :author "Sean Dawson"}
+ nanoweave.ast.scope
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
+
+;; TODO: Break this up further
 
 (s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])

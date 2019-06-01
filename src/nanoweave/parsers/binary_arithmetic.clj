@@ -1,9 +1,9 @@
-(ns ^{:doc "Binary arithmetic parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses arithmetic operations that can be done on two expressions.", :author "Sean Dawson"}
  nanoweave.parsers.binary-arithmetic
   (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer [one-of]]
             [nanoweave.ast.binary-arithmetic :refer
-              [->MultOp ->DivOp ->ModOp ->AddOp ->SubOp]]))
+             [->MultOp ->DivOp ->ModOp ->AddOp ->SubOp]]))
 
 ; Arithmetic Binary Operators
 

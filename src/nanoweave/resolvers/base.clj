@@ -1,4 +1,6 @@
-(ns nanoweave.resolvers.base
+(ns ^{:doc "Provides functions to walk the AST parsed by the parsing functions
+            and transform values.", :author "Sean Dawson"}
+ nanoweave.resolvers.base
   (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
 
 (defn safe-resolve-value

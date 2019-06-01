@@ -1,14 +1,14 @@
-(ns ^{:doc "Base parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses the basic structure of a transform definition.", :author "Sean Dawson"}
  nanoweave.parsers.base
   (:require [blancas.kern.core :refer [bind <|> <?> fwd return]]
             [blancas.kern.lexer.java-style :refer
-              [colon brackets braces comma-sep string-lit identifier]]
+             [colon brackets braces comma-sep string-lit identifier]]
             [nanoweave.ast.literals :refer [->ArrayLit]]
             [nanoweave.utils :refer [declare-extern]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parser.definitions/expr)
+(declare-extern nanoweave.parsers.expr/expr)
 
 ; JSON Elements
 
@@ -16,11 +16,11 @@
   "Parses the rule:  pair := String ':' expr"
   (<?> (bind [key (<|> string-lit identifier)
               _ colon
-              value (fwd nanoweave.parser.definitions/expr)] (return [key value]))
+              value (fwd nanoweave.parsers.expr/expr)] (return [key value]))
        "pair"))
 (def array
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
-  (<?> (brackets (bind [members (comma-sep (fwd nanoweave.parser.definitions/expr))]
+  (<?> (brackets (bind [members (comma-sep (fwd nanoweave.parsers.expr/expr))]
                        (return (->ArrayLit members))))
        "array"))
 (def object

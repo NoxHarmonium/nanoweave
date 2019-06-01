@@ -1,4 +1,6 @@
-(ns nanoweave.ast.binary-logic
+(ns ^{:doc "Syntax that defines logic operations that can be done on two expressions."
+      :author "Sean Dawson"}
+ nanoweave.ast.binary-logic
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 

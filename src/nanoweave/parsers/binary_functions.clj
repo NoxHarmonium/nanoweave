@@ -1,9 +1,11 @@
-(ns ^{:doc "Binary function parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses functional programming style operations
+            that can be done on two expressions."
+      :author "Sean Dawson"}
  nanoweave.parsers.binary-functions
   (:require [blancas.kern.core :refer [bind <|> <?> return]]
             [blancas.kern.lexer.java-style :refer [token]]
             [nanoweave.ast.binary-functions :refer
-              [->MapOp ->FilterOp ->ReduceOp]]))
+             [->MapOp ->FilterOp ->ReduceOp]]))
 
 ; Functional Binary Operators
 

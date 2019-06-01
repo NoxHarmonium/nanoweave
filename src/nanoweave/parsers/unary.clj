@@ -1,4 +1,5 @@
-(ns ^{:doc "Unary parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses miscellaneous operations that can be done on a single expression."
+      :author "Sean Dawson"}
  nanoweave.parsers.unary
   (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer [one-of]]

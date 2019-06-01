@@ -1,10 +1,11 @@
-(ns ^{:doc "Other binary parsers", :author "Sean Dawson"}
+(ns ^{:doc "Parses miscellaneous operations that can be done on two expressions."
+      :author "Sean Dawson"}
  nanoweave.parsers.binary-other
   (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer
-              [dot token]]
+             [dot token]]
             [nanoweave.ast.binary-other :refer
-              [->DotOp ->ConcatOp ->OpenRangeOp ->ClosedRangeOp]]))
+             [->DotOp ->ConcatOp ->OpenRangeOp ->ClosedRangeOp]]))
 
 ; Other Binary Operators
 

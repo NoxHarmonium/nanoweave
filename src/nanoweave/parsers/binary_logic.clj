@@ -1,13 +1,15 @@
-(ns ^{:doc "Binary logic parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses logic operations that can be done on two expressions."
+      :author "Sean Dawson"}
  nanoweave.parsers.binary-logic
   (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer [token]]
             [nanoweave.ast.binary-logic :refer
-              [->GrThanEqOp ->LessThanEqOp ->GrThanOp ->LessThanOp
+             [->GrThanEqOp ->LessThanEqOp ->GrThanOp ->LessThanOp
               ->EqOp ->NotEqOp ->AndOp ->OrOp ->XorOp]]))
 
 
 ; Logical Binary Operators
+
 
 (def wrapped-rel-op
   "Relational operator: greater than, less than"

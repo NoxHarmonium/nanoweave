@@ -1,7 +1,7 @@
 (ns nanoweave.resolvers.binary-other
   (:require [nanoweave.ast.binary-other]
             [nanoweave.resolvers.base :refer
-              [handle-bin-op handle-prop-access safe-resolve-value]])
+             [handle-bin-op handle-prop-access safe-resolve-value]])
   (:import [nanoweave.ast.binary_other DotOp ConcatOp OpenRangeOp ClosedRangeOp])
   (:use [nanoweave.ast.base :only [Resolvable resolve-value]]))
 

@@ -1,8 +1,9 @@
-(ns ^{:doc "Lambda parsers.", :author "Sean Dawson"}
+(ns ^{:doc "Parses operations to define functions and call them."
+      :author "Sean Dawson"}
  nanoweave.parsers.lambda
   (:require [blancas.kern.core :refer [bind <|> <+> <?> fwd return fail look-ahead many1 digit]]
             [blancas.kern.lexer.java-style :refer
-              [comma-sep identifier parens token sym lexeme]]
+             [comma-sep identifier parens token sym lexeme]]
             [nanoweave.ast.lambda :refer [->Lambda ->NoArgsLambda ->FunCall ->ArgList]]
             [nanoweave.ast.literals :refer [->IdentiferLit]]
             [nanoweave.parsers.base :refer [object]]
@@ -10,7 +11,7 @@
 
 ; Forward declarations
 
-(declare-extern nanoweave.parser.definitions/expr)
+(declare-extern nanoweave.parsers.expr/expr)
 
 ; Lambdas
 
@@ -21,7 +22,7 @@
        "lambda argument list"))
 (def lambda-body
   "The body of a lambda that is executed when the lambda is called"
-  (<?> (<|> (parens (fwd nanoweave.parser.definitions/expr)) object)
+  (<?> (<|> (parens (fwd nanoweave.parsers.expr/expr)) object)
        "lambda body"))
 (def lambda
   "A self contained function that binds an expression to arguments"
@@ -57,6 +58,6 @@
           (fail "expected ("))))
 (def function-arguments
   "A list of expressions passed to function application"
-  (<?> (bind [arguments (comma-sep (fwd nanoweave.parser.definitions/expr))]
+  (<?> (bind [arguments (comma-sep (fwd nanoweave.parsers.expr/expr))]
              (return (->ArgList arguments)))
        "function arguments"))

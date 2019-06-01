@@ -1,30 +1,31 @@
-(ns ^{:doc "The nanoweave parser definitions.", :author "Sean Dawson"}
- nanoweave.parser.definitions
-  (:require [blancas.kern.core :refer :all]
-            [blancas.kern.expr :refer :all]
-            [blancas.kern.lexer.java-style :refer :all]
-            [nanoweave.parser.custom-lexing :refer :all]
+(ns ^{:doc "Parses a nanoweave transform expression.
+            An expression combines all the other parsers together and is recursive
+            to allow complex transforms to be parsed.", :author "Sean Dawson"}
+ nanoweave.parsers.expr
+  (:require [blancas.kern.core :refer [fwd <|> <:>]]
+            [blancas.kern.lexer.java-style :refer
+             [parens]]
+            [blancas.kern.expr :refer [chainl1 prefix1 postfix1]]
             [nanoweave.parsers.base :refer [pair array object]]
-            [nanoweave.parsers.primatives :refer
-              [wrapped-identifier wrapped-float-lit wrapped-bool-lit wrapped-nil-lit]]
+            [nanoweave.parsers.literals :refer
+             [wrapped-identifier wrapped-float-lit wrapped-bool-lit wrapped-nil-lit]]
             [nanoweave.parsers.unary :refer [wrapped-uni-op]]
             [nanoweave.parsers.binary-arithmetic :refer
-              [wrapped-mul-op wrapped-add-op]]
+             [wrapped-mul-op wrapped-add-op]]
             [nanoweave.parsers.binary-logic :refer
-              [wrapped-rel-op wrapped-eq-op wrapped-and-op wrapped-or-op wrapped-xor-op]]
+             [wrapped-rel-op wrapped-eq-op wrapped-and-op wrapped-or-op wrapped-xor-op]]
             [nanoweave.parsers.binary-functions :refer
-              [map-op filter-op reduce-op]]
+             [map-op filter-op reduce-op]]
             [nanoweave.parsers.lambda :refer
-              [argument-list lambda-body lambda no-args-lambda no-args-lambda-param
+             [argument-list lambda-body lambda no-args-lambda no-args-lambda-param
               function-call function-arguments]]
             [nanoweave.parsers.binary-other :refer
-              [dot-op concat-op open-range-op closed-range-op]]
+             [dot-op concat-op open-range-op closed-range-op]]
             [nanoweave.parsers.scope :refer
-              [literal-match variable-match key-match key-value-match list-pattern-match
-               map-pattern-match binding-target variable-binding binding-list let-scope
-               when-clause when-scope else match-clause match-scope indexing import-statement
-               wrapped-interpolated-string]]
-            [nanoweave.ast.literals :refer [->IdentiferLit ->BoolLit]]))
+             [literal-match variable-match key-match key-value-match list-pattern-match
+              map-pattern-match binding-target variable-binding binding-list let-scope
+              when-clause when-scope else match-clause match-scope indexing import-statement
+              wrapped-interpolated-string]]))
 
 ; Forward declarations
 

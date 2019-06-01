@@ -1,11 +1,11 @@
-(ns nanoweave.parser.parser
-  ^{:doc "The parser for nanoweave.", :author "Sean Dawson"}
-  (:require [blancas.kern.core :as kern]
-            [cheshire.core :as cc]
+(ns nanoweave.transformers.file-transformer
+  ^{:doc "The transformer for nanoweave.", :author "Sean Dawson"}
+  (:require [blancas.kern.core :refer [parse]]
+            [cheshire.core :refer [generate-string]]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.resolvers.base :as base]
-            [nanoweave.parser.definitions :as def]
-            [nanoweave.parser.errors :as err]
+            [nanoweave.resolvers.base :refer [safe-resolve-value]]
+            [nanoweave.parsers.expr :refer [expr]]
+            [nanoweave.transformers.errors :refer [format-error]]
             [clojure.pprint :refer [pprint]]
             [nanoweave.resolvers.binary-arithmetic]
             [nanoweave.resolvers.binary-functions]
@@ -21,12 +21,12 @@
 (defn resolve-ast
   "Takes a parsed AST tree and transforms a given input with it"
   [ast input]
-  (base/safe-resolve-value ast input))
+  (safe-resolve-value ast input))
 
 (defn parse-nweave-definition
   "Takes a string with an nanoweave definition and parses it to an AST tree"
   [nweave-definition]
-  (kern/parse def/expr nweave-definition))
+  (parse expr nweave-definition))
 
 (defn transform
   "Transforms input with the given nanoweave definition and an optional
@@ -38,7 +38,7 @@
      (if (:ok pstate)
        (let [ast (:value pstate)]
          (transform-fn ast {"input" input}))
-       (throw (AssertionError. (err/format-error pstate)))))))
+       (throw (AssertionError. (format-error pstate)))))))
 
 (defn transform-files
   "Transforms text from an input file with a given nanoweave
@@ -46,5 +46,5 @@
   ([input-file output-file nweave-file]
    (let [input (read-json-with-doubles (slurp input-file))
          nweave (slurp nweave-file)
-         output (cc/generate-string (transform input nweave))]
+         output (generate-string (transform input nweave))]
      (spit output-file output))))

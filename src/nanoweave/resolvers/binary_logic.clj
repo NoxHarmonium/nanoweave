@@ -3,7 +3,7 @@
             [nanoweave.resolvers.base :refer [handle-bin-op]]
             [nanoweave.resolvers.operators :refer [xor]])
   (:import [nanoweave.ast.binary_logic EqOp NotEqOp LessThanOp LessThanEqOp
-                     GrThanOp GrThanEqOp AndOp OrOp XorOp])
+            GrThanOp GrThanEqOp AndOp OrOp XorOp])
   (:use [nanoweave.ast.base :only [Resolvable resolve-value]]))
 
 (extend-protocol Resolvable

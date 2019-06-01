@@ -1,4 +1,6 @@
-(ns nanoweave.ast.literals
+(ns ^{:doc "Syntax that represents literal values."
+      :author "Sean Dawson"}
+ nanoweave.ast.literals
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 
