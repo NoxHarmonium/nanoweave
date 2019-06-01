@@ -3,16 +3,25 @@
   (:require [blancas.kern.core :as kern]
             [cheshire.core :as cc]
             [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.ast.base :as ast]
+            [nanoweave.resolvers.base :as base]
             [nanoweave.parser.definitions :as def]
             [nanoweave.parser.errors :as err]
             [clojure.pprint :refer [pprint]]
-            [nanoweave.ast.primatives]))
+            [nanoweave.resolvers.binary-arithmetic]
+            [nanoweave.resolvers.binary-functions]
+            [nanoweave.resolvers.binary-logic]
+            [nanoweave.resolvers.binary-other]
+            [nanoweave.resolvers.lambda]
+            [nanoweave.resolvers.literals]
+            [nanoweave.resolvers.operators]
+            [nanoweave.resolvers.primatives]
+            [nanoweave.resolvers.scope]
+            [nanoweave.resolvers.unary]))
 
 (defn resolve-ast
   "Takes a parsed AST tree and transforms a given input with it"
   [ast input]
-  (ast/safe-resolve-value ast input))
+  (base/safe-resolve-value ast input))
 
 (defn parse-nweave-definition
   "Takes a string with an nanoweave definition and parses it to an AST tree"
