@@ -18,7 +18,7 @@
   "For lambdas that don't have arguments specified,
   this generates the parameters used as arguments."
   [count]
-  (map #(str "%" (+ %1 1)) (range count)))
+  (map #(str "%" (inc %1)) (range count)))
 
 (extend-protocol Resolvable
   Lambda

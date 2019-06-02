@@ -21,11 +21,14 @@
               function-call function-arguments]]
             [nanoweave.parsers.binary-other :refer
              [dot-op concat-op open-range-op closed-range-op]]
-            [nanoweave.parsers.scope :refer
+            [nanoweave.parsers.pattern-matching :refer
              [literal-match variable-match key-match key-value-match list-pattern-match
-              map-pattern-match binding-target variable-binding binding-list let-scope
-              when-clause when-scope else match-clause match-scope indexing import-statement
-              wrapped-interpolated-string]]))
+              map-pattern-match match-clause match-scope binding-target]]
+            [nanoweave.parsers.scope :refer
+                                                                          [variable-binding binding-list let-scope
+                                                                           when-clause when-scope else indexing import-statement
+                                                                           wrapped-interpolated-string]]))
+
 
 ; Forward declarations
 

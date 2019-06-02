@@ -15,6 +15,7 @@
             [nanoweave.resolvers.literals]
             [nanoweave.resolvers.operators]
             [nanoweave.resolvers.primatives]
+            [nanoweave.resolvers.pattern-matching]
             [nanoweave.resolvers.scope]
             [nanoweave.resolvers.unary]))
 
