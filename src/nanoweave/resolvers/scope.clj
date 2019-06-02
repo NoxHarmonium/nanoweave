@@ -8,6 +8,17 @@
             KeyMatchOp KeyValueMatchOp When WhenClause Match MatchClause])
   (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
 
+(defn- merge-bindings
+  "Merges the results of multiple pattern matches.
+   If one match fails, the entire match fails."
+  [bindings]
+  (let [bindings-with-errors (remove :ok bindings)
+        ok (empty? bindings-with-errors)
+        merged-bindings (when ok (into {} (map :bindings bindings)))]
+    {:ok ok
+     :bindings merged-bindings
+     :error (:error (first bindings-with-errors))}))
+
 (extend-protocol Resolvable
   Binding
   (resolve-value [this input]
@@ -23,7 +34,7 @@
   (resolve-value [this input]
     (let [elements (:body this)]
       (str/join
-             (map #(safe-resolve-value % input) elements))))
+       (map #(safe-resolve-value % input) elements))))
   Indexing
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)
@@ -48,13 +59,8 @@
             (let [[head tail] (split-at (dec binding-count) input)
                   head-bindings (map safe-resolve-value bindings head)
                   tail-binding (safe-resolve-value (last bindings) (vec tail))
-                  all-bindings (conj head-bindings tail-binding)
-                  bindings-with-errors (remove :ok all-bindings)
-                  ok (empty? bindings-with-errors)
-                  merged-bindings (when ok (into {} (map :bindings all-bindings)))]
-              {:ok ok
-               :bindings merged-bindings
-               :error (:error (first bindings-with-errors))})
+                  all-bindings (conj head-bindings tail-binding)]
+              (merge-bindings all-bindings))
             {:ok false
              :error (str "Binding pattern [" (str/join ", " bindings) "] has less elements than input (count: " (count input) ")")}))
         {:ok false
@@ -63,12 +69,8 @@
   (resolve-value [this input]
     (let [bindings (safe-resolve-value (:targets this) input)]
       (if (and (seqable? bindings) (map? input))
-        (let [mapped-bindings (map #(safe-resolve-value % input) bindings)
-              bindings-with-errors (remove :ok mapped-bindings)
-              ok (empty? bindings-with-errors)]
-          {:ok ok
-           :bindings (when ok (into {} (map :bindings mapped-bindings)))
-           :error (:error (first bindings-with-errors))})
+        (let [mapped-bindings (map #(safe-resolve-value % input) bindings)]
+          (merge-bindings mapped-bindings))
         {:ok false
          :error (str "Binding pattern [" (str/join ", " bindings) "] can only bind maps but found " (type input))})))
   VariableMatchOp
@@ -80,13 +82,8 @@
     (let [key-match (safe-resolve-value (:key this) input)
           [key] (vals (:bindings key-match))
           value-match (safe-resolve-value (:value this) key)
-          all-matches [key-match value-match]
-          bindings-with-errors (remove :ok all-matches)
-          ok (empty? bindings-with-errors)
-          merged-bindings (when ok (into {} (map :bindings all-matches)))]
-      {:ok ok
-       :bindings merged-bindings
-       :error (:error (first bindings-with-errors))}))
+          all-matches [key-match value-match]]
+      (merge-bindings all-matches)))
   LiteralMatchOp
   (resolve-value [this input]
     (let [value (safe-resolve-value (:target this) input)
