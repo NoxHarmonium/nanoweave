@@ -31,7 +31,7 @@
 (defn string-char
   "Parses an unquoted Java character literal. Characters in terminators must be escaped."
   [terminators]
-  (<?> (<|> (satisfy #(and (not (some (partial = %) terminators)) (not= % \\) (>= (int %) space-ascii)))
+  (<?> (<|> (satisfy #(and (not-any? (partial = %) terminators) (not= % \\) (>= (int %) space-ascii)))
             (>> (sym* \\)
                 (<?> (<|> esc-char esc-oct esc-uni)
                      "escaped code: b, t, n, f, r, ', \\, ooo, hhhh")))

@@ -22,7 +22,7 @@
   InterpolatedString
   (resolve-value [this input]
     (let [elements (:body this)]
-      (apply str
+      (str/join
              (map #(safe-resolve-value % input) elements))))
   Indexing
   (resolve-value [this input]
@@ -45,13 +45,13 @@
         (let [binding-count (count bindings)
               input-count (count input)]
           (if (<= (- binding-count input-count) 1)
-            (let [[head tail] (split-at (- binding-count 1) input)
-                  head-bindings (map #(safe-resolve-value %1 %2) bindings head)
+            (let [[head tail] (split-at (dec binding-count) input)
+                  head-bindings (map safe-resolve-value bindings head)
                   tail-binding (safe-resolve-value (last bindings) (vec tail))
                   all-bindings (conj head-bindings tail-binding)
                   bindings-with-errors (remove :ok all-bindings)
                   ok (empty? bindings-with-errors)
-                  merged-bindings (if ok (into {} (map :bindings all-bindings)) nil)]
+                  merged-bindings (when ok (into {} (map :bindings all-bindings)))]
               {:ok ok
                :bindings merged-bindings
                :error (:error (first bindings-with-errors))})
@@ -67,7 +67,7 @@
               bindings-with-errors (remove :ok mapped-bindings)
               ok (empty? bindings-with-errors)]
           {:ok ok
-           :bindings (if ok (into {} (map :bindings mapped-bindings)) nil)
+           :bindings (when ok (into {} (map :bindings mapped-bindings)))
            :error (:error (first bindings-with-errors))})
         {:ok false
          :error (str "Binding pattern [" (str/join ", " bindings) "] can only bind maps but found " (type input))})))
@@ -83,7 +83,7 @@
           all-matches [key-match value-match]
           bindings-with-errors (remove :ok all-matches)
           ok (empty? bindings-with-errors)
-          merged-bindings (if ok (into {} (map :bindings all-matches)) nil)]
+          merged-bindings (when ok (into {} (map :bindings all-matches)))]
       {:ok ok
        :bindings merged-bindings
        :error (:error (first bindings-with-errors))}))

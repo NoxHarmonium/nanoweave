@@ -6,7 +6,7 @@
 
 (defn matches-reflect-type? [instance key reflect-type]
   (let [matching-members (members-matching-name instance key)]
-    (not (empty? (filter #(instance? reflect-type %) matching-members)))))
+    (seq (filter (fn* [p1__281412#] (instance? reflect-type p1__281412#)) matching-members))))
 
 (defn marshal-arg [arg]
   (cond

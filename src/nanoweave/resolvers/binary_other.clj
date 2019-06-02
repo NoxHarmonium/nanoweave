@@ -21,4 +21,4 @@
   OpenRangeOp
   (resolve-value [this input] (handle-bin-op this input (comp vec range)))
   ClosedRangeOp
-  (resolve-value [this input] (handle-bin-op this input (comp vec #(range %1 (+ %2 1))))))
+  (resolve-value [this input] (handle-bin-op this input (comp vec #(range %1 (inc %2))))))
