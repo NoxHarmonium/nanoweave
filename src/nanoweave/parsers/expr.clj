@@ -1,34 +1,43 @@
-(ns ^{:doc "Parses a nanoweave transform expression.
-            An expression combines all the other parsers together and is recursive
-            to allow complex transforms to be parsed.", :author "Sean Dawson"}
+(ns ^{:author "Sean Dawson"
+      :doc "Parses a nanoweave transform expression.\n            An expression combines all the other parsers together and is recursive\n            to allow complex transforms to be parsed."}
  nanoweave.parsers.expr
-  (:require [blancas.kern.core :refer [fwd <|> <:>]]
-            [blancas.kern.lexer.java-style :refer
-             [parens]]
-            [blancas.kern.expr :refer [chainl1 prefix1 postfix1]]
-            [nanoweave.parsers.base :refer [pair array object]]
-            [nanoweave.parsers.literals :refer
-             [wrapped-identifier wrapped-float-lit wrapped-bool-lit wrapped-nil-lit]]
-            [nanoweave.parsers.unary :refer [wrapped-uni-op]]
-            [nanoweave.parsers.binary-arithmetic :refer
-             [wrapped-mul-op wrapped-add-op]]
-            [nanoweave.parsers.binary-logic :refer
-             [wrapped-rel-op wrapped-eq-op wrapped-and-op wrapped-or-op wrapped-xor-op]]
-            [nanoweave.parsers.binary-functions :refer
-             [map-op filter-op reduce-op]]
-            [nanoweave.parsers.lambda :refer
-             [argument-list lambda-body lambda no-args-lambda no-args-lambda-param
-              function-call function-arguments]]
-            [nanoweave.parsers.binary-other :refer
-             [dot-op concat-op open-range-op closed-range-op]]
-            [nanoweave.parsers.pattern-matching :refer
-             [literal-match variable-match key-match key-value-match list-pattern-match
-              map-pattern-match match-clause match-scope binding-target]]
-            [nanoweave.parsers.scope :refer
-                                                                          [variable-binding binding-list let-scope
-                                                                           when-clause when-scope else indexing import-statement
-                                                                           wrapped-interpolated-string]]))
-
+  (:require [blancas.kern.core :refer [<:> <|> fwd]]
+            [blancas.kern.expr :refer [chainl1 postfix1 prefix1]]
+            [blancas.kern.lexer.java-style :refer [parens]]
+            [nanoweave.parsers.base :refer [array object]]
+            [nanoweave.parsers.binary-arithmetic
+             :refer
+             [wrapped-add-op wrapped-mul-op]]
+            [nanoweave.parsers.binary-functions :refer [filter-op map-op reduce-op]]
+            [nanoweave.parsers.binary-logic
+             :refer
+             [wrapped-and-op
+              wrapped-eq-op
+              wrapped-or-op
+              wrapped-rel-op
+              wrapped-xor-op]]
+            [nanoweave.parsers.binary-other
+             :refer
+             [closed-range-op concat-op dot-op open-range-op]]
+            [nanoweave.parsers.lambda
+             :refer
+             [function-arguments
+              function-call
+              lambda
+              no-args-lambda
+              no-args-lambda-param]]
+            [nanoweave.parsers.literals
+             :refer
+             [wrapped-bool-lit
+              wrapped-float-lit
+              wrapped-identifier
+              wrapped-nil-lit]]
+            [nanoweave.parsers.pattern-matching :refer [match-scope]]
+            [nanoweave.parsers.scope
+             :refer
+             [else import-statement indexing let-scope when-scope]]
+            [nanoweave.parsers.text :refer [wrapped-interpolated-string]]
+            [nanoweave.parsers.unary :refer [wrapped-uni-op]]))
 
 ; Forward declarations
 

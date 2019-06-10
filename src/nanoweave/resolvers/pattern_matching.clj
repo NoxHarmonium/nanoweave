@@ -4,8 +4,8 @@
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class contains-many?]])
   (:import [nanoweave.ast.pattern_matching ListPatternMatchOp
-          MapPatternMatchOp VariableMatchOp LiteralMatchOp
-          KeyMatchOp KeyValueMatchOp Match MatchClause])
+            MapPatternMatchOp VariableMatchOp LiteralMatchOp
+            KeyMatchOp KeyValueMatchOp Match MatchClause])
   (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
 
 (defn- merge-bindings

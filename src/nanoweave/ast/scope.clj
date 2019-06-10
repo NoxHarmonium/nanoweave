@@ -6,7 +6,6 @@
 
 (s/defrecord Binding [match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [body :- Resolvable])
-(s/defrecord InterpolatedString [body :- [Resolvable]])
 (s/defrecord Indexing [target :- Resolvable key :- Resolvable])
 (s/defrecord ImportOp [class-name :- Resolvable])
 (s/defrecord When [clauses :- [Resolvable]])

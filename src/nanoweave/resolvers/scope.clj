@@ -1,11 +1,9 @@
 (ns nanoweave.resolvers.scope
   (:require [nanoweave.ast.scope]
-            [clojure.string :as str]
+            [nanoweave.ast.base :refer :all]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
-            [nanoweave.utils :refer [dynamically-load-class contains-many?]])
-  (:import [nanoweave.ast.scope Binding Expression InterpolatedString
-            Indexing ImportOp When WhenClause])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [nanoweave.utils :refer [dynamically-load-class]])
+  (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When]))
 
 (defn- merge-bindings
   "Merges the results of multiple pattern matches.
@@ -29,11 +27,6 @@
   Expression
   (resolve-value [this input]
     (safe-resolve-value (:body this) input))
-  InterpolatedString
-  (resolve-value [this input]
-    (let [elements (:body this)]
-      (str/join
-       (map #(safe-resolve-value % input) elements))))
   Indexing
   (resolve-value [this input]
     (let [target (safe-resolve-value (:target this) input)

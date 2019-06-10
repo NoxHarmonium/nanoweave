@@ -1,23 +1,10 @@
 (ns nanoweave.transformers.file-transformer
-  ^{:doc "The transformer for nanoweave.", :author "Sean Dawson"}
   (:require [blancas.kern.core :refer [parse]]
             [cheshire.core :refer [generate-string]]
-            [nanoweave.utils :refer [read-json-with-doubles]]
-            [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.parsers.expr :refer [expr]]
+            [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.transformers.errors :refer [format-error]]
-            [clojure.pprint :refer [pprint]]
-            [nanoweave.resolvers.binary-arithmetic]
-            [nanoweave.resolvers.binary-functions]
-            [nanoweave.resolvers.binary-logic]
-            [nanoweave.resolvers.binary-other]
-            [nanoweave.resolvers.lambda]
-            [nanoweave.resolvers.literals]
-            [nanoweave.resolvers.operators]
-            [nanoweave.resolvers.primatives]
-            [nanoweave.resolvers.pattern-matching]
-            [nanoweave.resolvers.scope]
-            [nanoweave.resolvers.unary]))
+            [nanoweave.utils :refer [read-json-with-doubles]]))
 
 (defn resolve-ast
   "Takes a parsed AST tree and transforms a given input with it"

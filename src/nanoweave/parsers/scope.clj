@@ -1,18 +1,16 @@
-(ns ^{:doc "Parses operations that manipulate the values available
-            in the scope of expressions."
-      :author "Sean Dawson"}
+(ns ^{:author "Sean Dawson"
+      :doc "Parses operations that manipulate the values available in the scope of expressions."}
  nanoweave.parsers.scope
-  (:require [blancas.kern.core :refer [bind <|> <:> <+> <?> fwd return fail
-                                       look-ahead token* sym* between many]]
-            [blancas.kern.lexer.java-style :refer
-             [identifier colon token comma-sep string-lit sym lexeme]]
-            [nanoweave.ast.scope :refer
-             [->Binding ->Expression ->WhenClause ->When
-              ->Indexing ->ImportOp ->InterpolatedString]]
+  (:require [blancas.kern.core :refer [<?> bind fail fwd look-ahead return]]
+            [blancas.kern.lexer.java-style
+             :refer
+             [colon comma-sep string-lit sym token]]
             [nanoweave.ast.literals :refer [->BoolLit]]
-            [nanoweave.utils :refer [declare-extern]]
+            [nanoweave.ast.scope
+             :refer
+             [->Binding ->Expression ->ImportOp ->Indexing ->When ->WhenClause]]
             [nanoweave.parsers.pattern-matching :refer [binding-target]]
-            [nanoweave.parsers.custom-lexing :refer [string-char]]))
+            [nanoweave.utils :refer [declare-extern]]))
 
 ; Forward declarations
 
@@ -76,23 +74,3 @@
              (return (->ImportOp class)))
        "import"))
 
-; Interpolated String
-
-(def interpolated-string-expression
-  "Parses an expression embedded within a string"
-  (<?> (bind [_ (token* "#{")
-              body (fwd nanoweave.parsers.expr/expr)
-              _ (token* "}")]
-             (return (->Expression body))) "interpolated string expression"))
-(def interpolated-string
-  "Parses string literals and embedded expressions delimited by double quotes"
-  (lexeme (between (sym* \")
-                   (<?> (sym* \") "end string")
-                   (many (<|>
-                          interpolated-string-expression
-                          (<+> (many (string-char [\" \#]))))))))
-(def wrapped-interpolated-string
-  "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
-  (<?> (bind [v interpolated-string]
-             (return (->InterpolatedString v)))
-       "string"))
