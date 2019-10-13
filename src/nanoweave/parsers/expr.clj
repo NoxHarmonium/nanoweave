@@ -8,7 +8,8 @@
             [nanoweave.parsers.binary-arithmetic
              :refer
              [wrapped-add-op wrapped-mul-op]]
-            [nanoweave.parsers.binary-functions :refer [filter-op map-op reduce-op]]
+            [nanoweave.parsers.binary-functions :refer
+             [filter-op map-op reduce-op regex-match-op regex-find-op regex-split-op]]
             [nanoweave.parsers.binary-logic
              :refer
              [wrapped-and-op
@@ -36,7 +37,7 @@
             [nanoweave.parsers.scope
              :refer
              [else import-statement indexing let-scope when-scope]]
-            [nanoweave.parsers.text :refer [wrapped-interpolated-string]]
+            [nanoweave.parsers.text :refer [wrapped-interpolated-string regex]]
             [nanoweave.parsers.unary :refer [wrapped-uni-op]]))
 
 ; Forward declarations
@@ -45,7 +46,7 @@
 
 (def fun-ops
   "Matches any of the functional binary operators (they have the same precedence)"
-  (<|> map-op filter-op reduce-op))
+  (<|> map-op filter-op reduce-op regex-match-op regex-find-op regex-split-op))
 
 ; Root Definition
 
@@ -55,6 +56,7 @@
    let-scope
    when-scope
    import-statement
+   regex
    wrapped-interpolated-string
    wrapped-float-lit
    wrapped-bool-lit

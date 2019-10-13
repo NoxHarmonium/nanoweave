@@ -5,4 +5,4 @@
             [nanoweave.ast.base :refer [Resolvable]]))
 
 (s/defrecord InterpolatedString [body :- [Resolvable]])
-
+(s/defrecord Regex [regex :- [java.util.regex.Pattern]])

@@ -3,11 +3,11 @@
  nanoweave.parsers.text
   (:require [blancas.kern.core
              :refer
-             [<+> <?> <|> between bind fwd many return sym* token*]]
+             [<+> <?> <|> between bind fwd many return sym* token* fail]]
             [blancas.kern.lexer.java-style :refer [lexeme]]
             [nanoweave.ast.scope :refer [->Expression]]
-            [nanoweave.ast.text :refer [->InterpolatedString]]
-            [nanoweave.parsers.custom-lexing :refer [string-char]]
+            [nanoweave.ast.text :refer [->InterpolatedString ->Regex]]
+            [nanoweave.parsers.custom-lexing :refer [string-char regex-char]]
             [nanoweave.utils :refer [declare-extern]]))
 
 ; Forward declarations
@@ -34,4 +34,12 @@
   (<?> (bind [v interpolated-string]
              (return (->InterpolatedString v)))
        "string"))
+(def regex
+  "Parses regular expression delimited by forward slashes"
+  (lexeme (between (sym* \/)
+                   (<?> (sym* \/) "end regex")
+                   (bind [pattern (<+> (many (regex-char)))]
+                         (try
+                           (return (->Regex (re-pattern pattern)))
+                           (catch Exception e (fail (.getMessage e))))))))
 

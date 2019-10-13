@@ -8,3 +8,7 @@
 (s/defrecord MapOp [left :- Resolvable right :- Resolvable])
 (s/defrecord FilterOp [left :- Resolvable right :- Resolvable])
 (s/defrecord ReduceOp [left :- Resolvable right :- Resolvable])
+
+(s/defrecord RegexMatchOp [left :- Resolvable right :- Resolvable])
+(s/defrecord RegexFindOp [left :- Resolvable right :- Resolvable])
+(s/defrecord RegexSplitOp [left :- Resolvable right :- Resolvable])
