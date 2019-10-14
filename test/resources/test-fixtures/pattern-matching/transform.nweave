@@ -2,9 +2,23 @@
   "lists": let ^[a, b, c, _] = [1, 2, 3]: a ++ "-" ++ b ++ "-" ++ c,
   "head/tail": let ^[head, tail] = [1, 2, 3]: "head: #{head} tail: #{tail}",
   "maps": let ^{ a, b, c } = { "a": 4, "b": 5, "c": 6 }: a ++ "-" ++ b ++ "-" ++ c,
-  "match array": [1, 2, 3, 4] match (^[head, tail]: "correct", []: "incorrect"),
-  "mix identifiers and literals": [1, 2, 3, 4] match (^[2, b, c, d]: "fail", ^[1, a, 3, b]: "pass: #{a} #{b}", ^[1, 2, 3, []]: "fail"),
-  "nested list pattern match": [[[[1]], 2], [3, 4]] match (^[^[^[^[a, _], _], b, _], ^[c, d, _], _]: a + b + c + d),
-  "key value pattern match": {a: 1, b: 2} match (^{a, b: 3}: "bad", ^[a, b]: "even more bad", ^{a, b: 2}: "match"),
-  "nested map pattern match": {a: 1, b: { c: { d: 3 } } } match (^{ b: ^{ c: ^{ d: x } } }: x)
+  "match array": [1, 2, 3, 4] match {
+    ^[head, tail]: "correct",
+    []: "incorrect"
+  },
+  "mix identifiers and literals": [1, 2, 3, 4] match {
+    ^[2, b, c, d]: "fail",
+    ^[1, a, 3, b]: "pass: #{a} #{b}",
+    ^[1, 2, 3, []]: "fail"
+  },
+  "nested list pattern match": [[[[1]], 2], [3, 4]] match {
+    ^[^[^[^[a, _], _], b, _], ^[c, d, _], _]: a + b + c + d
+  },
+  "key value pattern match": {a: 1, b: 2} match {
+    ^{a, b: 3}: "bad",
+    ^[a, b]: "even more bad", ^{a, b: 2}: "match"
+  },
+  "nested map pattern match": { a: 1, b: { c: { d: 3 } } } match {
+    ^{ b: ^{ c: ^{ d: x } } }: x
+  }
 }

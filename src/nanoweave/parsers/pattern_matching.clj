@@ -73,6 +73,6 @@
 (def match-scope
   "A match construct will take a branch if a pattern matches and passes in the matched variables"
   (<?> (bind [_ (token "match")
-              clauses (parens (comma-sep match-clause))]
+              clauses (braces (comma-sep match-clause))]
              (return (partial ->Match clauses)))
        "match statement"))
