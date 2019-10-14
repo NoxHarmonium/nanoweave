@@ -6,5 +6,34 @@
     "single": "contact@seandawson.info" rfind ridiculous
   },
   "escaped": let r = /a/: ["a" rmatch r, "abc" rmatch r, "abc" rfind r],
-  "pizza": let r = /,/: "a,b,c,d,e" rsplit r
+  "pizza": let r = /,/: "a,b,c,d,e" rsplit r,
+  "regex match basic": "abcd" match {
+    /a/: "bad",
+    /cd/: "bad",
+    /abcd/: "good",
+    else: "bad"
+  },
+  "regex match capture groups": "test@example.com" match {
+    /(.+)@(.+)(\.\w{3})/: {
+      "all": _,
+      "recipient": _[0],
+      "domain": _[1],
+      "tld": _[2]
+    },
+    else: "bad"
+  },
+  // Other pattern flags like Java's DOTALL, MULTILINE and UNICODE_CASE
+  // pattern matching modes, can be set by combining these embedded flags
+  // (?d) Unix lines (only match \newline)
+  // (?i) Case-insensitive
+  // (?u) Unicode-aware Case
+  // (?m) Multiline
+  // (?s) Dot matches all (including newline)
+  // (?x) Ignore Whitespace and comments
+  // E.g. https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#CASE_INSENSITIVE
+  "regex match java flags": "ABcd" match {
+    /abCD/: "bad",
+    /(?i)abCD/: "good",
+    else: "bad"
+  }
 }
