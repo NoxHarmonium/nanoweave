@@ -1,0 +1,26 @@
+{
+  "branch": "master",
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "leiningen-semantic-release",
+      {
+        "skipDeploy": false
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "package.json",
+          "package-lock.json",
+          "npm-shrinkwrap.json",
+          "project.clj"
+        ]
+      }
+    ]
+  ]
+}
