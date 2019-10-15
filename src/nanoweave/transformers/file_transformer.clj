@@ -1,5 +1,5 @@
-(ns nanoweave.transformers.file-transformer
-  ^{:doc "The transformer for nanoweave.", :author "Sean Dawson"}
+(ns ^{:doc "The transformer for nanoweave.", :author "Sean Dawson"}
+ nanoweave.transformers.file-transformer
   (:require [blancas.kern.core :refer [parse]]
             [cheshire.core :refer [generate-string]]
             [nanoweave.utils :refer [read-json-with-doubles]]
@@ -17,6 +17,7 @@
             [nanoweave.resolvers.primatives]
             [nanoweave.resolvers.pattern-matching]
             [nanoweave.resolvers.scope]
+            [nanoweave.resolvers.text]
             [nanoweave.resolvers.unary]))
 
 (defn resolve-ast

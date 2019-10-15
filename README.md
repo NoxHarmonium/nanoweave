@@ -49,6 +49,7 @@ I would like to implement.
 - [x] Ranges
 - [x] Flow Control/Pattern Matching
 - [x] Concatenation
+- [x] Regex
 - [ ] Type Checking (is?)
 - [ ] Type Coercion
 - [ ] String Manipulation

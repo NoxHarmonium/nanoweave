@@ -4,8 +4,9 @@
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class contains-many?]])
   (:import [nanoweave.ast.pattern_matching ListPatternMatchOp
-          MapPatternMatchOp VariableMatchOp LiteralMatchOp
-          KeyMatchOp KeyValueMatchOp Match MatchClause])
+            MapPatternMatchOp VariableMatchOp LiteralMatchOp
+            KeyMatchOp KeyValueMatchOp Match MatchClause
+            RegexMatchOp])
   (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
 
 (defn- merge-bindings
@@ -48,6 +49,11 @@
   (resolve-value [this input]
     (let [binding-name (safe-resolve-value (:target this) input)]
       {:ok true :bindings {binding-name input}}))
+  RegexMatchOp
+  (resolve-value [this input]
+    (let [pattern (safe-resolve-value (:pattern this) input)
+          matches (re-matches pattern input)]
+      {:ok (some? matches) :bindings {"_" matches}}))
   KeyValueMatchOp
   (resolve-value [this input]
     (let [key-match (safe-resolve-value (:key this) input)

@@ -56,4 +56,6 @@
   (testing "Pattern Matching"
     (run-test-fixture "pattern-matching"))
   (testing "Flow Control"
-    (run-test-fixture "flow-control")))
+    (run-test-fixture "flow-control"))
+  (testing "Regex"
+    (run-test-fixture "regex")))

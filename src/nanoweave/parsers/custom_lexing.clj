@@ -1,7 +1,7 @@
 (ns ^{:doc "Custom lexers to help with parsing.", :author "Sean Dawson"}
  nanoweave.parsers.custom-lexing
   (:require [blancas.kern.core :refer
-             [>>= <+> <?> <|> >> many1 return fail one-of* sym* times satisfy hex-digit oct-digit]]))
+             [>>= <+> <?> <|> >> many1 return fail one-of* sym* times satisfy hex-digit oct-digit bind token-]]))
 
 ; Duplicates blancas.kern.lexer but I couldn't work out another way
 ; to create a custom string type because they are all private in Kern.
@@ -36,3 +36,10 @@
                 (<?> (<|> esc-char esc-oct esc-uni)
                      "escaped code: b, t, n, f, r, ', \\, ooo, hhhh")))
        "character literal"))
+
+(defn regex-char
+  "Parses a character for a regex literal. Forward slashes must be escaped."
+  []
+  (<?> (<|> (bind [_ (token- "\\/")] (return \/))
+            (satisfy #(and (not= % \/) (>= (int %) space-ascii))))
+       "regex literal"))

@@ -6,8 +6,10 @@
 
 (s/defrecord ListPatternMatchOp [targets :- [Resolvable]])
 (s/defrecord MapPatternMatchOp [targets :- [Resolvable]])
+(s/defrecord RegexMatchOp [pattern :- Resolvable])
 (s/defrecord VariableMatchOp [target :- Resolvable])
 (s/defrecord LiteralMatchOp [target :- Resolvable])
+
 (s/defrecord KeyMatchOp [target :- Resolvable])
 (s/defrecord KeyValueMatchOp [key :- Resolvable value :- Resolvable])
 (s/defrecord Match [clauses :- [Resolvable] target :- Resolvable])

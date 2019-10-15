@@ -4,10 +4,11 @@
   (:require [blancas.kern.core :refer [bind <|> <:> <?> fwd return]]
             [blancas.kern.lexer.java-style :refer
              [identifier colon brackets comma-sep braces parens token]]
+            [nanoweave.parsers.text :refer [regex]]
             [nanoweave.ast.pattern-matching :refer
              [->LiteralMatchOp ->VariableMatchOp ->KeyMatchOp
               ->KeyValueMatchOp ->ListPatternMatchOp ->MapPatternMatchOp
-              ->MatchClause ->Match]]
+              ->MatchClause ->Match ->RegexMatchOp]]
             [nanoweave.utils :refer [declare-extern]]))
 
 ; Forward declarations
@@ -27,6 +28,11 @@
   (<?> (bind [target identifier]
              (return (->VariableMatchOp target)))
        "variable pattern match"))
+(def regex-match
+  "parses an expression that pattern matches with a regex expression"
+  (<?> (bind [target regex]
+             (return (->RegexMatchOp target)))
+       "regex pattern match"))
 (def key-match
   "parses an expression that pattern matches against a key on a map"
   (<?> (bind [target identifier]
@@ -59,6 +65,7 @@
   (<?> (<|>
         (<:> list-pattern-match)
         (<:> map-pattern-match)
+        regex-match
         variable-match
         literal-match)
        "variable binding target"))
@@ -73,6 +80,6 @@
 (def match-scope
   "A match construct will take a branch if a pattern matches and passes in the matched variables"
   (<?> (bind [_ (token "match")
-              clauses (parens (comma-sep match-clause))]
+              clauses (braces (comma-sep match-clause))]
              (return (partial ->Match clauses)))
        "match statement"))
