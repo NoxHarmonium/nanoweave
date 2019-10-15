@@ -4,12 +4,8 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     "@semantic-release/changelog",
-    [
-      "leiningen-semantic-release",
-      {
-        "skipDeploy": false
-      }
-    ],
+    "@semantic-release/npm",
+    "leiningen-semantic-release",
     [
       "@semantic-release/git",
       {
