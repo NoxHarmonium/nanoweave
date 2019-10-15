@@ -1,4 +1,4 @@
-(defproject nanoweave "1.0.0"
+(defproject nanoweave "1.0.1"
   :description "A data transformation tool"
   :url "http://github.com/noxharmonium/nanoweave"
   :license {:name "Apache License, Version 2.0"
