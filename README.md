@@ -1,6 +1,6 @@
 # nanoweave
 
-[![Build Status](https://travis-ci.org/NoxHarmonium/nanoweave.svg?branch=master)](https://travis-ci.org/NoxHarmonium/nanoweave)
+[![CircleCI](https://circleci.com/gh/NoxHarmonium/nanoweave.svg?style=svg)](https://circleci.com/gh/NoxHarmonium/nanoweave)
 
 A JSONesqe language for transforming
 the structure and values of documents.
