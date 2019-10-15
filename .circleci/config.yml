@@ -19,7 +19,7 @@ jobs:
             - v2-dependencies-{{ checksum "package.json" }}
             - v2-dependencies-{{ checksum "project.clj" }}
       # Semantic release dependencies
-      - run: npm install
+      - run: yarn install
 
       # Download dependencies,makes sure the code compiles and runs tests
       - run: lein test

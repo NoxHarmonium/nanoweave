@@ -5,5 +5,18 @@
   "repository": "git@github.com:NoxHarmonium/nanoweave.git",
   "author": "Sean Dawson <contact@seandawson.info>",
   "license": "Apache-2.0",
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@semantic-release/changelog": "^3.0.4",
+    "@semantic-release/git": "^7.0.16",
+    "commitizen": "^4.0.3",
+    "cz-conventional-changelog": "3.0.2",
+    "leiningen-semantic-release": "^1.0.4",
+    "semantic-release": "^15.13.24"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
