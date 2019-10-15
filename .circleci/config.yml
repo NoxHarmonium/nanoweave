@@ -1,0 +1,55 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/clojure:lein-node-browsers
+
+    working_directory: ~/repo
+
+    environment:
+      # Allows leiningen to run as root
+      LEIN_ROOT: "true"
+
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v2-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "project.clj" }}
+      # Semantic release dependencies
+      - run: npm install
+
+      # Download dependencies,makes sure the code compiles and runs tests
+      - run: lein test
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: v2-dependencies-{{ checksum "project.clj" }}
+
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v2-dependencies-{{ checksum "package.json" }}
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - .
+
+  deploy:
+    docker:
+      - image: circleci/clojure:lein-node-browsers
+    working_directory: ~/repo
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/repo
+      # We aren't publishing this library yet
+      # When we do, https://github.com/NoxHarmonium/leiningen-semantic-release-test-clojars/blob/master/.circleci/config.yml
+      # would be a good reference
+      - run:
+          name: run release 🚀
+          command: yarn semantic-release
