@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/clojure:lein-node-browsers
+      - image: cimg/clojure:1.10-browsers
 
     working_directory: ~/repo
 
@@ -41,7 +41,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/clojure:lein-node-browsers
+      - image: cimg/clojure:1.10-browsers
     working_directory: ~/repo
     steps:
       - checkout
