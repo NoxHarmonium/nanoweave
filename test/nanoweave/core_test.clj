@@ -9,9 +9,7 @@
             [nanoweave.transformers.file-transformer :as transformer]
             [diff-eq.core :as de]))
 
-
 ;; Patch the eq function to provide diffs for object comparisons
-
 
 (de/diff!)
 

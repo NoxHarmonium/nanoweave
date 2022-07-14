@@ -24,6 +24,7 @@ jobs:
       # Download dependencies,makes sure the code compiles and runs tests
       - run: lein test
       - run: lein eastwood
+      - run: lein cljfmt check
 
       - save_cache:
           paths:

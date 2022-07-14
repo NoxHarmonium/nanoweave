@@ -7,9 +7,7 @@
              [->GrThanEqOp ->LessThanEqOp ->GrThanOp ->LessThanOp
               ->EqOp ->NotEqOp ->AndOp ->OrOp ->XorOp]]))
 
-
 ; Logical Binary Operators
-
 
 (def wrapped-rel-op
   "Relational operator: greater than, less than"
