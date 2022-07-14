@@ -29,18 +29,14 @@
                 (clojure.lang.RT/classForName class-name))
   (clojure.lang.RT/classForName class-name))
 
-
 ; Thanks: https://stackoverflow.com/a/27914262
-
 
 (defn contains-many?
   "Checks if a map m contains all the keys in sequence ks"
   [m ks]
   (every? #(contains? m %) ks))
 
-
 ; Thanks: https://stackoverflow.com/a/20054111
-
 
 (defmacro declare-extern
   [& syms]
@@ -51,3 +47,8 @@
               (ns ~(symbol (namespace s)))
               (declare ~(symbol (name s)))))
        (in-ns '~n))))
+
+; Thanks: https://stackoverflow.com/a/4831170/1153203
+
+(defn find-thing [needle haystack]
+  (keep-indexed #(when (= %2 needle) %1) haystack))

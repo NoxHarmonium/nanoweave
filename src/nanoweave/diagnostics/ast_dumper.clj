@@ -3,7 +3,7 @@
  nanoweave.diagnostics.ast-dumper
   (:require
    [rhizome.viz :as r]
-   [nanoweave.utils :refer [read-json-with-doubles]]
+   [nanoweave.utils :refer [read-json-with-doubles find-thing]]
    [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
   (:import (nanoweave.ast.literals StringLit FloatLit BoolLit NilLit ArrayLit)))
@@ -33,8 +33,7 @@
   {:label (cond (map? src) (first
                             (map (fn [[k _]] k)
                                  (filter (fn [[_ v]] (= v dest)) src)))
-                (vector? src)
-                (.indexOf src dest))})
+                (vector? src) (find-thing dest src))})
 
 (defn- ast-map-to-graphviz [ast filename]
   (pp/pprint ast)

@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/clojure:lein-node-browsers
+      - image: cimg/clojure:1.10-browsers
 
     working_directory: ~/repo
 
@@ -23,6 +23,8 @@ jobs:
 
       # Download dependencies,makes sure the code compiles and runs tests
       - run: lein test
+      - run: lein eastwood
+      - run: lein cljfmt check
 
       - save_cache:
           paths:
@@ -41,7 +43,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/clojure:lein-node-browsers
+      - image: cimg/clojure:1.10-browsers
     working_directory: ~/repo
     steps:
       - checkout
