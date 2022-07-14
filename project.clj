@@ -19,10 +19,9 @@
              :dev {:resource-paths ["test/resources"]
                    :plugins [[lein-githooks "0.1.0"]
                              [jonase/eastwood "1.2.4"]
-                             [com.github.clj-kondo/lein-clj-kondo "0.2.1"]
                              [lein-cljfmt "0.8.2"]]
                    :githooks {:pre-push ["lein test"]
-                              :pre-commit ["lein eastwood && lein cljfmt fix"]}}}
+                              :pre-commit ["lein eastwood", "lein cljfmt fix"]}}}
   :eastwood {:config-files ["lint_config.clj"]
 
              :exclude-linters [; The magic of 'declare-extern' requires a call to ns. I need that macro to avoid circular references.
