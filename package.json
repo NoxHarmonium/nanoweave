@@ -12,7 +12,7 @@
     "commitizen": "4.2.4",
     "cz-conventional-changelog": "3.3.0",
     "leiningen-semantic-release": "1.0.4",
-    "semantic-release": "^17.0.0"
+    "semantic-release": "^19.0.0"
   },
   "config": {
     "commitizen": {
