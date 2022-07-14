@@ -14,8 +14,7 @@
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :jvm-opts ["-Djava.awt.headless=true"]
-  :plugins [[lein-codox "0.10.8"]
-            [cider/cider-nrepl "0.28.5"]]
+  :plugins [[lein-codox "0.10.4"]]
   :profiles {:uberjar {:aot :all}
              :dev {:resource-paths ["test/resources"]}}
   :eastwood {:config-files ["lint_config.clj"]})
