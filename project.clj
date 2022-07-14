@@ -16,7 +16,17 @@
   :jvm-opts ["-Djava.awt.headless=true"]
   :plugins [[lein-codox "0.10.4"]]
   :profiles {:uberjar {:aot :all}
-             :dev {:resource-paths ["test/resources"]}}
-  :eastwood {:config-files ["lint_config.clj"]})
+             :dev {:resource-paths ["test/resources"]
+                   :plugins [[lein-githooks "0.1.0"]
+                             [jonase/eastwood "1.2.4"]]
+                   :githooks {:pre-push ["lein test"]
+                              :pre-commit ["lein eastwood"]}}}
+  :eastwood {:config-files ["lint_config.clj"]
+
+             :exclude-linters [; The magic of 'declare-extern' requires a call to ns. I need that macro to avoid circular references.
+                               :wrong-ns-form
+                               ; The defrecord macro expands to a redundant (but harmless) dissoc statement when creating a record with no attributes (in this case NilLit).
+                               ; No matter what I do, I can't get this error to be ignored via disable-warning or ignored-faults
+                               :suspicious-expression]})
 
 

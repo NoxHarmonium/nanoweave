@@ -51,3 +51,10 @@
               (ns ~(symbol (namespace s)))
               (declare ~(symbol (name s)))))
        (in-ns '~n))))
+
+
+; Thanks: https://stackoverflow.com/a/4831170/1153203
+
+
+(defn find-thing [needle haystack]
+  (keep-indexed #(when (= %2 needle) %1) haystack))
