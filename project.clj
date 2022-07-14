@@ -8,7 +8,7 @@
                  [org.clojure/tools.cli "1.0.206"]
                  [prismatic/schema "1.3.0"]
                  [rhizome "0.2.9"]
-                 [org.clojure/tools.namespace "0.3.1"]
+                 [org.clojure/tools.namespace "1.3.0"]
                  [diff-eq "0.2.5"]
                  [cheshire "5.11.0"]]
   :main ^:skip-aot nanoweave.core
