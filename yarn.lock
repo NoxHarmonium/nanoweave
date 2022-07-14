@@ -115,7 +115,7 @@
     once "^1.4.0"
     universal-user-agent "^4.0.0"
 
-"@semantic-release/changelog@^3.0.4":
+"@semantic-release/changelog@3.0.4":
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/@semantic-release/changelog/-/changelog-3.0.4.tgz#8fc578b76bca5b23c3000694277c38e0fa835edd"
   integrity sha512-UqEPahcZSW0IKtzOglyjeEZCN99ku6Wb/yH/iOKEBJ7Vkw0/+Fc3VRiGoXTkMfHSFUJk+4UkoQKTlYuwf61C2w==
@@ -142,7 +142,7 @@
   resolved "https://registry.yarnpkg.com/@semantic-release/error/-/error-2.2.0.tgz#ee9d5a09c9969eade1ec864776aeda5c5cddbbf0"
   integrity sha512-9Tj/qn+y2j+sjCI3Jd+qseGtHjOAeg7dU2/lVcqIQ9TV3QDaDXDYXcoOHU+7o2Hwh8L8ymL4gfuO7KxDs3q2zg==
 
-"@semantic-release/git@^7.0.16":
+"@semantic-release/git@7.0.16":
   version "7.0.16"
   resolved "https://registry.yarnpkg.com/@semantic-release/git/-/git-7.0.16.tgz#19921d2fdc75d712ae1706330dba8ebec8ced52d"
   integrity sha512-Bw/npxTVTeFPnQZmuczWRGRdxqJpWOOFZENx38ykyp42InwDFm4n72bfcCwmP/J4WqkPmMR4p+IracWruz/RUw==
@@ -885,7 +885,7 @@ commander@2.20.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.0.tgz#d58bb2b5c1ee8f87b0d340027e9e94e222c5a422"
   integrity sha512-7j2y+40w61zy6YC2iRNpUe/NwhNyoXrYpHMrSunaMG64nRnaf96zO/KMQR4OyN/UnE5KLyEBnKHd4aG3rskjpQ==
 
-commitizen@^4.0.3:
+commitizen@4.0.3, commitizen@^4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/commitizen/-/commitizen-4.0.3.tgz#c19a4213257d0525b85139e2f36db7cc3b4f6dae"
   integrity sha512-lxu0F/Iq4dudoFeIl5pY3h3CQJzkmQuh3ygnaOvqhAD8Wu2pYBI17ofqSuPHNsBTEOh1r1AVa9kR4Hp0FAHKcQ==
@@ -2656,7 +2656,7 @@ lcid@^2.0.0:
   dependencies:
     invert-kv "^2.0.0"
 
-leiningen-semantic-release@^1.0.4:
+leiningen-semantic-release@1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/leiningen-semantic-release/-/leiningen-semantic-release-1.0.4.tgz#5beb36cb24c7c41436883b0a80c8be5739b857d9"
   integrity sha512-pVkC++8FY8GbbUa3YTwjDZY8KPtgCRW9Iww9n02rZAbQwxMq+csbISWZckjJwcIo+yFtoO2T596I95oX6HBg/w==
