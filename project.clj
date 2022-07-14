@@ -14,10 +14,10 @@
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :jvm-opts ["-Djava.awt.headless=true"]
-  :plugins [[lein-codox "0.10.4"]]
+  :plugins [[lein-codox "0.10.8"]]
   :profiles {:uberjar {:aot :all}
              :dev {:resource-paths ["test/resources"]
-                   :plugins [[lein-githooks "0.1.0"]
+                   :plugins [[lein-githooks "0.1.1"]
                              [jonase/eastwood "1.2.4"]
                              [lein-cljfmt "0.8.2"]]
                    :githooks {:pre-push ["lein test"]

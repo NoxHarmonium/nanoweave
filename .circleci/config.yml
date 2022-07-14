@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/clojure:1.10-browsers
+      - image: cimg/clojure:1.11-browsers
 
     working_directory: ~/repo
 
@@ -43,7 +43,7 @@ jobs:
 
   deploy:
     docker:
-      - image: cimg/clojure:1.10-browsers
+      - image: cimg/clojure:1.11-browsers
     working_directory: ~/repo
     steps:
       - checkout
