@@ -56,4 +56,6 @@
   (testing "Flow Control"
     (run-test-fixture "flow-control"))
   (testing "Regex"
-    (run-test-fixture "regex")))
+    (run-test-fixture "regex"))
+  (testing "Type Checking and Coercion"
+    (run-test-fixture "type-checking-coercion")))

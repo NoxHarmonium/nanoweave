@@ -10,3 +10,4 @@
 (s/defrecord BoolLit [value :- s/Bool])
 (s/defrecord NilLit [])
 (s/defrecord ArrayLit [value :- [Resolvable]])
+(s/defrecord TypeLit [value :- (s/enum "Number" "String" "Boolean" "Nil" "Array")])

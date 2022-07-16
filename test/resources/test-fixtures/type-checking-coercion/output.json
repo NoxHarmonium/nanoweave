@@ -1,0 +1,37 @@
+{
+  "array": {
+    "5 should be false (is not array)": false,
+    "4 should be false (is not array)": false,
+    "1 should be true (is array)": true,
+    "2 should be false (is not array)": false,
+    "3 should be false (is not array)": false
+  },
+  "nil": {
+    "1 should be true (is nil)": true,
+    "4 should be false (is not nil)": false,
+    "5 should be false (is not nil)": false,
+    "2 should be false (is not nil)": false,
+    "3 should be false (is not nil)": false
+  },
+  "number": {
+    "3 should be false (is not a number)": false,
+    "2 should be true (is a number)": true,
+    "1 should be true (is a number)": true,
+    "4 should be false (is not a number)": false,
+    "5 should be false (is not a number)": false
+  },
+  "string": {
+    "4 should be false (is not a string)": false,
+    "5 should be false (is not a string)": false,
+    "2 should be false (is not a string)": false,
+    "1 should be true (is a string)": true,
+    "3 should be false (is not a string)": false
+  },
+  "boolean": {
+    "5 should be false (is not a boolean)": false,
+    "4 should be false (is not a boolean)": false,
+    "1 should be true (is a boolean)": true,
+    "2 should be false (is not a boolean)": false,
+    "3 should be false (is not a boolean)": false
+  }
+}

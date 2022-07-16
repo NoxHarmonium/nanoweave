@@ -2,7 +2,7 @@
   (:require [nanoweave.ast.binary-other]
             [nanoweave.resolvers.base :refer
              [handle-bin-op handle-prop-access safe-resolve-value]])
-  (:import [nanoweave.ast.binary_other DotOp ConcatOp OpenRangeOp ClosedRangeOp])
+  (:import [nanoweave.ast.binary_other DotOp ConcatOp OpenRangeOp ClosedRangeOp IsOp])
   (:use [nanoweave.ast.base :only [Resolvable resolve-value]]))
 
 (defn all-sequential? [coll]
@@ -21,4 +21,14 @@
   OpenRangeOp
   (resolve-value [this input] (handle-bin-op this input (comp vec range)))
   ClosedRangeOp
-  (resolve-value [this input] (handle-bin-op this input (comp vec #(range %1 (inc %2))))))
+  (resolve-value [this input] (handle-bin-op this input (comp vec #(range %1 (inc %2)))))
+  IsOp
+  (resolve-value [this input]
+    (handle-bin-op this input #(case %2
+                                 :number (number? %1)
+                                 :string  (string? %1)
+                                 :boolean  (boolean? %1)
+                                 :nil   (nil? %1)
+                                 ; TODO: Should we check for seqable??
+                                 :array (vector? %1)
+                                 (throw (AssertionError. (str "Unknown type '" %2 "'")))))))

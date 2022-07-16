@@ -1,0 +1,37 @@
+{
+  number: {
+    "1 should be true (is a number)": 1 is Number,
+    "2 should be true (is a number)": 1.2 is Number,
+    "3 should be false (is not a number)": "some string" is Number,
+    "4 should be false (is not a number)": null is Number,
+    "5 should be false (is not a number)": false is Number
+  },
+  string: {
+    "1 should be true (is a string)": "some string" is String,
+    "2 should be false (is not a string)": 1 is String,
+    "3 should be false (is not a string)": 1.2 is String,
+    "4 should be false (is not a string)": null is String,
+    "5 should be false (is not a string)": false is String
+  },
+  boolean: {
+    "1 should be true (is a boolean)": true is Boolean,
+    "2 should be false (is not a boolean)": 1 is Boolean,
+    "3 should be false (is not a boolean)": 1.2 is Boolean,
+    "4 should be false (is not a boolean)": null is Boolean,
+    "5 should be false (is not a boolean)": "some string" is Boolean
+  },
+  nil: {
+    "1 should be true (is nil)": null is Nil,
+    "2 should be false (is not nil)": 1 is Nil,
+    "3 should be false (is not nil)": 1.2 is Nil,
+    "4 should be false (is not nil)": true is Nil,
+    "5 should be false (is not nil)": "some string" is Nil
+  },
+  array: {
+    "1 should be true (is array)": [1,2,3] is Array,
+    "2 should be false (is not array)": 1 is Array,
+    "3 should be false (is not array)": 1.2 is Array,
+    "4 should be false (is not array)": true is Array,
+    "5 should be false (is not array)": "some string" is Array
+  }
+}
