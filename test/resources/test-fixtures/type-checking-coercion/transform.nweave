@@ -33,5 +33,13 @@
     "3 should be false (is not array)": 1.2 is Array,
     "4 should be false (is not array)": true is Array,
     "5 should be false (is not array)": "some string" is Array
+  },
+  jvm: {
+    "1 should be true (is java.util.Calendar)": let String = import "java.lang.String",
+    Calendar = import "java.util.Calendar",
+    TimeZone = import "java.util.TimeZone",
+    Locale = import "java.util.Locale",
+    timeZone = TimeZone.getTimeZone("GMT"): Calendar.getInstance(timeZone, Locale.US) is "java.util.Calendar",
+    "2 should be false (is not java.util.Calendar)": "not a calendar" is "java.util.Calendar"
   }
 }

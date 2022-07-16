@@ -33,5 +33,9 @@
     "1 should be true (is a boolean)": true,
     "2 should be false (is not a boolean)": false,
     "3 should be false (is not a boolean)": false
+  },
+  "jvm": {
+    "1 should be true (is java.util.Calendar)": true,
+    "2 should be false (is not java.util.Calendar)": false
   }
 }
