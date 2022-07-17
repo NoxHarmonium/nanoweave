@@ -50,13 +50,13 @@ I would like to implement.
 - [x] Flow Control/Pattern Matching
 - [x] Concatenation
 - [x] Regex
-- [ ] Type Checking (is?)
-- [ ] Type Coercion
+- [x] Type Checking (is?)
+- [x] Type Coercion
 - [ ] String Manipulation
 - [ ] Error handling (line number etc.)
 - [ ] List comprehensions
 - [ ] Set and Map Operators
-- [ ] Aggregrate (.*)
+- [ ] Aggregrate (.\*)
 
 ### Tools
 

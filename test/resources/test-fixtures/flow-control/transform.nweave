@@ -9,6 +9,7 @@
     ^[head, tail]: "head: #{head} tail: #{tail}"
   },
   "match type string": typeof 1 match {
+    // Don't actually do this - use the `is` operator instead
     "class java.lang.Double": "it's a double!"
   },
   // Thanks: http://learnyouahaskell.com/recursion#quick-sort
