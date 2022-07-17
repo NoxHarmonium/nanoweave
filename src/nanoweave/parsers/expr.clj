@@ -19,7 +19,7 @@
               wrapped-xor-op]]
             [nanoweave.parsers.binary-other
              :refer
-             [closed-range-op concat-op dot-op open-range-op is-op]]
+             [closed-range-op concat-op dot-op open-range-op is-op as-op]]
             [nanoweave.parsers.lambda
              :refer
              [function-arguments
@@ -78,7 +78,7 @@
 
 (def fun-group (chainl1 nweave fun-ops))
 (def member-access-group (chainl1 fun-group
-                                  (<|> dot-op (<:> function-call) (<:> indexing))))
+                                  (<|> dot-op  (<:> function-call) (<:> indexing))))
 (def concat-group (chainl1 member-access-group concat-op))
 (def unary-group (prefix1 concat-group wrapped-uni-op))
 (def mul-group (chainl1 unary-group wrapped-mul-op))
@@ -86,7 +86,7 @@
 (def rel-group (chainl1 add-group wrapped-rel-op))
 (def range-group (chainl1 rel-group
                           (<|> open-range-op closed-range-op)))
-(def type-group (chainl1 range-group is-op))
+(def type-group (chainl1 range-group (<|> is-op as-op)))
 (def eq-group (chainl1 type-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))

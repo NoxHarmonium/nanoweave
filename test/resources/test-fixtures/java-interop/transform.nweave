@@ -1,11 +1,14 @@
 let javaString = import "java.lang.String": {
   "noargs": "should BE lower CASE".toUpperCase().toLowerCase(),
   "noargs constructor": javaString().length(),
+  // TODO: Should we have some sort of special literals for java parameters
+  // so we don't have to cast them?
+  "constructor with args": (import "java.util.ArrayList")(10 as "java.lang.Integer").size(),
   "args": "a,b,c".split(",")[0],
-  "static": (import "java.util.Arrays").asList([0, 1, 2]),
+  "static": (import "java.util.Arrays").$asList([0, 1, 2]),
   "precedence": let String = import "java.lang.String",
     Calendar = import "java.util.Calendar",
     TimeZone = import "java.util.TimeZone",
     Locale = import "java.util.Locale",
-    timeZone = TimeZone.getTimeZone("GMT"): Calendar.getInstance(timeZone, Locale.US).getCalendarType()
+    timeZone = TimeZone.$getTimeZone("GMT"): Calendar.$getInstance(timeZone, Locale.$US).getCalendarType()
 }

@@ -2,7 +2,7 @@
             that can be done on two expressions."
       :author "Sean Dawson"}
  nanoweave.parsers.binary-functions
-  (:require [blancas.kern.core :refer [bind <|> <?> return]]
+  (:require [blancas.kern.core :refer [bind <?> return]]
             [blancas.kern.lexer.java-style :refer [token]]
             [nanoweave.ast.binary-functions :refer
              [->MapOp ->FilterOp ->ReduceOp ->RegexMatchOp ->RegexFindOp ->RegexSplitOp]]))

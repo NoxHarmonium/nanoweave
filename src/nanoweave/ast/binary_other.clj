@@ -9,3 +9,4 @@
 (s/defrecord OpenRangeOp [left :- Resolvable right :- Resolvable])
 (s/defrecord ClosedRangeOp [left :- Resolvable right :- Resolvable])
 (s/defrecord IsOp [left :- Resolvable right :- Resolvable])
+(s/defrecord AsOp [left :- Resolvable right :- Resolvable])

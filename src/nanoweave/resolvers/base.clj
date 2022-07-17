@@ -1,13 +1,16 @@
 (ns ^{:doc "Provides functions to walk the AST parsed by the parsing functions
             and transform values.", :author "Sean Dawson"}
  nanoweave.resolvers.base
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+  (:require [nanoweave.ast.base :refer [resolve-value Resolvable]]))
 
 (defn safe-resolve-value
   "Resolves the input if the given resolver is not nil and conforms to Resolvable,
   otherwise it will just return the input."
   [resolver input]
-  (when (some? resolver) (if (satisfies? Resolvable resolver) (resolve-value resolver input) (println "Warning: Resolving unknown type: [" (type input) "] Will return nil"))))
+  (when (some? resolver)
+    (if (satisfies? Resolvable resolver)
+      (resolve-value resolver input)
+      (println "Warning: Resolving unknown type: [" (type input) "] Will return nil"))))
 
 (defn handle-prop-access
   "A special case binary resolver.

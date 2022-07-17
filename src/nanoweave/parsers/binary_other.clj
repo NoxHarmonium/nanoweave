@@ -5,7 +5,7 @@
             [blancas.kern.lexer.java-style :refer
              [dot token]]
             [nanoweave.ast.binary-other :refer
-             [->DotOp ->ConcatOp ->OpenRangeOp ->ClosedRangeOp ->IsOp]]))
+             [->DotOp ->ConcatOp ->OpenRangeOp ->ClosedRangeOp ->IsOp ->AsOp]]))
 
 ; Other Binary Operators
 
@@ -34,3 +34,8 @@
   (<?> (bind [_ (token "is")]
              (return ->IsOp))
        "is expression"))
+(def as-op
+  "Parses an 'as' expression."
+  (<?> (bind [_ (token "as")]
+             (return ->AsOp))
+       "as expression"))

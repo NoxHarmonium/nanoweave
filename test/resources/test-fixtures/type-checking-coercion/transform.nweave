@@ -1,45 +1,88 @@
 {
-  number: {
-    "1 should be true (is a number)": 1 is Number,
-    "2 should be true (is a number)": 1.2 is Number,
-    "3 should be false (is not a number)": "some string" is Number,
-    "4 should be false (is not a number)": null is Number,
-    "5 should be false (is not a number)": false is Number
+  "is" : {
+    number: {
+      "1 should be true (is a number)": 1 is Number,
+      "2 should be true (is a number)": 1.2 is Number,
+      "3 should be false (is not a number)": "some string" is Number,
+      "4 should be false (is not a number)": null is Number,
+      "5 should be false (is not a number)": false is Number
+    },
+    string: {
+      "1 should be true (is a string)": "some string" is String,
+      "2 should be false (is not a string)": 1 is String,
+      "3 should be false (is not a string)": 1.2 is String,
+      "4 should be false (is not a string)": null is String,
+      "5 should be false (is not a string)": false is String
+    },
+    boolean: {
+      "1 should be true (is a boolean)": true is Boolean,
+      "2 should be false (is not a boolean)": 1 is Boolean,
+      "3 should be false (is not a boolean)": 1.2 is Boolean,
+      "4 should be false (is not a boolean)": null is Boolean,
+      "5 should be false (is not a boolean)": "some string" is Boolean
+    },
+    nil: {
+      "1 should be true (is nil)": null is Nil,
+      "2 should be false (is not nil)": 1 is Nil,
+      "3 should be false (is not nil)": 1.2 is Nil,
+      "4 should be false (is not nil)": true is Nil,
+      "5 should be false (is not nil)": "some string" is Nil
+    },
+    array: {
+      "1 should be true (is array)": [1,2,3] is Array,
+      "2 should be false (is not array)": 1 is Array,
+      "3 should be false (is not array)": 1.2 is Array,
+      "4 should be false (is not array)": true is Array,
+      "5 should be false (is not array)": "some string" is Array
+    },
+    jvm: {
+      "1 should be true (is java.util.Calendar)": let String = import "java.lang.String",
+      Calendar = import "java.util.Calendar",
+      TimeZone = import "java.util.TimeZone",
+      Locale = import "java.util.Locale",
+      timeZone = TimeZone.$getTimeZone("GMT"): Calendar.$getInstance(timeZone, Locale.$US) is "java.util.Calendar",
+      "2 should be false (is not java.util.Calendar)": "not a calendar" is "java.util.Calendar"
+    }
   },
-  string: {
-    "1 should be true (is a string)": "some string" is String,
-    "2 should be false (is not a string)": 1 is String,
-    "3 should be false (is not a string)": 1.2 is String,
-    "4 should be false (is not a string)": null is String,
-    "5 should be false (is not a string)": false is String
-  },
-  boolean: {
-    "1 should be true (is a boolean)": true is Boolean,
-    "2 should be false (is not a boolean)": 1 is Boolean,
-    "3 should be false (is not a boolean)": 1.2 is Boolean,
-    "4 should be false (is not a boolean)": null is Boolean,
-    "5 should be false (is not a boolean)": "some string" is Boolean
-  },
-  nil: {
-    "1 should be true (is nil)": null is Nil,
-    "2 should be false (is not nil)": 1 is Nil,
-    "3 should be false (is not nil)": 1.2 is Nil,
-    "4 should be false (is not nil)": true is Nil,
-    "5 should be false (is not nil)": "some string" is Nil
-  },
-  array: {
-    "1 should be true (is array)": [1,2,3] is Array,
-    "2 should be false (is not array)": 1 is Array,
-    "3 should be false (is not array)": 1.2 is Array,
-    "4 should be false (is not array)": true is Array,
-    "5 should be false (is not array)": "some string" is Array
-  },
-  jvm: {
-    "1 should be true (is java.util.Calendar)": let String = import "java.lang.String",
-    Calendar = import "java.util.Calendar",
-    TimeZone = import "java.util.TimeZone",
-    Locale = import "java.util.Locale",
-    timeZone = TimeZone.getTimeZone("GMT"): Calendar.getInstance(timeZone, Locale.US) is "java.util.Calendar",
-    "2 should be false (is not java.util.Calendar)": "not a calendar" is "java.util.Calendar"
+  "as" : {
+    number: {
+      "1 from number": 1 as Number,
+      "2 from number (float)": 1.2 as Number,
+      "3 from string": "1" as Number,
+      "4 from boolean": true as Number,
+      "5 from boolean (false)": false as Number,
+      "6 from nil": null as Number
+    },
+    string: {
+      "1 from number": 1 as String,
+      "2 from number (float)": 1.2 as String,
+      "3 from string": "1" as String,
+      "4 from boolean": true as String,
+      "5 from boolean (false)": false as String,
+      "6 from nil": null as String
+    },
+    boolean: {
+      "1 from number": 1 as Boolean,
+      "2 from number (float)": 1.2 as Boolean,
+      "3 from string": "1" as Boolean,
+      "4 from boolean": true as Boolean,
+      "5 from boolean (false)": false as Boolean,
+      "6 from nil": null as Boolean
+    },
+    nil: {
+     "1 from number": 1 as Nil,
+      "2 from number (float)": 1.2 as Nil,
+      "3 from string": "1" as Nil,
+      "4 from boolean": true as Nil,
+      "5 from boolean (false)": false as Nil,
+      "6 from nil": null as Nil
+    },
+    array: {
+      "1 should convert java collections": ((import "java.util.Arrays").$asList([0, 1, 2])) as Array
+    },
+    jvm: {    
+      "1 casting java object works":
+       (let Locale = import "java.util.Locale": Locale.$US as "java.lang.Object").getClass().getName()
+    }
   }
 }

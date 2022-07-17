@@ -1,5 +1,6 @@
 {
   "noargs constructor": 0,
+  "constructor with args": 0,
   "args": "a",
   "noargs": "should be lower case",
   "static": [0, 1, 2],

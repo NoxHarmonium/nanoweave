@@ -1,14 +1,15 @@
 (ns nanoweave.resolvers.lambda
   (:require [nanoweave.ast.lambda]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
-            [nanoweave.java-interop :as j])
-  (:import [nanoweave.ast.lambda Lambda NoArgsLambda FunCall ArgList])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [nanoweave.java-interop :as j]
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.lambda Lambda NoArgsLambda FunCall ArgList]))
 
 (defn- check-param-count
   "Checks that the expected number of arguments are passed to a function"
   [args param-list]
-  (let [args-count (count args) param-list-count (count param-list)]
+  (let [args-count (count args)
+        param-list-count (count param-list)]
     (assert (= (count args) (count param-list))
             (str "incorrect number of params passed to lambda.
             Expected " param-list-count " Got " args-count

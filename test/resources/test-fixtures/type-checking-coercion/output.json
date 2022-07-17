@@ -1,41 +1,79 @@
 {
-  "array": {
-    "5 should be false (is not array)": false,
-    "4 should be false (is not array)": false,
-    "1 should be true (is array)": true,
-    "2 should be false (is not array)": false,
-    "3 should be false (is not array)": false
+  "is": {
+    "array": {
+      "5 should be false (is not array)": false,
+      "4 should be false (is not array)": false,
+      "1 should be true (is array)": true,
+      "2 should be false (is not array)": false,
+      "3 should be false (is not array)": false
+    },
+    "nil": {
+      "1 should be true (is nil)": true,
+      "4 should be false (is not nil)": false,
+      "5 should be false (is not nil)": false,
+      "2 should be false (is not nil)": false,
+      "3 should be false (is not nil)": false
+    },
+    "number": {
+      "3 should be false (is not a number)": false,
+      "2 should be true (is a number)": true,
+      "1 should be true (is a number)": true,
+      "4 should be false (is not a number)": false,
+      "5 should be false (is not a number)": false
+    },
+    "string": {
+      "4 should be false (is not a string)": false,
+      "5 should be false (is not a string)": false,
+      "2 should be false (is not a string)": false,
+      "1 should be true (is a string)": true,
+      "3 should be false (is not a string)": false
+    },
+    "boolean": {
+      "5 should be false (is not a boolean)": false,
+      "4 should be false (is not a boolean)": false,
+      "1 should be true (is a boolean)": true,
+      "2 should be false (is not a boolean)": false,
+      "3 should be false (is not a boolean)": false
+    },
+    "jvm": {
+      "1 should be true (is java.util.Calendar)": true,
+      "2 should be false (is not java.util.Calendar)": false
+    }
   },
-  "nil": {
-    "1 should be true (is nil)": true,
-    "4 should be false (is not nil)": false,
-    "5 should be false (is not nil)": false,
-    "2 should be false (is not nil)": false,
-    "3 should be false (is not nil)": false
-  },
-  "number": {
-    "3 should be false (is not a number)": false,
-    "2 should be true (is a number)": true,
-    "1 should be true (is a number)": true,
-    "4 should be false (is not a number)": false,
-    "5 should be false (is not a number)": false
-  },
-  "string": {
-    "4 should be false (is not a string)": false,
-    "5 should be false (is not a string)": false,
-    "2 should be false (is not a string)": false,
-    "1 should be true (is a string)": true,
-    "3 should be false (is not a string)": false
-  },
-  "boolean": {
-    "5 should be false (is not a boolean)": false,
-    "4 should be false (is not a boolean)": false,
-    "1 should be true (is a boolean)": true,
-    "2 should be false (is not a boolean)": false,
-    "3 should be false (is not a boolean)": false
-  },
-  "jvm": {
-    "1 should be true (is java.util.Calendar)": true,
-    "2 should be false (is not java.util.Calendar)": false
+  "as": {
+    "boolean": {
+      "4 from boolean": true,
+      "1 from number": true,
+      "6 from nil": false,
+      "2 from number (float)": true,
+      "3 from string": true,
+      "5 from boolean (false)": false
+    },
+    "string": {
+      "4 from boolean": "true",
+      "1 from number": "1.0",
+      "6 from nil": "",
+      "2 from number (float)": "1.2",
+      "3 from string": "1",
+      "5 from boolean (false)": "false"
+    },
+    "number": {
+      "4 from boolean": 1.0,
+      "1 from number": 1.0,
+      "6 from nil": null,
+      "2 from number (float)": 1.2,
+      "3 from string": 1.0,
+      "5 from boolean (false)": 0.0
+    },
+    "nil": {
+      "4 from boolean": null,
+      "1 from number": null,
+      "6 from nil": null,
+      "2 from number (float)": null,
+      "3 from string": null,
+      "5 from boolean (false)": null
+    },
+    "array": { "1 should convert java collections": [0.0, 1.0, 2.0] },
+    "jvm": { "1 casting java object works": "java.util.Locale" }
   }
 }

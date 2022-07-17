@@ -4,7 +4,7 @@
   (:require [schema.core :as s]
             [nanoweave.ast.base :refer [Resolvable]]))
 
-(s/defrecord IdentiferLit [value :- s/Str])
+(s/defrecord IdentiferLit [value :- s/Str static-prefix :- s/Bool])
 (s/defrecord StringLit [value :- s/Str])
 (s/defrecord FloatLit [value :- s/Num])
 (s/defrecord BoolLit [value :- s/Bool])
