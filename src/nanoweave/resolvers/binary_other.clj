@@ -29,9 +29,9 @@
     (handle-bin-op this input
                    #(case %2
                       :number (number? %1)
-                      :string  (string? %1)
-                      :boolean  (boolean? %1)
-                      :nil   (nil? %1)
+                      :string (string? %1)
+                      :boolean (boolean? %1)
+                      :nil (nil? %1)
                       ; TODO: Should we check for seqable??
                       :array (vector? %1)
                       (if (string? %2) (instance? (dynamically-load-class %2) %1)
@@ -41,10 +41,10 @@
     (handle-bin-op this input
                    #(case %2
                       :number (convert-to-number %1)
-                      :string  (str %1)
-                      :boolean  (boolean %1)
+                      :string (str %1)
+                      :boolean (boolean %1)
                       ; Not sure why you would cast to null but I guess it is valid type
-                      :nil   nil
+                      :nil nil
                       :array (vec %1)
                       (if (string? %2)
                         (let [referenced-class (dynamically-load-class %2)]

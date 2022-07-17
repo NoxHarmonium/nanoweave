@@ -78,7 +78,7 @@
 
 (def fun-group (chainl1 nweave fun-ops))
 (def member-access-group (chainl1 fun-group
-                                  (<|> dot-op  (<:> function-call) (<:> indexing))))
+                                  (<|> dot-op (<:> function-call) (<:> indexing))))
 (def concat-group (chainl1 member-access-group concat-op))
 (def unary-group (prefix1 concat-group wrapped-uni-op))
 (def mul-group (chainl1 unary-group wrapped-mul-op))

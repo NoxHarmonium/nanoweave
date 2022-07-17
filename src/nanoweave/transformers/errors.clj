@@ -9,10 +9,10 @@
 ; because the methods were not made public
 
 ;; Error types.
-(def- err-system 0)                                         ;; Used in satisfy for specific unexpected input.
-(def- err-unexpect 1)                                       ;; Used on any unexpected input to show a message.
-(def- err-expect 2)                                         ;; Used to show a message of what's expected.
-(def- err-message 3)                                        ;; Used for any kind of message from client code.
+(def- err-system 0) ;; Used in satisfy for specific unexpected input.
+(def- err-unexpect 1) ;; Used on any unexpected input to show a message.
+(def- err-expect 2) ;; Used to show a message of what's expected.
+(def- err-message 3) ;; Used for any kind of message from client code.
 
 (defn- get-msg
   "Get the text from message types system, unexpect, and message."

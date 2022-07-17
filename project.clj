@@ -29,6 +29,7 @@
                                :wrong-ns-form
                                ; The defrecord macro expands to a redundant (but harmless) dissoc statement when creating a record with no attributes (in this case NilLit).
                                ; No matter what I do, I can't get this error to be ignored via disable-warning or ignored-faults
-                               :suspicious-expression]})
+                               :suspicious-expression]}
+  :cljfmt {:remove-multiple-non-indenting-spaces? true})
 
 
