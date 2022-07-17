@@ -1,10 +1,6 @@
 (ns nanoweave.core-test
-  (:require [clojure.test :refer :all]
-            [nanoweave.core :refer :all]
-            [clojure.data :refer [diff]]
+  (:require [clojure.test :refer [deftest is testing]]
             [clojure.java.io :as io]
-            [clojure.pprint :as pp]
-            [clojure.walk :refer [prewalk]]
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.transformers.file-transformer :as transformer]
             [diff-eq.core :as de]))

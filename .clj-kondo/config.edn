@@ -1,0 +1,3 @@
+{:lint-as {blancas.kern.core/bind clojure.core/let
+           blancas.kern.core/def- clojure.core/def}
+ :linters {:unresolved-namespace {:exclude [nanoweave.parsers.expr]}}}

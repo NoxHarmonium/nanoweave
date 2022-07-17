@@ -1,10 +1,10 @@
 (ns nanoweave.resolvers.binary-logic
   (:require [nanoweave.ast.binary-logic]
             [nanoweave.resolvers.base :refer [handle-bin-op]]
-            [nanoweave.resolvers.operators :refer [xor]])
+            [nanoweave.resolvers.operators :refer [xor]]
+            [nanoweave.ast.base :refer [Resolvable]])
   (:import [nanoweave.ast.binary_logic EqOp NotEqOp LessThanOp LessThanEqOp
-            GrThanOp GrThanEqOp AndOp OrOp XorOp])
-  (:use [nanoweave.ast.base :only [Resolvable resolve-value]]))
+            GrThanOp GrThanEqOp AndOp OrOp XorOp]))
 
 (extend-protocol Resolvable
   EqOp

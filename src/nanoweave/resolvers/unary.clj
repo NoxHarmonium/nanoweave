@@ -1,8 +1,8 @@
 (ns nanoweave.resolvers.unary
   (:require [nanoweave.ast.unary]
-            [nanoweave.resolvers.base :refer [safe-resolve-value]])
-  (:import [nanoweave.ast.unary NotOp NegOp])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [nanoweave.resolvers.base :refer [safe-resolve-value]]
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.unary NotOp NegOp]))
 
 (extend-protocol Resolvable
   NotOp

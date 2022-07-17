@@ -1,8 +1,8 @@
 (ns
  ^{:doc "Error handling functions.", :author "Sean Dawson"}
  nanoweave.transformers.errors
-  (:require [blancas.kern.core :refer :all]
-            [blancas.kern.i18n :refer :all]
+  (:require [blancas.kern.core :refer [def-]]
+            [blancas.kern.i18n :refer [i18n fmt]]
             [clojure.string :refer [join]]))
 
 ; Copied from https://github.com/blancas/kern/blob/master/src/main/clojure/blancas/kern/core.clj
@@ -13,22 +13,6 @@
 (def- err-unexpect 1)                                       ;; Used on any unexpected input to show a message.
 (def- err-expect 2)                                         ;; Used to show a message of what's expected.
 (def- err-message 3)                                        ;; Used for any kind of message from client code.
-
-(defn- make-err-system
-  "Makes a message of type err-system."
-  [pos text] (->PError pos (list (->PMessage err-system text))))
-
-(defn- make-err-unexpect
-  "Makes a message of type err-unexpect."
-  [pos text] (->PError pos (list (->PMessage err-unexpect text))))
-
-(defn- make-err-expect
-  "Makes a message of type err-expect."
-  [pos text] (->PError pos (list (->PMessage err-expect text))))
-
-(defn- make-err-message
-  "Makes a message of type err-message."
-  [pos text] (->PError pos (list (->PMessage err-message text))))
 
 (defn- get-msg
   "Get the text from message types system, unexpect, and message."
@@ -64,12 +48,6 @@
      (let [lst (filter #(= (:type %) err-message) ms)]
        (reduce #(conj %1 (get-msg %2)) [] lst)))))
 
-(defn- get-msg-str
-  "Gets the text of error messages separated by \\n."
-  [err]
-  (let [eol (System/getProperty "line.separator")]
-    (join eol (get-msg-list err))))
-
 (defn format-error
   "Formats error messages in a PState record."
   [s]
@@ -77,8 +55,8 @@
         pos (:pos err)
         src (let [l (:src pos)] (if (empty? l) "" (str l " ")))
         ln (:line pos)
-        col (:col pos)]
-    (let [eol (System/getProperty "line.separator")]
-      (str (format (i18n :err-pos) src ln col)
-           eol
-           (join eol (get-msg-list err))))))
+        col (:col pos)
+        eol (System/getProperty "line.separator")]
+    (str (format (i18n :err-pos) src ln col)
+         eol
+         (join eol (get-msg-list err)))))

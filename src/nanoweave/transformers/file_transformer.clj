@@ -6,7 +6,6 @@
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.parsers.expr :refer [expr]]
             [nanoweave.transformers.errors :refer [format-error]]
-            [clojure.pprint :refer [pprint]]
             [nanoweave.resolvers.binary-arithmetic]
             [nanoweave.resolvers.binary-functions]
             [nanoweave.resolvers.binary-logic]

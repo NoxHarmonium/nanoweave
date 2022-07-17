@@ -3,7 +3,8 @@
             [nanoweave.resolvers.base :refer
              [handle-bin-op handle-prop-access safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class convert-to-number]]
-            [nanoweave.ast.base :refer [Resolvable]])
+            [nanoweave.ast.base :refer [Resolvable]]
+            [nanoweave.java-interop :refer [byte-value double-value float-value int-value long-value short-value java-cast]])
   (:import [nanoweave.ast.binary_other DotOp ConcatOp OpenRangeOp ClosedRangeOp IsOp AsOp]))
 
 (defn all-sequential? [coll]
