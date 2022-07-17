@@ -8,6 +8,9 @@
     [1, 2]: "b",
     ^[head, tail]: "head: #{head} tail: #{tail}"
   },
+  "match type string": typeof 1 match {
+    "class java.lang.Double": "it's a double!"
+  },
   // Thanks: http://learnyouahaskell.com/recursion#quick-sort
   sorted: let quicksort = (y) ->
     (y match {

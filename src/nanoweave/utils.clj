@@ -31,7 +31,7 @@
    but will return 'Nil' instead of an empty string if it is passed
    a nil value"
   [anything]
-  (if (nil? anything) "Nil" (type anything)))
+  (if (nil? anything) "Nil" (str (type anything))))
 
 ; From https://github.com/Prismatic/plumbing/
 (defn map-vals

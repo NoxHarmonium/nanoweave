@@ -80,9 +80,10 @@
     array: {
       "1 should convert java collections": ((import "java.util.Arrays").$asList([0, 1, 2])) as Array
     },
-    jvm: {    
+    jvm: let Locale = import "java.util.Locale":{    
       "1 casting java object works":
-       (let Locale = import "java.util.Locale": Locale.$US as "java.lang.Object").getClass().getName()
+       (Locale.$US as "java.lang.Object").getClass().getName(),
+       "2 typeof operator works": typeof Locale.$US
     }
   }
 }

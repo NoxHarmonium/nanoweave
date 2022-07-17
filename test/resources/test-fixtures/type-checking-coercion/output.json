@@ -74,6 +74,9 @@
       "5 from boolean (false)": null
     },
     "array": { "1 should convert java collections": [0.0, 1.0, 2.0] },
-    "jvm": { "1 casting java object works": "java.util.Locale" }
+    "jvm": {
+      "1 casting java object works": "java.util.Locale",
+      "2 typeof operator works": "class java.util.Locale"
+    }
   }
 }
