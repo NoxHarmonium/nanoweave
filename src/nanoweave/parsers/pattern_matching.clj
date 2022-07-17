@@ -3,7 +3,7 @@
  nanoweave.parsers.pattern-matching
   (:require [blancas.kern.core :refer [bind <|> <:> <?> fwd return]]
             [blancas.kern.lexer.java-style :refer
-             [identifier colon brackets comma-sep braces parens token]]
+             [identifier colon brackets comma-sep braces token]]
             [nanoweave.parsers.text :refer [regex]]
             [nanoweave.ast.pattern-matching :refer
              [->LiteralMatchOp ->VariableMatchOp ->KeyMatchOp

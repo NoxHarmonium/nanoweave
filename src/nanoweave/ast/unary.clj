@@ -6,3 +6,4 @@
 
 (s/defrecord NotOp [value :- Resolvable])
 (s/defrecord NegOp [value :- Resolvable])
+(s/defrecord TypeOfOp [value :- Resolvable])

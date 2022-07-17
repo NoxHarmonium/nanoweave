@@ -1,8 +1,8 @@
 (ns nanoweave.resolvers.binary-arithmetic
   (:require [nanoweave.ast.binary-arithmetic]
-            [nanoweave.resolvers.base :refer [handle-bin-op]])
-  (:import [nanoweave.ast.binary_arithmetic AddOp SubOp MultOp DivOp ModOp])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [nanoweave.resolvers.base :refer [handle-bin-op]]
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.binary_arithmetic AddOp SubOp MultOp DivOp ModOp]))
 
 (extend-protocol Resolvable
   AddOp

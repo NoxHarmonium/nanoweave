@@ -1,7 +1,7 @@
 (ns nanoweave.resolvers.text
   (:require [nanoweave.ast.text]
             [clojure.string :as str]
-            [nanoweave.ast.base :refer :all]
+            [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]])
   (:import [nanoweave.ast.text InterpolatedString Regex]))
 
@@ -12,5 +12,5 @@
       (str/join
        (map #(safe-resolve-value % input) elements))))
   Regex
-  (resolve-value [this input]
+  (resolve-value [this _]
     (:regex this)))

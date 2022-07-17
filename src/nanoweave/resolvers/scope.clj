@@ -1,20 +1,9 @@
 (ns nanoweave.resolvers.scope
   (:require [nanoweave.ast.scope]
-            [nanoweave.ast.base :refer :all]
+            [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class]])
   (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When]))
-
-(defn- merge-bindings
-  "Merges the results of multiple pattern matches.
-   If one match fails, the entire match fails."
-  [bindings]
-  (let [bindings-with-errors (remove :ok bindings)
-        ok (empty? bindings-with-errors)
-        merged-bindings (when ok (into {} (map :bindings bindings)))]
-    {:ok ok
-     :bindings merged-bindings
-     :error (:error (first bindings-with-errors))}))
 
 (extend-protocol Resolvable
   Binding

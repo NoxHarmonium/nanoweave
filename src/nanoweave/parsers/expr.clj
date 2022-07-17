@@ -19,7 +19,7 @@
               wrapped-xor-op]]
             [nanoweave.parsers.binary-other
              :refer
-             [closed-range-op concat-op dot-op open-range-op]]
+             [closed-range-op concat-op dot-op open-range-op is-op as-op]]
             [nanoweave.parsers.lambda
              :refer
              [function-arguments
@@ -32,7 +32,8 @@
              [wrapped-bool-lit
               wrapped-float-lit
               wrapped-identifier
-              wrapped-nil-lit]]
+              wrapped-nil-lit
+              type-lit]]
             [nanoweave.parsers.pattern-matching :refer [match-scope]]
             [nanoweave.parsers.scope
              :refer
@@ -57,6 +58,7 @@
    when-scope
    import-statement
    regex
+   type-lit
    wrapped-interpolated-string
    wrapped-float-lit
    wrapped-bool-lit
@@ -84,7 +86,8 @@
 (def rel-group (chainl1 add-group wrapped-rel-op))
 (def range-group (chainl1 rel-group
                           (<|> open-range-op closed-range-op)))
-(def eq-group (chainl1 range-group wrapped-eq-op))
+(def type-group (chainl1 range-group (<|> is-op as-op)))
+(def eq-group (chainl1 type-group wrapped-eq-op))
 (def and-group (chainl1 eq-group wrapped-and-op))
 (def xor-group (chainl1 and-group wrapped-xor-op))
 (def or-group (chainl1 xor-group wrapped-or-op))

@@ -73,7 +73,8 @@ node_modules
 
 # Tools
 .calva/
-.clj-kondo/
+.clj-kondo/*
+!.clj-kondo/config.edn
 .lsp/
 
 # End of https://www.gitignore.io/api/clojure,intellij,sublimetext,visualstudiocode

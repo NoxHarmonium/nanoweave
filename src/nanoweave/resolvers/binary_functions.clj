@@ -1,9 +1,9 @@
 (ns nanoweave.resolvers.binary-functions
   (:require [nanoweave.ast.binary-functions]
             [nanoweave.resolvers.base :refer [handle-bin-op]]
-            [clojure.string :as str])
-  (:import [nanoweave.ast.binary_functions MapOp FilterOp ReduceOp RegexMatchOp RegexFindOp RegexSplitOp])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [clojure.string :as str]
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.binary_functions MapOp FilterOp ReduceOp RegexMatchOp RegexFindOp RegexSplitOp]))
 
 (defn wrap-lambda
   "Returns a function that wraps the given lambda so that it will be

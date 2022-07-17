@@ -45,7 +45,7 @@
   Just resolves to an identifier for now but might be extended later."
   (<?> (bind [prefix (sym \%)
               val digit-string-lit]
-             (return (->IdentiferLit (str prefix val))))
+             (return (->IdentiferLit (str prefix val) false)))
        "lambda parameter"))
 (def function-call
   "Calls a lambda/java function with specified params.

@@ -6,15 +6,15 @@
    [nanoweave.utils :refer [read-json-with-doubles find-thing]]
    [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
-  (:import (nanoweave.ast.literals StringLit FloatLit BoolLit NilLit ArrayLit)))
+  (:import (nanoweave.ast.literals StringLit FloatLit BoolLit)))
 
-(defn- primative-lit? [val]
+(defn- primitive-lit? [val]
   (or (instance? StringLit val)
       (instance? FloatLit val)
       (instance? BoolLit val)))
 
 (defn- decend-map? [map]
-  (not (primative-lit? map)))
+  (not (primitive-lit? map)))
 
 (defn- decend? [val]
   (or (and (map? val) (decend-map? val)) (vector? val)))
@@ -24,7 +24,7 @@
 
 (defn- describe-node [node]
   {:label (if (map? node) (cond
-                            (primative-lit? node) (:value node)
+                            (primitive-lit? node) (:value node)
                             :else (type node))
               (cond (instance? java.lang.String node) node
                     :else (type node)))})

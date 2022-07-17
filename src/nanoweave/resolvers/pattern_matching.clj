@@ -2,12 +2,11 @@
   (:require [nanoweave.ast.pattern-matching]
             [clojure.string :as str]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
-            [nanoweave.utils :refer [dynamically-load-class contains-many?]])
+            [nanoweave.ast.base :refer [Resolvable]])
   (:import [nanoweave.ast.pattern_matching ListPatternMatchOp
             MapPatternMatchOp VariableMatchOp LiteralMatchOp
-            KeyMatchOp KeyValueMatchOp Match MatchClause
-            RegexMatchOp])
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            KeyMatchOp KeyValueMatchOp Match
+            RegexMatchOp]))
 
 (defn- merge-bindings
   "Merges the results of multiple pattern matches.

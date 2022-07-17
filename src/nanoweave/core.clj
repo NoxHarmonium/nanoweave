@@ -39,14 +39,14 @@
   (let [{:keys [options arguments errors summary]} (parse-opts args
                                                                cli-options)]
     (cond
-      (:help options)                                       ; help => exit OK with usage summary
+      (:help options) ; help => exit OK with usage summary
       {:exit-message (usage summary), :ok? true}
-      errors                                                ; errors => exit with description of errors
+      errors ; errors => exit with description of errors
       {:exit-message (error-msg errors)}
       ;; custom validation on arguments
       (and (= 1 (count arguments)) (#{"transform" "dump-ast"} (first arguments)))
       {:action (first arguments), :options options}
-      :else                                                 ; failed custom validation => exit with usage summary
+      :else ; failed custom validation => exit with usage summary
       {:exit-message (usage summary)})))
 
 (defn exit [status msg] (println msg) (System/exit status))

@@ -1,8 +1,8 @@
 (ns nanoweave.resolvers.primatives
   (:require [nanoweave.resolvers.base :refer [safe-resolve-value]]
-            [nanoweave.utils :refer [map-vals]])
-  (:import (clojure.lang PersistentArrayMap PersistentVector PersistentHashMap))
-  (:use [nanoweave.ast.base :only [resolve-value Resolvable]]))
+            [nanoweave.utils :refer [map-vals]]
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import (clojure.lang PersistentArrayMap PersistentVector PersistentHashMap)))
 
 (extend-protocol Resolvable
   String

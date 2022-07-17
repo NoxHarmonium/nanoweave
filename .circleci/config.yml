@@ -22,9 +22,11 @@ jobs:
       - run: yarn install
 
       # Download dependencies,makes sure the code compiles and runs tests
-      - run: lein test
+      - run: lein check
       - run: lein eastwood
+      - run: lein clj-kondo
       - run: lein cljfmt check
+      - run: lein test
 
       - save_cache:
           paths:
