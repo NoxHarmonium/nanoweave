@@ -1,3 +1,13 @@
+# [1.1.0](https://github.com/NoxHarmonium/nanoweave/compare/v1.0.3...v1.1.0) (2022-07-17)
+
+
+### Features
+
+* add type checking for nanoweave types ([b9ae0cc](https://github.com/NoxHarmonium/nanoweave/commit/b9ae0cc1d51055847239ec2eb35b2b715328aa75))
+* add type coercion ([dd69d08](https://github.com/NoxHarmonium/nanoweave/commit/dd69d087570e6910331a2fb944772920d3803197))
+* allow type checking of JVM instances ([ab2685e](https://github.com/NoxHarmonium/nanoweave/commit/ab2685ed791764cdf0fddca0eeee6bbe8095b21c))
+* implement 'typeof' operator ([5a1fd8a](https://github.com/NoxHarmonium/nanoweave/commit/5a1fd8a6339dbbff117005328355b235bd6a7e4f))
+
 ## [1.0.3](https://github.com/NoxHarmonium/nanoweave/compare/v1.0.2...v1.0.3) (2022-07-16)
 
 
