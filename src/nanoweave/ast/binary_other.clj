@@ -2,11 +2,12 @@
       :author "Sean Dawson"}
  nanoweave.ast.binary-other
   (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]]))
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.base AstSpan]))
 
-(s/defrecord DotOp [left :- Resolvable right :- Resolvable])
-(s/defrecord ConcatOp [left :- Resolvable right :- Resolvable])
-(s/defrecord OpenRangeOp [left :- Resolvable right :- Resolvable])
-(s/defrecord ClosedRangeOp [left :- Resolvable right :- Resolvable])
-(s/defrecord IsOp [left :- Resolvable right :- Resolvable])
-(s/defrecord AsOp [left :- Resolvable right :- Resolvable])
+(s/defrecord DotOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord ConcatOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord OpenRangeOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord ClosedRangeOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord IsOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord AsOp [span :- AstSpan left :- Resolvable right :- Resolvable])

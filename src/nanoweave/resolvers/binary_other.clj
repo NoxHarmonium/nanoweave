@@ -3,6 +3,7 @@
             [nanoweave.resolvers.base :refer
              [handle-bin-op handle-prop-access safe-resolve-value]]
             [nanoweave.utils :refer [dynamically-load-class convert-to-number]]
+            [nanoweave.resolvers.errors :refer [throw-resolve-error]]
             [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.java-interop :refer [byte-value double-value float-value int-value long-value short-value java-cast]])
   (:import [nanoweave.ast.binary_other DotOp ConcatOp OpenRangeOp ClosedRangeOp IsOp AsOp]))
@@ -35,7 +36,7 @@
                       ; TODO: Should we check for seqable??
                       :array (vector? %1)
                       (if (string? %2) (instance? (dynamically-load-class %2) %1)
-                          (throw (AssertionError. (str "Unknown type '" (type %2) "' for type checking. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class")))))))
+                          (throw-resolve-error this (str "Unknown type '" (type %2) "' for type checking. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class"))))))
   AsOp
   (resolve-value [this input]
     (handle-bin-op this input
@@ -57,6 +58,6 @@
                                                                 "java.lang.Integer" (int-value %1)
                                                                 "java.lang.Long" (long-value %1)
                                                                 "java.lang.Short" (short-value %1)
-                                                                (throw (AssertionError. (str "java.lang.Number subclass of '" %2 "' is not supported. Currenly supported are Byte, Double, Float, Int, Long and Short (when fully qualified)"))))
+                                                                (throw-resolve-error this (str "java.lang.Number subclass of '" %2 "' is not supported. Currenly supported are Byte, Double, Float, Int, Long and Short (when fully qualified)")))
                               (java-cast referenced-class %1)))
-                        (throw (AssertionError. (str "Unknown type '" (type %2) "' for type coercion. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class"))))))))
+                        ((throw-resolve-error this (str "Unknown type '" (type %2) "' for type coercion. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class"))))))))

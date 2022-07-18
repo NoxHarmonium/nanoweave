@@ -15,13 +15,18 @@
   :target-path "target/%s"
   :global-vars {*warn-on-reflection* true}
   :jvm-opts ["-Djava.awt.headless=true"]
-  :plugins [[lein-codox "0.10.8"]]
+  :plugins []
   :profiles {:uberjar {:aot :all}
+             :repl {:source-paths ["src" "profiles"]
+                    :repl-options {:init-ns repl.repl-env}}
              :dev {:resource-paths ["test/resources"]
                    :plugins [[rasom/lein-githooks "0.1.5"]
                              [jonase/eastwood "1.4.0"]
                              [lein-cljfmt "0.9.2"]
-                             [com.github.clj-kondo/lein-clj-kondo "0.2.5"]]
+                             [com.github.clj-kondo/lein-clj-kondo "0.2.5"]
+                             [lein-codox "0.10.8"]]
+                   :dependencies [[org.clojure/tools.namespace "1.3.0"]
+                                  [diff-eq "0.2.5"]]
                    :githooks {:pre-push ["lein check" "lein test"]
                               :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt fix"]}}}
   :eastwood {:config-files ["lint_config.clj"]

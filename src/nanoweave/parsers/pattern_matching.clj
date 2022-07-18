@@ -2,6 +2,7 @@
       :author "Sean Dawson"}
  nanoweave.parsers.pattern-matching
   (:require [blancas.kern.core :refer [bind <|> <:> <?> fwd return]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [blancas.kern.lexer.java-style :refer
              [identifier colon brackets comma-sep braces token]]
             [nanoweave.parsers.text :refer [regex]]
@@ -20,45 +21,52 @@
 (declare binding-target)
 (def literal-match
   "pareses an expression that pattern matches against a literal variable"
-  (<?> (bind [target (fwd nanoweave.parsers.expr/expr)]
-             (return (->LiteralMatchOp target)))
-       "literal pattern match"))
+  (<s> (<?> (bind [target (fwd nanoweave.parsers.expr/expr)
+                   ps pop-span]
+                  (return ((ps ->LiteralMatchOp) target)))
+            "literal pattern match")))
 (def variable-match
   "parses an expression that pattern matches against a single variable"
-  (<?> (bind [target identifier]
-             (return (->VariableMatchOp target)))
-       "variable pattern match"))
+  (<s> (<?> (bind [target identifier
+                   ps pop-span]
+                  (return ((ps ->VariableMatchOp) target)))
+            "variable pattern match")))
 (def regex-match
   "parses an expression that pattern matches with a regex expression"
-  (<?> (bind [target regex]
-             (return (->RegexMatchOp target)))
-       "regex pattern match"))
+  (<s> (<?> (bind [target regex
+                   ps pop-span]
+                  (return ((ps ->RegexMatchOp) target)))
+            "regex pattern match")))
 (def key-match
   "parses an expression that pattern matches against a key on a map"
-  (<?> (bind [target identifier]
-             (return (->KeyMatchOp target)))
-       "map key pattern match"))
+  (<s> (<?> (bind [target identifier
+                   ps pop-span]
+                  (return ((ps ->KeyMatchOp) target)))
+            "map key pattern match")))
 (def key-value-match
   "parses an expression that pattern matches against a key/value pair"
-  (<?> (bind [key key-match
-              _ colon
-              value (fwd binding-target)]
-             (return (->KeyValueMatchOp key value)))
-       "map key/value pattern match"))
+  (<s> (<?> (bind [key key-match
+                   _ colon
+                   value (fwd binding-target)
+                   ps pop-span]
+                  (return ((ps ->KeyValueMatchOp) key value)))
+            "map key/value pattern match")))
 (def list-pattern-match
   "parses an expression that pattern matches against a list"
-  (<?> (bind [_ (token "^")
-              match (brackets (comma-sep (fwd binding-target)))]
-             (return (->ListPatternMatchOp match)))
-       "list pattern match"))
+  (<s> (<?> (bind [_ (token "^")
+                   match (brackets (comma-sep (fwd binding-target)))
+                   ps pop-span]
+                  (return ((ps ->ListPatternMatchOp) match)))
+            "list pattern match")))
 (def map-pattern-match
   "parses an expression that pattern matches against a map structure"
-  (<?> (bind [_ (token "^")
-              match (braces (comma-sep (<|>
-                                        (<:> key-value-match)
-                                        key-match)))]
-             (return (->MapPatternMatchOp match)))
-       "map pattern match"))
+  (<s> (<?> (bind [_ (token "^")
+                   match (braces (comma-sep (<|>
+                                             (<:> key-value-match)
+                                             key-match)))
+                   ps pop-span]
+                  (return ((ps ->MapPatternMatchOp) match)))
+            "map pattern match")))
 
 (def binding-target
   "parses the target of a variable binding"
@@ -72,14 +80,16 @@
 
 (def match-clause
   "A pattern match expression and an associated body that will be evaluated if the match succeeds"
-  (<?> (bind [match binding-target
-              _ colon
-              body (fwd nanoweave.parsers.expr/expr)]
-             (return (->MatchClause match body)))
-       "match clause"))
+  (<s> (<?> (bind [match binding-target
+                   _ colon
+                   body (fwd nanoweave.parsers.expr/expr)
+                   ps pop-span]
+                  (return ((ps ->MatchClause) match body)))
+            "match clause")))
 (def match-scope
   "A match construct will take a branch if a pattern matches and passes in the matched variables"
-  (<?> (bind [_ (token "match")
-              clauses (braces (comma-sep match-clause))]
-             (return (partial ->Match clauses)))
-       "match statement"))
+  (<s> (<?> (bind [_ (token "match")
+                   clauses (braces (comma-sep match-clause))
+                   ps pop-span]
+                  (return (partial (ps ->Match) clauses)))
+            "match statement")))

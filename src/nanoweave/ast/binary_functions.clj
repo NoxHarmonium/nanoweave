@@ -3,12 +3,13 @@
       :author "Sean Dawson"}
  nanoweave.ast.binary-functions
   (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]]))
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.base AstSpan]))
 
-(s/defrecord MapOp [left :- Resolvable right :- Resolvable])
-(s/defrecord FilterOp [left :- Resolvable right :- Resolvable])
-(s/defrecord ReduceOp [left :- Resolvable right :- Resolvable])
+(s/defrecord MapOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord FilterOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord ReduceOp [span :- AstSpan left :- Resolvable right :- Resolvable])
 
-(s/defrecord RegexMatchOp [left :- Resolvable right :- Resolvable])
-(s/defrecord RegexFindOp [left :- Resolvable right :- Resolvable])
-(s/defrecord RegexSplitOp [left :- Resolvable right :- Resolvable])
+(s/defrecord RegexMatchOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord RegexFindOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord RegexSplitOp [span :- AstSpan left :- Resolvable right :- Resolvable])

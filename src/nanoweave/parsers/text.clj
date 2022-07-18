@@ -7,6 +7,7 @@
             [blancas.kern.lexer.java-style :refer [lexeme]]
             [nanoweave.ast.scope :refer [->Expression]]
             [nanoweave.ast.text :refer [->InterpolatedString ->Regex]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [nanoweave.parsers.custom-lexing :refer [string-char regex-char]]
             [nanoweave.utils :refer [declare-extern]]))
 
@@ -18,10 +19,11 @@
 
 (def interpolated-string-expression
   "Parses an expression embedded within a string"
-  (<?> (bind [_ (token* "#{")
-              body (fwd nanoweave.parsers.expr/expr)
-              _ (token* "}")]
-             (return (->Expression body))) "interpolated string expression"))
+  (<s> (<?> (bind [_ (token* "#{")
+                   body (fwd nanoweave.parsers.expr/expr)
+                   _ (token* "}")
+                   ps pop-span]
+                  (return ((ps ->Expression) body))) "interpolated string expression")))
 (def interpolated-string
   "Parses string literals and embedded expressions delimited by double quotes"
   (lexeme (between (sym* \")
@@ -31,15 +33,17 @@
                           (<+> (many (string-char [\" \#]))))))))
 (def wrapped-interpolated-string
   "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
-  (<?> (bind [v interpolated-string]
-             (return (->InterpolatedString v)))
-       "string"))
+  (<s> (<?> (bind [v interpolated-string
+                   ps pop-span]
+                  (return ((ps ->InterpolatedString) v)))
+            "string")))
 (def regex
   "Parses regular expression delimited by forward slashes"
-  (lexeme (between (sym* \/)
-                   (<?> (sym* \/) "end regex")
-                   (bind [pattern (<+> (many (regex-char)))]
-                         (try
-                           (return (->Regex (re-pattern pattern)))
-                           (catch Exception e (fail (.getMessage e))))))))
+  (<s> (lexeme (between (sym* \/)
+                        (<?> (sym* \/) "end regex")
+                        (bind [pattern (<+> (many (regex-char)))
+                               ps pop-span]
+                              (try
+                                (return ((ps ->Regex) (re-pattern pattern)))
+                                (catch Exception e (fail (.getMessage e)))))))))
 

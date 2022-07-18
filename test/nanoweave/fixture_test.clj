@@ -1,4 +1,4 @@
-(ns nanoweave.core-test
+(ns nanoweave.fixture-test
   (:require [clojure.test :refer [deftest is testing]]
             [clojure.java.io :as io]
             [nanoweave.utils :refer [read-json-with-doubles]]
@@ -13,16 +13,17 @@
   (println "Running test fixture: " test-folder)
   (let [input-file (io/resource (str "test-fixtures/" test-folder "/input.json"))
         expected-file (io/resource (str "test-fixtures/" test-folder "/output.json"))
-        nweave-file (io/resource (str "test-fixtures/" test-folder "/transform.nweave"))
+        nweave-filename (str "test-fixtures/" test-folder "/transform.nweave")
+        nweave-file (io/resource nweave-filename)
         input (read-json-with-doubles (slurp input-file))
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
-        actual (transformer/transform input nweave)]
+        actual (transformer/transform input nweave nweave-filename)]
     (is (= expected actual))))
 
 ; Future work: work out how to dynamically create tests based on test-fixtures directory
 ; A simple loop didn't work, I'll probably need a macro
-(deftest io-tests
+(deftest fixture-test
   (testing "Structure Transformation"
     (run-test-fixture "simple-structure-transform"))
   (testing "String concatination"

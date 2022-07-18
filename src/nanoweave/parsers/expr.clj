@@ -1,10 +1,10 @@
 (ns ^{:author "Sean Dawson"
       :doc "Parses a nanoweave transform expression.\n            An expression combines all the other parsers together and is recursive\n            to allow complex transforms to be parsed."}
  nanoweave.parsers.expr
-  (:require [blancas.kern.core :refer [<:> <|> fwd]]
-            [blancas.kern.expr :refer [chainl1 postfix1 prefix1]]
+  (:require [blancas.kern.core :refer [<:> <|> <?> fwd << eof]]
+            [blancas.kern.expr :refer [postfix1 prefix1]]
             [blancas.kern.lexer.java-style :refer [parens]]
-            [nanoweave.parsers.base :refer [array object]]
+            [nanoweave.parsers.base :refer [chainl1*]]
             [nanoweave.parsers.binary-arithmetic
              :refer
              [wrapped-add-op wrapped-mul-op]]
@@ -33,7 +33,9 @@
               wrapped-float-lit
               wrapped-identifier
               wrapped-nil-lit
-              type-lit]]
+              type-lit
+              array-lit
+              object-lit]]
             [nanoweave.parsers.pattern-matching :refer [match-scope]]
             [nanoweave.parsers.scope
              :refer
@@ -64,8 +66,8 @@
    wrapped-bool-lit
    else
    wrapped-nil-lit
-   array
-   object
+   array-lit
+   object-lit
    (<|> wrapped-identifier no-args-lambda-param)
    (<:> no-args-lambda)
    (<:> lambda)
@@ -76,19 +78,21 @@
 ; Concat group needs to be higher than add group because
 ; it shares the '+' token
 
-(def fun-group (chainl1 nweave fun-ops))
-(def member-access-group (chainl1 fun-group
-                                  (<|> dot-op (<:> function-call) (<:> indexing))))
-(def concat-group (chainl1 member-access-group concat-op))
+(def fun-group (chainl1* nweave fun-ops))
+(def member-access-group (chainl1* fun-group
+                                   (<|> dot-op (<:> function-call) (<:> indexing))))
+(def concat-group (chainl1* member-access-group concat-op))
 (def unary-group (prefix1 concat-group wrapped-uni-op))
-(def mul-group (chainl1 unary-group wrapped-mul-op))
-(def add-group (chainl1 mul-group wrapped-add-op))
-(def rel-group (chainl1 add-group wrapped-rel-op))
-(def range-group (chainl1 rel-group
-                          (<|> open-range-op closed-range-op)))
-(def type-group (chainl1 range-group (<|> is-op as-op)))
-(def eq-group (chainl1 type-group wrapped-eq-op))
-(def and-group (chainl1 eq-group wrapped-and-op))
-(def xor-group (chainl1 and-group wrapped-xor-op))
-(def or-group (chainl1 xor-group wrapped-or-op))
-(def expr (postfix1 or-group match-scope))
+(def mul-group (chainl1* unary-group wrapped-mul-op))
+(def add-group (chainl1* mul-group wrapped-add-op))
+(def rel-group (chainl1* add-group wrapped-rel-op))
+(def range-group (chainl1* rel-group
+                           (<|> open-range-op closed-range-op)))
+(def type-group (chainl1* range-group (<|> is-op as-op)))
+(def eq-group (chainl1* type-group wrapped-eq-op))
+(def and-group (chainl1* eq-group wrapped-and-op))
+(def xor-group (chainl1* and-group wrapped-xor-op))
+(def or-group (chainl1* xor-group wrapped-or-op))
+(def expr (<?> (postfix1 or-group match-scope) "expression"))
+
+(def single-expression (<< expr eof))

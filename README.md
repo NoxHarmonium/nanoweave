@@ -96,6 +96,23 @@ It should output an image file like the following:
 
 ![AST Image Example](doc/ast.png)
 
+## REPL
+
+Start the REPL with `lein repl`
+
+This will drop you into the namespace `repl-env` which has
+a function called `refresh` in scope that allows you to
+safely reload the source files if they change.
+
+```
+(ns repl-env)
+(reload)
+```
+
+See also:
+
+https://stackoverflow.com/a/25979645/1153203
+
 ## License
 
 Copyright 2018 Sean Dawson
