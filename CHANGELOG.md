@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.0...v1.1.1) (2022-07-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency prismatic:schema to v1.3.5 ([feeba61](https://github.com/NoxHarmonium/nanoweave/commit/feeba61e201e60895c978da85ee4ba822249cd34))
+
 # [1.1.0](https://github.com/NoxHarmonium/nanoweave/compare/v1.0.3...v1.1.0) (2022-07-17)
 
 
