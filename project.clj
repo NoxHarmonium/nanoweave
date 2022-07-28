@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "1.0.206"]
-                 [prismatic/schema "1.3.0"]
+                 [prismatic/schema "1.3.5"]
                  [rhizome "0.2.9"]
                  [org.clojure/tools.namespace "1.3.0"]
                  [diff-eq "0.2.5"]
