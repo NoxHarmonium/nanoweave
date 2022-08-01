@@ -28,7 +28,7 @@
                    :dependencies [[org.clojure/tools.namespace "1.3.0"]
                                   [diff-eq "0.2.5"]]
                    :githooks {:pre-push ["lein check" "lein test"]
-                              :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt fix"]}}}
+                              :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt check"]}}}
   :eastwood {:config-files ["lint_config.clj"]
              :exclude-linters [; The magic of 'declare-extern' requires a call to ns. I need that macro to avoid circular references.
                                :wrong-ns-form
