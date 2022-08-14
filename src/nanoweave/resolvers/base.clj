@@ -17,7 +17,7 @@
           ; no need to double handle it and mess with the AstSpan
           (if (resolve-error? ex) (throw ex)
               ; Otherwise wrap the error with the current AST node so that the error span can be calculated
-              (throw-resolve-error resolver (ex-message ex)))))
+              (throw-resolve-error (ex-message ex) resolver ex))))
       (println "Warning: Resolving unknown type: [" (type input) "] Will return nil"))))
 
 (defn handle-prop-access

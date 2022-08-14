@@ -36,7 +36,7 @@
                       ; TODO: Should we check for seqable??
                       :array (vector? %1)
                       (if (string? %2) (instance? (dynamically-load-class %2) %1)
-                          (throw-resolve-error this (str "Unknown type '" (type %2) "' for type checking. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class"))))))
+                          (throw-resolve-error (str "Unknown type '" (type %2) "' for type checking. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class") this)))))
   AsOp
   (resolve-value [this input]
     (handle-bin-op this input
@@ -58,6 +58,6 @@
                                                                 "java.lang.Integer" (int-value %1)
                                                                 "java.lang.Long" (long-value %1)
                                                                 "java.lang.Short" (short-value %1)
-                                                                (throw-resolve-error this (str "java.lang.Number subclass of '" %2 "' is not supported. Currenly supported are Byte, Double, Float, Int, Long and Short (when fully qualified)")))
+                                                                (throw-resolve-error (str "java.lang.Number subclass of '" %2 "' is not supported. Currenly supported are Byte, Double, Float, Int, Long and Short (when fully qualified)") this))
                               (java-cast referenced-class %1)))
-                        ((throw-resolve-error this (str "Unknown type '" (type %2) "' for type coercion. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class"))))))))
+                        ((throw-resolve-error (str "Unknown type '" (type %2) "' for type coercion. Should either be one of the type literals Number, String, Boolean, Nil or Array or a string referring to a fully qualified Java class") this)))))))

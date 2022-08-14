@@ -80,7 +80,7 @@
                     clauses-that-match
                     (filter #(-> % :match-result :ok) clauses-with-match-results)]
                 (when (empty? clauses-that-match)
-                  (throw-resolve-error this (str "Pattern match not exhaustive for input [" target "]")))
+                  (throw-resolve-error (str "Pattern match not exhaustive for input [" target "]") this))
                 (first clauses-that-match)))]
       (let [target (safe-resolve-value (:target this) input)
             clauses (:clauses this)

@@ -6,7 +6,7 @@
    [nanoweave.utils :refer [read-json-with-doubles find-thing]]
    [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
-  (:import (nanoweave.ast.literals StringLit FloatLit BoolLit)))
+  (:import [nanoweave.ast.literals StringLit FloatLit BoolLit]))
 
 (defn- primitive-lit? [val]
   (or (instance? StringLit val)

@@ -4,7 +4,7 @@
   (:require [blancas.kern.core :refer [def-]]
             [blancas.kern.i18n :refer [i18n fmt]]
             [clojure.string :refer [join]]
-            [nanoweave.utils :refer [format-code-frame]]))
+            [nanoweave.ast.base :refer [->ErrorWithContext ->AstSpan ->AstPos]]))
 
 ; Copied from https://github.com/blancas/kern/blob/master/src/main/clojure/blancas/kern/core.clj
 ; because the methods were not made public
@@ -51,17 +51,16 @@
      (let [lst (filter #(= (:type %) err-message) ms)]
        (reduce #(conj %1 (get-msg %2)) [] lst)))))
 
-(defn format-parsing-error-as-code-frame
-  "Formats a parsing error messages by showing it in context."
+(defn convert-pstate-to-error-with-context
+  "Normalises a error parser state to a generic error type that can be formatted."
   [pstate input]
   (assert (not (:ok pstate)) "Provided parser state does not indicate an error")
   (let [err (:error pstate)
         pos (:pos err)
-        src (let [l (:src pos)] (if (empty? l) "" (str l " ")))
-        ln (:line pos)
+        src (:src pos)
+        line (:line pos)
         col (:col pos)
-        preamble (str "Parsing error: "
-                      (format (i18n :err-pos) src ln col))
-        message (join ", " (get-msg-list err))]
-    (format-code-frame ln col input preamble message)))
-
+        message (join ", " (get-msg-list err))
+        ast-pos (->AstPos line col src)
+        span (->AstSpan ast-pos ast-pos)]
+    (->ErrorWithContext message :parse-error nil span nil input)))

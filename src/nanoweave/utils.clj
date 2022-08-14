@@ -113,63 +113,96 @@
   "Formats a range of lines of code for a code frame"
   [lines min-line max-line min-col max-col gutter]
   (let [gutter-length (count gutter)
-        adjusted-max-line (inc max-line)
-        line-range (range min-line adjusted-max-line)
+        line-range (range min-line (inc max-line))
         formatted-lines
         (map (fn [line-num]
                (let [line (get lines (dec line-num))
                      line-length (count line)]
                  [(format-line gutter lines line-num)
+                  ; This strangeness is to support spans that go over a single line
                   (cond
+                     ; Single line - just highlight from min -> max column numbers
+                    (= min-line max-line) (format-highlight-cols gutter-length min-col max-col)
+                    ; Multi line
+                    ; the highlighting on the first line goes from the start of the span to the end of the line 
                     (= line-num min-line) (format-highlight-cols gutter-length min-col line-length)
-                    (= line-num (dec adjusted-max-line)) (format-highlight-cols gutter-length 1 max-col)
+                    ; The highlighting on the last line goes from the start of the line to the end of the span
+                    (= line-num max-line) (format-highlight-cols gutter-length 1 max-col)
+                    ; the lhighlighting for the lines in the middle span the entire line because they are in the middle of the multi line span
                     :else (format-highlight-cols gutter-length 1 line-length))])) line-range)]
     (join eol (flatten formatted-lines))))
 
 (defn format-code-frame
   "Formats parsing error messages by showing it in context."
   [ln col input preamble message]
-  (let [{:keys [gutter lines-below lines-above]} code-frame-options
-        lines (split-lines input)
-        min-line (max (- ln lines-above) 1)
-        max-line (min (+ ln lines-below) (count lines))
-        text-before (format-code-lines lines min-line ln gutter)
-        target-line (format-line gutter lines ln)
-        text-after (format-code-lines lines (inc ln) max-line gutter)
-        pointer (format-pointer (count gutter) col)]
+  (if input
+    (let [{:keys [gutter lines-below lines-above]} code-frame-options
+          lines (split-lines input)
+          min-line (max (- ln lines-above) 1)
+          max-line (min (+ ln lines-below) (count lines))
+          text-before (format-code-lines lines min-line ln gutter)
+          target-line (format-line gutter lines ln)
+          text-after (format-code-lines lines (inc ln) max-line gutter)
+          pointer (format-pointer (count gutter) col)]
+      (str
+       preamble
+       text-before
+       eol
+       target-line
+       eol
+       pointer
+       message
+       eol
+       text-after
+       eol))
     (str
      preamble
-     text-before
      eol
-     target-line
-     eol
-     pointer
      message
-     eol
-     text-after
      eol)))
 
 (defn format-code-frame-span
   "Formats AST error messages by showing it in context."
   [span input preamble message]
-  (let [{:keys [gutter lines-below lines-above]} code-frame-options
-        {:keys [start end]} span
-        start-line (:line start)
-        end-line (:line end)
-        start-col (:col start)
-        end-col (:col end)
-        lines (split-lines input)
-        min-line (max (- start-line lines-above) 1)
-        max-line (min (+ end-line lines-below) (count lines))
-        text-before (format-code-lines lines min-line start-line gutter)
-        text-after (format-code-lines lines (inc end-line) max-line gutter)]
+  (if input
+    (let [{:keys [gutter lines-below lines-above]} code-frame-options
+          {:keys [start end]} span
+          start-line (:line start)
+          end-line (:line end)
+          start-col (:col start)
+          end-col (:col end)
+          lines (split-lines input)
+          min-line (max (- start-line lines-above) 1)
+          max-line (min (+ end-line lines-below) (count lines))
+          text-before (format-code-lines lines min-line start-line gutter)
+          text-after (format-code-lines lines (inc end-line) max-line gutter)]
+      (str
+       preamble
+       text-before
+       eol
+       (format-hightlight-lines lines start-line end-line start-col end-col gutter)
+       eol
+       message
+       eol
+       text-after
+       eol))
     (str
      preamble
-     text-before
-     eol
-     (format-hightlight-lines lines start-line end-line start-col end-col gutter)
      eol
      message
-     eol
-     text-after
      eol)))
+
+(defn format-error-with-context
+  "Takes a ErrorWithContext record and formats it for printing to a console."
+  ; TODO: Use more keys of the error type
+  ; type - we should switch on this to show the right type of error (e.g. read/write/parse etc.)
+  ; ast-node - could use this for some smart error reporting
+  ; cause - could print this if it exists for more info
+  [{:keys [message span input]}]
+  (let [{:keys [start end]} span
+        {:keys [line col src]} start
+        preamble (format "Compliation failure: (ln: %d col: %d src: %s)\n"
+                         line col src)]
+    (if (= start end)
+      (format-code-frame line col input preamble message)
+      (format-code-frame-span span input preamble message))))

@@ -19,7 +19,8 @@
         expected (read-json-with-doubles (slurp expected-file))
         nweave (slurp nweave-file)
         actual (transformer/transform input nweave nweave-filename)]
-    (is (= expected actual))))
+    (is (= (:ok actual) true))
+    (is (= expected (:value actual)))))
 
 ; Future work: work out how to dynamically create tests based on test-fixtures directory
 ; A simple loop didn't work, I'll probably need a macro

@@ -51,7 +51,7 @@
       (cond
         (fn? target) (apply target (cons input resolved-args))
         (instance? java.lang.Class target) (j/call-java-constructor target resolved-args)
-        :else (throw-resolve-error this (str "Not sure how to call [" target "] (" (type target) ")")))))
+        :else (throw-resolve-error (str "Not sure how to call [" target "] (" (type target) ")") this))))
   ArgList
   (resolve-value [this input]
     (let [arguments (:arguments this)]

@@ -18,7 +18,7 @@
             (map? input) (get input key)
             (j/matches-reflect-type? input key clojure.reflect.Method is-static) (j/wrap-java-fn input key is-static)
             (j/matches-reflect-type? input key clojure.reflect.Field is-static) (j/get-java-field input key is-static)
-            :else (throw-resolve-error this (str "Not sure how to resolve key [" key "] on [" (type input) "]")))]
+            :else (throw-resolve-error (str "Not sure how to resolve key [" key "] on [" (type input) "]") this))]
       resolved-value))
   StringLit
   (resolve-value [this _] (:value this))
