@@ -8,7 +8,6 @@
             [nanoweave.parsers.expr :refer [single-expression]]
             [nanoweave.parsers.errors :refer [convert-pstate-to-error-with-context]]
             [nanoweave.resolvers.errors :refer [unwrap-resolve-error]]
-            [nanoweave.monads :refer [bind return chain* ok err run map-error]]
             [nanoweave.resolvers.binary-arithmetic]
             [nanoweave.resolvers.binary-functions]
             [nanoweave.resolvers.binary-logic]
@@ -20,7 +19,9 @@
             [nanoweave.resolvers.pattern-matching]
             [nanoweave.resolvers.scope]
             [nanoweave.resolvers.text]
-            [nanoweave.resolvers.unary]))
+            [nanoweave.resolvers.unary]
+            [nanoweave.monadic.base :refer [domonad]]
+            [nanoweave.monadic.either :refer [either-m ok err map-error]]))
 
 (defn resolve-ast
   "Takes a parsed AST tree and transforms a given input with it"
@@ -82,8 +83,10 @@
   "Transforms text from an input file with a given nanoweave
   defnition and writes the result to the output file"
   ([input-file output-file nweave-file]
-   (run (bind [input (chain* (read-input-file! input-file))
-               nweave (chain* (read-nweave-file! nweave-file))
-               result (chain* (transform input nweave nweave-file))
-               _ (chain* (write-output-file! output-file result))]
-              (return result)))))
+   (#_{:clj-kondo/ignore [:unresolved-symbol]}
+    (domonad either-m
+             [input (read-input-file! input-file)
+              nweave (read-nweave-file! nweave-file)
+              result (transform input nweave nweave-file)
+              _ (write-output-file! output-file result)]
+             result))))
