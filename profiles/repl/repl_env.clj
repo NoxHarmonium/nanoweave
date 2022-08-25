@@ -1,8 +1,4 @@
-;; TODO DON'T EVALUATE THIS IN EASTWOOD
-;; SEEMS LIKE IT MIGHT CAUSE ISSUES
-;; EXCLUDE FROM LINTINGH????
+;; TODO: Move to user profile?
 
-(ns repl-env
+(ns repl.repl-env
   (:require [clojure.tools.namespace.repl :refer [refresh]]))
-
-(refresh)
