@@ -20,7 +20,7 @@
              :dev {:resource-paths ["test/resources"]
                    :plugins [[rasom/lein-githooks "0.1.5"]
                              [jonase/eastwood "1.2.4"]
-                             [lein-cljfmt "0.8.2"]
+                             [lein-cljfmt "0.9.0"]
                              [com.github.clj-kondo/lein-clj-kondo "0.2.1"]]
                    :githooks {:pre-push ["lein check" "lein test"]
                               :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt fix"]}}}
