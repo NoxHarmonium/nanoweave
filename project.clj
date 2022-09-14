@@ -19,7 +19,7 @@
   :profiles {:uberjar {:aot :all}
              :dev {:resource-paths ["test/resources"]
                    :plugins [[rasom/lein-githooks "0.1.5"]
-                             [jonase/eastwood "1.2.5"]
+                             [jonase/eastwood "1.3.0"]
                              [lein-cljfmt "0.9.0"]
                              [com.github.clj-kondo/lein-clj-kondo "0.2.1"]]
                    :githooks {:pre-push ["lein check" "lein test"]
