@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.3...v1.1.4) (2022-10-09)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.clojure:tools.cli to v1.0.214 ([7bcf1d9](https://github.com/NoxHarmonium/nanoweave/commit/7bcf1d9bbb688340f260b16bc8d3a8430c1b0156))
+
 ## [1.1.3](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.2...v1.1.3) (2022-09-29)
 
 
