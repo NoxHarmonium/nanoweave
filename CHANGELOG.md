@@ -1,3 +1,10 @@
+## [1.1.8](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.7...v1.1.8) (2023-03-14)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.clojure:tools.namespace to v1.4.4 ([54164dd](https://github.com/NoxHarmonium/nanoweave/commit/54164ddc85f0e94ed02aeacce6108814e55c4afc))
+
 ## [1.1.7](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.6...v1.1.7) (2023-03-11)
 
 
