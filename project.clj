@@ -21,7 +21,7 @@
                    :plugins [[rasom/lein-githooks "0.1.5"]
                              [jonase/eastwood "1.4.0"]
                              [lein-cljfmt "0.9.2"]
-                             [com.github.clj-kondo/lein-clj-kondo "0.2.4"]]
+                             [com.github.clj-kondo/lein-clj-kondo "0.2.5"]]
                    :githooks {:pre-push ["lein check" "lein test"]
                               :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt fix"]}}}
   :eastwood {:config-files ["lint_config.clj"]
