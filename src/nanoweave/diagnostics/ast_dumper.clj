@@ -44,16 +44,13 @@
                :node->descriptor describe-node
                :edge->descriptor describe-edge))
 
-; No-op
-(defn- process-ast [ast _] ast)
-
 (defn dump-ast-as-graphviz
   "Takes an input file and a nanoweave definition and outputs a graphical
 representation of the AST in PNG format to the output file"
   [input-file output-file nweave-file]
   (let [input (read-json-with-doubles (slurp input-file))
         nweave (slurp nweave-file)
-        output (transformer/transform input nweave process-ast)]
+        output (transformer/transform input nweave nweave-file)]
     (ast-map-to-graphviz output output-file)
     ; For some reason rhizome keeps the app open
     (System/exit 0)))
