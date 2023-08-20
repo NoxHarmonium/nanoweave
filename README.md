@@ -53,7 +53,7 @@ I would like to implement.
 - [x] Type Checking (is?)
 - [x] Type Coercion
 - [ ] String Manipulation
-- [ ] Error handling (line number etc.)
+- [x] Error handling (line number etc.)
 - [ ] List comprehensions
 - [ ] Set and Map Operators
 - [ ] Aggregrate (.\*)
@@ -105,7 +105,7 @@ a function called `refresh` in scope that allows you to
 safely reload the source files if they change.
 
 ```
-(ns repl-env)
+(require '[clojure.tools.namespace.repl :refer [refresh]])
 (reload)
 ```
 
