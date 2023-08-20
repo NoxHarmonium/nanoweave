@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.0...v1.2.1) (2023-08-20)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([b2f719e](https://github.com/NoxHarmonium/nanoweave/commit/b2f719ed1b149dc9be819b2b89f4b0136f4e95a0))
+
 # [1.2.0](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.9...v1.2.0) (2023-08-20)
 
 
