@@ -2,8 +2,9 @@
       :author "Sean Dawson"}
  nanoweave.ast.unary
   (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]]))
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.base AstSpan]))
 
-(s/defrecord NotOp [value :- Resolvable])
-(s/defrecord NegOp [value :- Resolvable])
-(s/defrecord TypeOfOp [value :- Resolvable])
+(s/defrecord NotOp [span :- AstSpan value :- Resolvable])
+(s/defrecord NegOp [span :- AstSpan value :- Resolvable])
+(s/defrecord TypeOfOp [span :- AstSpan value :- Resolvable])

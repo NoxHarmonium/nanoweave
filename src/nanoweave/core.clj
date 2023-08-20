@@ -2,6 +2,7 @@
   (:require [clojure.tools.cli :refer [parse-opts]]
             [clojure.string :as string]
             [clojure.java.io :as io]
+            [nanoweave.utils :refer [format-error-with-context]]
             [nanoweave.transformers.file-transformer :as transformer]
             [nanoweave.diagnostics.ast-dumper :as dumper])
   (:gen-class))
@@ -36,8 +37,8 @@
   should exit (with a error message, and optional ok status), or a map
   indicating the action the program should take and the options provided."
   [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args
-                                                               cli-options)]
+  (let [{:keys [options arguments errors summary]}
+        (parse-opts args cli-options)]
     (cond
       (:help options) ; help => exit OK with usage summary
       {:exit-message (usage summary), :ok? true}
@@ -51,15 +52,26 @@
 
 (defn exit [status msg] (println msg) (System/exit status))
 
+(defn exit-with-error-when-not-ok!
+  "If the transform result is not ok, will print a human friendly explanation,
+   otherwise it will do nothing"
+  [result]
+  (when (not (:ok result))
+    (let [message (if-let [contextual-error (:error result)]
+                    (format-error-with-context contextual-error)
+                    "An unknown error occurred")]
+      (exit 1 message))))
+
 (defn -main
   [& args]
   (let [{:keys [action options exit-message ok?]} (validate-args args)]
     (if exit-message
       (exit (if ok? 0 1) exit-message)
       (case action
-        "transform" (transformer/transform-files (:input options)
-                                                 (:output options)
-                                                 (:nweave options))
+        "transform" (exit-with-error-when-not-ok!
+                     (transformer/transform-files! (:input options)
+                                                   (:output options)
+                                                   (:nweave options)))
         "dump-ast" (dumper/dump-ast-as-graphviz (:input options)
                                                 (:output options)
                                                 (:nweave options))))))

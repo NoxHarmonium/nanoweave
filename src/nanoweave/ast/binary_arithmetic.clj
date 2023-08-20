@@ -3,10 +3,11 @@
       :author "Sean Dawson"}
  nanoweave.ast.binary-arithmetic
   (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]]))
+            [nanoweave.ast.base :refer [Resolvable]])
+  (:import [nanoweave.ast.base AstSpan]))
 
-(s/defrecord AddOp [left :- Resolvable right :- Resolvable])
-(s/defrecord SubOp [left :- Resolvable right :- Resolvable])
-(s/defrecord MultOp [left :- Resolvable right :- Resolvable])
-(s/defrecord DivOp [left :- Resolvable right :- Resolvable])
-(s/defrecord ModOp [left :- Resolvable right :- Resolvable])
+(s/defrecord AddOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord SubOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord MultOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord DivOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord ModOp [span :- AstSpan left :- Resolvable right :- Resolvable])

@@ -53,7 +53,7 @@ I would like to implement.
 - [x] Type Checking (is?)
 - [x] Type Coercion
 - [ ] String Manipulation
-- [ ] Error handling (line number etc.)
+- [x] Error handling (line number etc.)
 - [ ] List comprehensions
 - [ ] Set and Map Operators
 - [ ] Aggregrate (.\*)
@@ -85,16 +85,33 @@ I would like to implement.
 
 You can run nanoweave using `lein`.
 
-    lein run -i test\resources\test-fixtures\simple-structure-transform\input.json -o output.json -j test\resources\test-fixtures\simple-structure-transform\transform.nweave transform
+    lein run -i test/resources/test-fixtures/simple-structure-transform/input.json -o output.json -j test/resources/test-fixtures/simple-structure-transform/transform.nweave transform
 
 You can print out the AST tree by using the `dump-ast` command with the same options.
 For example to save the the AST tree of the 'map-collection' test fixture to a file called 'ast.png' you would run the following command:
 
-    lein run -i test\resources\test-fixtures\map-collection\input.json -n test\resources\test-fixtures\map-collection\transform.nweave -o ast.png dump-ast
+    lein run -i test/resources/test-fixtures/map-collection/input.json -n test/resources/test-fixtures/map-collection/transform.nweave -o ast.png dump-ast
 
 It should output an image file like the following:
 
 ![AST Image Example](doc/ast.png)
+
+## REPL
+
+Start the REPL with `lein repl`
+
+This will drop you into the namespace `repl-env` which has
+a function called `refresh` in scope that allows you to
+safely reload the source files if they change.
+
+```
+(require '[clojure.tools.namespace.repl :refer [refresh]])
+(reload)
+```
+
+See also:
+
+https://stackoverflow.com/a/25979645/1153203
 
 ## License
 

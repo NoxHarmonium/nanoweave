@@ -1,9 +1,10 @@
 (ns
- ^{:doc "Error handling functions.", :author "Sean Dawson"}
- nanoweave.transformers.errors
+ ^{:doc "Functions to help with parser errors", :author "Sean Dawson"}
+ nanoweave.parsers.errors
   (:require [blancas.kern.core :refer [def-]]
             [blancas.kern.i18n :refer [i18n fmt]]
-            [clojure.string :refer [join]]))
+            [clojure.string :refer [join]]
+            [nanoweave.ast.base :refer [->ErrorWithContext ->AstSpan ->AstPos]]))
 
 ; Copied from https://github.com/blancas/kern/blob/master/src/main/clojure/blancas/kern/core.clj
 ; because the methods were not made public
@@ -39,24 +40,27 @@
   [{msgs :msgs}]
   (let [ms (distinct msgs)]
     (concat
-     (let [lst (filter #(= (:type %) err-system) ms)]
-       (reduce #(conj %1 (get-msg %2)) [] lst))
-     (let [lst (filter #(= (:type %) err-unexpect) ms)]
-       (reduce #(conj %1 (get-msg %2)) [] lst))
+    ;; TODO: Unexpected token messages are probably useful,
+    ;; but at the moment I can't work out how to separate
+    ;; them out in meaningful way at the moment
+     (let [lst (filter #(contains? #{err-system err-unexpect} (:type %)) ms)]
+       (take 1 (reduce #(conj %1 (get-msg %2)) [] lst)))
+     ;;
      (let [lst (filter #(= (:type %) err-expect) ms)]
        (if (empty? lst) lst (list (get-msg-expect lst))))
      (let [lst (filter #(= (:type %) err-message) ms)]
        (reduce #(conj %1 (get-msg %2)) [] lst)))))
 
-(defn format-error
-  "Formats error messages in a PState record."
-  [s]
-  (let [err (:error s)
+(defn convert-pstate-to-error-with-context
+  "Normalises a error parser state to a generic error type that can be formatted."
+  [pstate input]
+  (assert (not (:ok pstate)) "Provided parser state does not indicate an error")
+  (let [err (:error pstate)
         pos (:pos err)
-        src (let [l (:src pos)] (if (empty? l) "" (str l " ")))
-        ln (:line pos)
+        src (:src pos)
+        line (:line pos)
         col (:col pos)
-        eol (System/getProperty "line.separator")]
-    (str (format (i18n :err-pos) src ln col)
-         eol
-         (join eol (get-msg-list err)))))
+        message (join ", " (get-msg-list err))
+        ast-pos (->AstPos line col src)
+        span (->AstSpan ast-pos ast-pos)]
+    (->ErrorWithContext message :parse-error nil span nil input)))

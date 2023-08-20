@@ -1,3 +1,5 @@
 {:lint-as {blancas.kern.core/bind clojure.core/let
-           blancas.kern.core/def- clojure.core/def}
+           nanoweave.monadic.either/bind clojure.core/let
+           blancas.kern.core/def- clojure.core/def
+           nanoweave.monadic.base/defmonad clojure.core/defn}
  :linters {:unresolved-namespace {:exclude [nanoweave.parsers.expr]}}}

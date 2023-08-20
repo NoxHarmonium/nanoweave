@@ -1,6 +1,7 @@
 (ns nanoweave.resolvers.lambda
   (:require [nanoweave.ast.lambda]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
+            [nanoweave.resolvers.errors :refer [throw-resolve-error]]
             [nanoweave.java-interop :as j]
             [nanoweave.ast.base :refer [Resolvable]])
   (:import [nanoweave.ast.lambda Lambda NoArgsLambda FunCall ArgList]))
@@ -50,7 +51,7 @@
       (cond
         (fn? target) (apply target (cons input resolved-args))
         (instance? java.lang.Class target) (j/call-java-constructor target resolved-args)
-        :else (throw (Exception. (str "Not sure how to call [" target "(" (type target) ")]"))))))
+        :else (throw-resolve-error (str "Not sure how to call [" target "] (" (type target) ")") this))))
   ArgList
   (resolve-value [this input]
     (let [arguments (:arguments this)]

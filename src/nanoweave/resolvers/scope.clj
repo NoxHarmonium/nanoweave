@@ -2,6 +2,7 @@
   (:require [nanoweave.ast.scope]
             [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
+            [nanoweave.resolvers.errors :refer [throw-resolve-error]]
             [nanoweave.utils :refer [dynamically-load-class]])
   (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When]))
 
@@ -36,7 +37,7 @@
               (let [clauses-that-match
                     (filter #(safe-resolve-value (:condition %) input) clauses)]
                 (when (empty? clauses-that-match)
-                  (throw (AssertionError. (str "Pattern match not exhaustive for input [" input "]"))))
+                  (throw-resolve-error (str "Pattern match not exhaustive for input [" input "]") this))
                 (first clauses-that-match)))]
       (let [clauses (:clauses this)
             matching-clause (find-matching-clause clauses)]
