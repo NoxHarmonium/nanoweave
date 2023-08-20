@@ -1,3 +1,15 @@
+# [1.2.0](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.9...v1.2.0) (2023-08-20)
+
+
+### Bug Fixes
+
+* fix incorrect arguments ([3923790](https://github.com/NoxHarmonium/nanoweave/commit/392379043bd0ac3ea4a8639263cfedfa0e47852f))
+
+
+### Features
+
+* report errors during evaluation ([73c9556](https://github.com/NoxHarmonium/nanoweave/commit/73c9556d0ac5f69a75ab99df27f727634516db24))
+
 ## [1.1.9](https://github.com/NoxHarmonium/nanoweave/compare/v1.1.8...v1.1.9) (2023-05-09)
 
 
