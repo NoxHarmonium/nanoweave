@@ -8,7 +8,7 @@
                  [org.clojure/tools.cli "1.0.219"]
                  [prismatic/schema "1.4.1"]
                  [rhizome "0.2.9"]
-                 [cheshire "5.11.0"]
+                 [cheshire "5.12.0"]
                  [org.clojure/data.xml "0.0.8"]
                  [org.clojure/data.csv "1.0.1"]
                  [org.clojure/tools.macro "0.1.5"]]
