@@ -22,7 +22,7 @@
                    :plugins [[rasom/lein-githooks "0.1.5"]
                              [jonase/eastwood "1.4.2"]
                              [lein-cljfmt "0.9.2"]
-                             [com.github.clj-kondo/lein-clj-kondo "0.2.5"]
+                             [com.github.clj-kondo/lein-clj-kondo "2023.12.15"]
                              [lein-codox "0.10.8"]]
                    :dependencies [[diff-eq "0.2.5"]]
                    :githooks {:pre-push ["lein check" "lein test"]
