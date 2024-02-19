@@ -5,12 +5,12 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.blancas/kern "1.1.0"]
-                 [org.clojure/tools.cli "1.0.219"]
+                 [org.clojure/tools.cli "1.1.230"]
                  [prismatic/schema "1.4.1"]
                  [rhizome "0.2.9"]
                  [cheshire "5.12.0"]
                  [org.clojure/data.xml "0.0.8"]
-                 [org.clojure/data.csv "1.0.1"]
+                 [org.clojure/data.csv "1.1.0"]
                  [org.clojure/tools.macro "0.2.0"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
@@ -29,7 +29,7 @@
                               :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt check"]}}
              :repl {:source-paths ["profiles"]
                     :repl-options {:init-ns repl.repl-env}
-                    :dependencies [[org.clojure/tools.namespace "1.4.5"]]}}
+                    :dependencies [[org.clojure/tools.namespace "1.5.0"]]}}
   :eastwood {:config-files ["lint_config.clj"]
              :exclude-linters [; The magic of 'declare-extern' requires a call to ns. I need that macro to avoid circular references.
                                :wrong-ns-form
