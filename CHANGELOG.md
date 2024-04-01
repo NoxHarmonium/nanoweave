@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.5...v1.2.6) (2024-04-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency cheshire:cheshire to v5.13.0 ([347e4f6](https://github.com/NoxHarmonium/nanoweave/commit/347e4f62e7e86e9bbcf1cdaa7eb209e4e52aa376))
+
 ## [1.2.5](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.4...v1.2.5) (2024-02-20)
 
 
