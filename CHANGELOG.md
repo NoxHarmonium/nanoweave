@@ -1,3 +1,10 @@
+## [1.2.7](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.6...v1.2.7) (2024-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.clojure:clojure to v1.11.4 ([36a8f15](https://github.com/NoxHarmonium/nanoweave/commit/36a8f152dad9305ab1c5ae0d82975741eda6a6fb))
+
 ## [1.2.6](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.5...v1.2.6) (2024-04-01)
 
 
