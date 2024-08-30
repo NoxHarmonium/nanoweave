@@ -11,7 +11,7 @@
                  [cheshire "5.13.0"]
                  [org.clojure/data.xml "0.0.8"]
                  [org.clojure/data.csv "1.1.0"]
-                 [org.clojure/tools.macro "0.2.0"]]
+                 [org.clojure/tools.macro "0.2.1"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :global-vars {*warn-on-reflection* true}
