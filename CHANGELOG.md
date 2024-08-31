@@ -1,3 +1,10 @@
+## [1.2.8](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.7...v1.2.8) (2024-08-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.clojure:tools.macro to v0.2.1 ([ac57da4](https://github.com/NoxHarmonium/nanoweave/commit/ac57da4a4acb2f925b9d01970f51420f48b78d6d))
+
 ## [1.2.7](https://github.com/NoxHarmonium/nanoweave/compare/v1.2.6...v1.2.7) (2024-08-04)
 
 
