@@ -5,7 +5,7 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.12.3"]
                  [org.blancas/kern "1.1.0"]
-                 [org.clojure/tools.cli "1.1.230"]
+                 [org.clojure/tools.cli "1.2.245"]
                  [prismatic/schema "1.4.1"]
                  [rhizome "0.2.9"]
                  [cheshire "5.13.0"]
