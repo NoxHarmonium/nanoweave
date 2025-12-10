@@ -3,7 +3,7 @@
   :url "http://github.com/noxharmonium/nanoweave"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
-  :dependencies [[org.clojure/clojure "1.12.3"]
+  :dependencies [[org.clojure/clojure "1.12.4"]
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "1.2.245"]
                  [prismatic/schema "1.4.1"]
