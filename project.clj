@@ -5,13 +5,13 @@
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.12.4"]
                  [org.blancas/kern "1.1.0"]
-                 [org.clojure/tools.cli "1.2.245"]
+                 [org.clojure/tools.cli "1.3.250"]
                  [prismatic/schema "1.4.1"]
                  [rhizome "0.2.9"]
                  [cheshire "5.13.0"]
                  [org.clojure/data.xml "0.0.8"]
-                 [org.clojure/data.csv "1.1.0"]
-                 [org.clojure/tools.macro "0.2.1"]]
+                 [org.clojure/data.csv "1.1.1"]
+                 [org.clojure/tools.macro "0.2.2"]]
   :main ^:skip-aot nanoweave.core
   :target-path "target/%s"
   :global-vars {*warn-on-reflection* true}
