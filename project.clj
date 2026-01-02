@@ -29,7 +29,7 @@
                               :pre-commit ["lein eastwood" "lein clj-kondo" "lein cljfmt check"]}}
              :repl {:source-paths ["profiles"]
                     :repl-options {:init-ns repl.repl-env}
-                    :dependencies [[org.clojure/tools.namespace "1.5.0"]]}}
+                    :dependencies [[org.clojure/tools.namespace "1.5.1"]]}}
   :eastwood {:config-files ["lint_config.clj"]
              :exclude-linters [; The magic of 'declare-extern' requires a call to ns. I need that macro to avoid circular references.
                                :wrong-ns-form
