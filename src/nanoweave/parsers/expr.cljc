@@ -22,10 +22,10 @@
              [closed-range-op concat-op dot-op open-range-op is-op as-op]]
             [nanoweave.parsers.lambda
              :refer
-             [function-arguments
+             [make-function-arguments
               function-call
-              lambda
-              no-args-lambda
+              make-lambda
+              make-no-args-lambda
               no-args-lambda-param]]
             [nanoweave.parsers.literals
              :refer
@@ -34,18 +34,30 @@
               wrapped-identifier
               wrapped-nil-lit
               type-lit
-              array-lit
-              object-lit]]
-            [nanoweave.parsers.pattern-matching :refer [match-scope]]
+              make-array-lit
+              make-object-lit]]
+            [nanoweave.parsers.pattern-matching :refer [make-match-scope]]
             [nanoweave.parsers.scope
              :refer
-             [else import-statement indexing let-scope when-scope]]
-            [nanoweave.parsers.text :refer [wrapped-interpolated-string regex]]
+             [else import-statement indexing make-let-scope make-when-scope]]
+            [nanoweave.parsers.text :refer [make-wrapped-interpolated-string regex]]
             [nanoweave.parsers.unary :refer [wrapped-uni-op]]))
 
 ; Forward declarations
 
 (declare expr)
+
+; These parsers recursively call `expr` and therefore would cause a cross namespace circular
+; dependency. Turning them into factory parsers (with the -make prefix) allows us to get around this.
+(def array-lit (make-array-lit (fn [s] (expr s))))
+(def object-lit (make-object-lit (fn [s] (expr s))))
+(def lambda (make-lambda (fn [s] (expr s))))
+(def no-args-lambda (make-no-args-lambda (fn [s] (expr s))))
+(def function-arguments (make-function-arguments (fn [s] (expr s))))
+(def let-scope (make-let-scope (fn [s] (expr s))))
+(def when-scope (make-when-scope (fn [s] (expr s))))
+(def wrapped-interpolated-string (make-wrapped-interpolated-string (fn [s] (expr s))))
+(def match-scope (make-match-scope (fn [s] (expr s))))
 
 (def fun-ops
   "Matches any of the functional binary operators (they have the same precedence)"
@@ -96,6 +108,3 @@
 (def expr (<?> (postfix1 or-group match-scope) "expression"))
 
 (def single-expression (<< expr eof))
-
-; Wire up the CLJS forward reference to allow recursive grammar definitions
-#?(:cljs (reset! nanoweave.parsers.base/fwd-expr-atom expr))

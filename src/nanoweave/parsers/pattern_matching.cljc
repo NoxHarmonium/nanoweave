@@ -1,8 +1,8 @@
 (ns ^{:doc "Parses operations that match patterns and extract values from input"
       :author "Sean Dawson"}
  nanoweave.parsers.pattern-matching
-  (:require [blancas.kern.core :refer [bind <|> <:> <?> fwd return]]
-            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+  (:require [blancas.kern.core :refer [bind <|> <:> <?> return]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [blancas.kern.lexer.java-style :refer
              [identifier colon brackets comma-sep braces token]]
             [nanoweave.parsers.text :refer [regex]]
@@ -11,16 +11,15 @@
               ->KeyValueMatchOp ->ListPatternMatchOp ->MapPatternMatchOp
               ->MatchClause ->Match ->RegexMatchOp]]))
 
-; Forward declarations
-
-; (declare-extern replaced by fwd-expr for cross-platform support)
-
 ; Scopes
 
-(declare binding-target)
-(def literal-match
+; Note: parsers starting with make- are "factory parsers" which take an `expr` parser and return
+; a parser that can parse expressions. This is to get around cross namespace circular references.
+
+(defn make-literal-match
   "pareses an expression that pattern matches against a literal variable"
-  (<s> (<?> (bind [target (fwd-expr)
+  [expr-p]
+  (<s> (<?> (bind [target expr-p
                    ps pop-span]
                   (return ((ps ->LiteralMatchOp) target)))
             "literal pattern match")))
@@ -42,53 +41,63 @@
                    ps pop-span]
                   (return ((ps ->KeyMatchOp) target)))
             "map key pattern match")))
-(def key-value-match
+(defn make-key-value-match
   "parses an expression that pattern matches against a key/value pair"
+  [bt-p]
   (<s> (<?> (bind [key key-match
                    _ colon
-                   value (fwd binding-target)
+                   value bt-p
                    ps pop-span]
                   (return ((ps ->KeyValueMatchOp) key value)))
             "map key/value pattern match")))
-(def list-pattern-match
+(defn make-list-pattern-match
   "parses an expression that pattern matches against a list"
+  [bt-p]
   (<s> (<?> (bind [_ (token "^")
-                   match (brackets (comma-sep (fwd binding-target)))
+                   match (brackets (comma-sep bt-p))
                    ps pop-span]
                   (return ((ps ->ListPatternMatchOp) match)))
             "list pattern match")))
-(def map-pattern-match
+(defn make-map-pattern-match
   "parses an expression that pattern matches against a map structure"
+  [bt-p]
   (<s> (<?> (bind [_ (token "^")
                    match (braces (comma-sep (<|>
-                                             (<:> key-value-match)
+                                             (<:> (make-key-value-match bt-p))
                                              key-match)))
                    ps pop-span]
                   (return ((ps ->MapPatternMatchOp) match)))
             "map pattern match")))
 
-(def binding-target
+(defn make-binding-target
   "parses the target of a variable binding"
-  (<?> (<|>
-        (<:> list-pattern-match)
-        (<:> map-pattern-match)
-        regex-match
-        variable-match
-        literal-match)
-       "variable binding target"))
+  [expr-p]
+  (let [bt (atom nil)
+        bt-p (fn [s] (@bt s))]
+    (reset! bt
+            (<?> (<|>
+                  (<:> (make-list-pattern-match bt-p))
+                  (<:> (make-map-pattern-match bt-p))
+                  regex-match
+                  variable-match
+                  (make-literal-match expr-p))
+                 "variable binding target"))
+    @bt))
 
-(def match-clause
+(defn make-match-clause
   "A pattern match expression and an associated body that will be evaluated if the match succeeds"
-  (<s> (<?> (bind [match binding-target
+  [expr-p]
+  (<s> (<?> (bind [match (make-binding-target expr-p)
                    _ colon
-                   body (fwd-expr)
+                   body expr-p
                    ps pop-span]
                   (return ((ps ->MatchClause) match body)))
             "match clause")))
-(def match-scope
+(defn make-match-scope
   "A match construct will take a branch if a pattern matches and passes in the matched variables"
+  [expr-p]
   (<s> (<?> (bind [_ (token "match")
-                   clauses (braces (comma-sep match-clause))
+                   clauses (braces (comma-sep (make-match-clause expr-p)))
                    ps pop-span]
                   (return (partial (ps ->Match) clauses)))
             "match statement")))

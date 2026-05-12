@@ -2,29 +2,35 @@
       :author "Sean Dawson"}
  nanoweave.parsers.literals
   (:require [blancas.kern.core :refer [bind <?> <|> optional sym* return]]
-            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [blancas.kern.lexer.java-style :refer
              [identifier float-lit bool-lit nil-lit token braces brackets colon comma-sep identifier string-lit]]
             [nanoweave.ast.literals :refer [->IdentiferLit ->FloatLit ->BoolLit ->NilLit ->TypeLit ->PairLit ->ArrayLit ->ObjectLit]]))
 
 ; 'JSON' Style Elements
 
-(def pair-lit
+; Note: parsers starting with make- are "factory parsers" which take an `expr` parser and return
+; a parser that can parse expressions. This is to get around cross namespace circular references.
+
+(defn make-pair-lit
   "Parses the rule:  pair := String ':' expr"
+  [expr-p]
   (<s> (<?> (bind [key (<|> string-lit identifier)
                    _ colon
-                   value (fwd-expr)
+                   value expr-p
                    ps pop-span] (return ((ps ->PairLit) key value)))
             "pair")))
-(def array-lit
+(defn make-array-lit
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
-  (<s> (<?> (brackets (bind [members (comma-sep (fwd-expr))
+  [expr-p]
+  (<s> (<?> (brackets (bind [members (comma-sep expr-p)
                              ps pop-span]
                             (return ((ps ->ArrayLit) members))))
             "array")))
-(def object-lit
+(defn make-object-lit
   "Parses the rule:  object := '{' (pair (',' pair)*)* '}'"
-  (<s> (<?> (braces (bind [members (comma-sep pair-lit)
+  [expr-p]
+  (<s> (<?> (braces (bind [members (comma-sep (make-pair-lit expr-p))
                            ps pop-span]
                           (return ((ps ->ObjectLit) members))))
             "object")))

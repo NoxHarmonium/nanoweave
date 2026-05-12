@@ -6,36 +6,38 @@
              [comma-sep identifier parens token sym lexeme]]
             [nanoweave.ast.lambda :refer [->Lambda ->NoArgsLambda ->FunCall ->ArgList]]
             [nanoweave.ast.literals :refer [->IdentiferLit]]
-            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
-            [nanoweave.parsers.literals :refer [object-lit]]))
-
-; Forward declarations
-
-; (declare-extern replaced by fwd-expr for cross-platform support)
+            [nanoweave.parsers.base :refer [<s> pop-span]]
+            [nanoweave.parsers.literals :refer [make-object-lit]]))
 
 ; Lambdas
+
+; Note: parsers starting with make- are "factory parsers" which take an `expr` parser and return
+; a parser that can parse expressions. This is to get around cross namespace circular references.
 
 (def argument-list
   "A list of arguments for a lambda"
   (<?> (parens (bind [args (comma-sep identifier)]
                      (return args)))
        "lambda argument list"))
-(def lambda-body
+(defn make-lambda-body
   "The body of a lambda that is executed when the lambda is called"
-  (<?> (<|> (parens (fwd-expr)) object-lit)
+  [expr-p]
+  (<?> (<|> (parens expr-p) (make-object-lit expr-p))
        "lambda body"))
-(def lambda
+(defn make-lambda
   "A self contained function that binds an expression to arguments"
+  [expr-p]
   (<s> (<?> (bind [args argument-list
                    _ (token "->")
-                   body lambda-body
+                   body (make-lambda-body expr-p)
                    ps pop-span]
                   (return ((ps ->Lambda) args body)))
             "lambda")))
-(def no-args-lambda
+(defn make-no-args-lambda
   "A self contained function with no params definition"
+  [expr-p]
   (<s> (<?> (bind [_ (sym \#)
-                   body lambda-body
+                   body (make-lambda-body expr-p)
                    ps pop-span]
                   (return ((ps ->NoArgsLambda) body)))
             "lambda")))
@@ -59,9 +61,10 @@
         (if ahead
           (return ->FunCall)
           (fail "expected ("))))
-(def function-arguments
+(defn make-function-arguments
   "A list of expressions passed to function application"
-  (<s> (<?> (bind [arg-exprs (comma-sep (fwd-expr))
+  [expr-p]
+  (<s> (<?> (bind [arg-exprs (comma-sep expr-p)
                    ps pop-span]
                   (return ((ps ->ArgList) arg-exprs)))
             "function arguments")))

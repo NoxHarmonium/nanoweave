@@ -2,7 +2,7 @@
       :doc "Parses operations that manipulate the values available in the scope of expressions."}
  nanoweave.parsers.scope
   (:require [blancas.kern.core :refer [<?> bind fail look-ahead return]]
-            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [blancas.kern.lexer.java-style
              :refer
              [colon comma-sep string-lit sym token]]
@@ -10,48 +10,51 @@
             [nanoweave.ast.scope
              :refer
              [->Binding ->Expression ->ImportOp ->Indexing ->When ->WhenClause]]
-            [nanoweave.parsers.pattern-matching :refer [binding-target]]))
+            [nanoweave.parsers.pattern-matching :refer [make-binding-target]]))
 
 ; Forward declarations
 
-; (declare-extern replaced by fwd-expr for cross-platform support)
-
 ; Scopes
 
-(def variable-binding
+(defn make-variable-binding
   "Parses a binding of an expression result to a target"
-  (<s> (<?> (bind [target binding-target
+  [expr-p]
+  (<s> (<?> (bind [target (make-binding-target expr-p)
                    _ (sym \=)
-                   body (fwd-expr)
+                   body expr-p
                    ps pop-span]
                   (return (partial (ps ->Binding) target body)))
             "variable binding")))
-(def binding-list
+(defn make-binding-list
   "Parses multiple variable bindings separated by commas to a sequence"
-  (<?> (bind [bindings (comma-sep variable-binding)]
+  [expr-p]
+  (<?> (bind [bindings (comma-sep (make-variable-binding expr-p))]
              (return (reduce comp bindings)))
        "binding list"))
-(def let-scope
+(defn make-let-scope
   "Creates a new scope that has variables that are bound in the binding list"
+  [expr-p]
   (<s> (<?> (bind [_ (token "let")
-                   bindings binding-list
+                   bindings (make-binding-list expr-p)
                    _ colon
-                   body (fwd-expr)
+                   body expr-p
                    ps pop-span]
                   (return ((ps ->Expression) (bindings body))))
             "let statement")))
-(def when-clause
+(defn make-when-clause
   "An expression and an associated body that will be evaluated if the expression evaluates truthy"
-  (<s> (<?> (bind [condition (fwd-expr)
+  [expr-p]
+  (<s> (<?> (bind [condition expr-p
                    _ colon
-                   body (fwd-expr)
+                   body expr-p
                    ps pop-span]
                   (return ((ps ->WhenClause) condition body)))
             "when clause")))
-(def when-scope
+(defn make-when-scope
   "A flow control construct that will take a branch if an expression evaluates truthy"
+  [expr-p]
   (<s> (<?> (bind [_ (token "when")
-                   clauses (comma-sep when-clause)
+                   clauses (comma-sep (make-when-clause expr-p))
                    ps pop-span]
                   (return ((ps ->When) clauses)))
             "when statement")))

@@ -7,32 +7,34 @@
             [blancas.kern.lexer.java-style :refer [lexeme]]
             [nanoweave.ast.scope :refer [->Expression]]
             [nanoweave.ast.text :refer [->InterpolatedString ->Regex]]
-            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+            [nanoweave.parsers.base :refer [<s> pop-span]]
             [nanoweave.parsers.custom-lexing :refer [string-char regex-char]]))
-
-; Forward declarations
-
-; (declare-extern replaced by fwd-expr for cross-platform support)
 
 ; Interpolated String
 
-(def interpolated-string-expression
+; Note: parsers starting with make- are "factory parsers" which take an `expr` parser and return
+; a parser that can parse expressions. This is to get around cross namespace circular references.
+
+(defn make-interpolated-string-expression
   "Parses an expression embedded within a string"
+  [expr-p]
   (<s> (<?> (bind [_ (token* "#{")
-                   body (fwd-expr)
+                   body expr-p
                    _ (token* "}")
                    ps pop-span]
                   (return ((ps ->Expression) body))) "interpolated string expression")))
-(def interpolated-string
+(defn make-interpolated-string
   "Parses string literals and embedded expressions delimited by double quotes"
+  [expr-p]
   (lexeme (between (sym* \")
                    (<?> (sym* \") "end string")
                    (many (<|>
-                          interpolated-string-expression
+                          (make-interpolated-string-expression expr-p)
                           (<+> (many (string-char [\" \#]))))))))
-(def wrapped-interpolated-string
+(defn make-wrapped-interpolated-string
   "Wraps an interpolated-string parser so it returns an AST record rather than an array of strings and expressions."
-  (<s> (<?> (bind [v interpolated-string
+  [expr-p]
+  (<s> (<?> (bind [v (make-interpolated-string expr-p)
                    ps pop-span]
                   (return ((ps ->InterpolatedString) v)))
             "string")))

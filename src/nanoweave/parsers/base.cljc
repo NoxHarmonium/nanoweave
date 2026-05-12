@@ -1,22 +1,9 @@
 (ns ^{:doc "Parses the basic structure of a transform definition.", :author "Sean Dawson"}
  nanoweave.parsers.base
-  (:require [blancas.kern.core :refer [<|> bind put-state return #?@(:clj [fwd])]]
+  (:require [blancas.kern.core :refer [<|> bind put-state return]]
             [nanoweave.ast.base :refer [->AstPos ->AstSpan #?@(:cljs [AstSpan])]]
-            #?(:clj [nanoweave.utils :refer [declare-extern]])
             [schema.core :refer [validate] :include-macros true])
   #?(:clj (:import [nanoweave.ast.base AstSpan])))
-
-; Forward declarations
-
-#?(:clj (declare-extern nanoweave.parsers.expr/expr))
-#?(:cljs (def fwd-expr-atom (atom nil)))
-
-(defn fwd-expr
-  "Returns a parser that lazily references the main expression parser.
-   Used to break the circular namespace dependency in ClojureScript."
-  []
-  #?(:clj (fwd nanoweave.parsers.expr/expr)
-     :cljs (fn [s] (@fwd-expr-atom s))))
 
 ;; Utility
 
