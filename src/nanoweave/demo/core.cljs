@@ -8,7 +8,7 @@
 ;; State
 
 (defonce state
-  (atom {:input     (:input (first examples))
+  (atom {:input (:input (first examples))
          :transform (:transform (first examples))}))
 
 (defonce editors (atom {}))
@@ -48,10 +48,10 @@
 ;; Init
 
 (defn init []
-  (let [input-el     (.getElementById js/document "editor-input")
+  (let [input-el (.getElementById js/document "editor-input")
         transform-el (.getElementById js/document "editor-transform")
-        output-el    (.getElementById js/document "editor-output")
-        select-el    (.getElementById js/document "example-select")]
+        output-el (.getElementById js/document "editor-output")
+        select-el (.getElementById js/document "example-select")]
 
     ;; Populate dropdown
     (doseq [[i ex] (map-indexed vector examples)]

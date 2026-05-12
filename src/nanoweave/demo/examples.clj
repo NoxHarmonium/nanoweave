@@ -32,7 +32,7 @@
                  "flow-control"
                  "regex"]]
     (mapv (fn [folder]
-            {:label     (folder->label folder)
-             :input     (read-fixture folder "input.json")
+            {:label (folder->label folder)
+             :input (read-fixture folder "input.json")
              :transform (read-fixture folder "transform.nweave")})
           folders)))

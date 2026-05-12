@@ -34,9 +34,9 @@
       (.match stream (js/RegExp "^[a-zA-Z_][a-zA-Z0-9_]*"))
       (let [word (.current stream)]
         (cond
-          (keywords word)  "keyword"
-          (builtins word)  "atom"
-          :else            "variable"))
+          (keywords word) "keyword"
+          (builtins word) "atom"
+          :else "variable"))
 
       ;; Lambda param %1, %2, ...
       (.match stream (js/RegExp "^%[0-9]*"))

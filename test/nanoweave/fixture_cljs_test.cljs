@@ -21,10 +21,10 @@
 
 (defn run-test-fixture [test-folder]
   (println "Running CLJS test fixture: " test-folder)
-  (let [input-str  (read-file (fixture-path test-folder "input.json"))
-        expected   (read-expected test-folder)
+  (let [input-str (read-file (fixture-path test-folder "input.json"))
+        expected (read-expected test-folder)
         nweave-str (read-file (fixture-path test-folder "transform.nweave"))
-        actual     (transform-strings input-str nweave-str)]
+        actual (transform-strings input-str nweave-str)]
     (is (= (:ok actual) true) (str test-folder " - expected ok result"))
     (is (= expected (:value actual)) (str test-folder " - value mismatch"))))
 

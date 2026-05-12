@@ -18,8 +18,8 @@
    Returns the EditorView."
   [parent-el language on-change]
   (let [lang-ext (case language
-                   :json       (json)
-                   :nanoweave  nanoweave-language
+                   :json (json)
+                   :nanoweave nanoweave-language
                    nil)
         change-ext (when on-change
                      (on-update-ext
@@ -27,8 +27,8 @@
                         (when (.-docChanged update)
                           (on-change (.. update -state -doc (toString)))))))
         extensions (cond-> [(lineNumbers) oneDark]
-                     lang-ext       (conj lang-ext)
-                     on-change      (conj change-ext)
+                     lang-ext (conj lang-ext)
+                     on-change (conj change-ext)
                      (not on-change) (conj read-only-extension))
         state (.create EditorState #js {:doc ""
                                         :extensions (into-array extensions)})]
@@ -40,5 +40,5 @@
   (.dispatch view
              (.update (.-state view)
                       #js {:changes #js {:from 0
-                                         :to   (.. view -state -doc -length)
+                                         :to (.. view -state -doc -length)
                                          :insert text}})))
