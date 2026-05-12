@@ -1,4 +1,4 @@
-{:source-paths ["src" "test"]
+{:source-paths ["src" "test" "test/resources"]
 
  :dependencies [[org.blancas/kern "1.2.0"]
                 [prismatic/schema "1.4.1"]

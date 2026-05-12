@@ -1,5 +1,5 @@
 (ns nanoweave.fixture-cljs-test
-  (:require [cljs.test :refer [deftest is testing run-tests]]
+  (:require [cljs.test :refer [deftest is testing]]
             [nanoweave.utils :refer [read-json-with-doubles]]
             [nanoweave.transformers.string-transformer :refer [transform-strings]]))
 
