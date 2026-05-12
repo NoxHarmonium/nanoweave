@@ -1,13 +1,16 @@
 (ns nanoweave.resolvers.pattern-matching
-  (:require [nanoweave.ast.pattern-matching]
+  (:require [nanoweave.ast.pattern-matching #?@(:cljs [:refer [ListPatternMatchOp
+                                                               MapPatternMatchOp VariableMatchOp LiteralMatchOp
+                                                               KeyMatchOp KeyValueMatchOp Match
+                                                               RegexMatchOp]])]
             [clojure.string :as str]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.resolvers.errors :refer [throw-resolve-error]]
             [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.pattern_matching ListPatternMatchOp
-            MapPatternMatchOp VariableMatchOp LiteralMatchOp
-            KeyMatchOp KeyValueMatchOp Match
-            RegexMatchOp]))
+  #?(:clj (:import [nanoweave.ast.pattern_matching ListPatternMatchOp
+                    MapPatternMatchOp VariableMatchOp LiteralMatchOp
+                    KeyMatchOp KeyValueMatchOp Match
+                    RegexMatchOp])))
 
 (defn- merge-bindings
   "Merges the results of multiple pattern matches.

@@ -2,7 +2,7 @@
       :author "Sean Dawson"}
  nanoweave.parsers.literals
   (:require [blancas.kern.core :refer [bind <?> <|> fwd optional sym* return]]
-            [nanoweave.parsers.base :refer [<s> pop-span]]
+            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
             [blancas.kern.lexer.java-style :refer
              [identifier float-lit bool-lit nil-lit token braces brackets colon comma-sep identifier string-lit]]
             [nanoweave.ast.literals :refer [->IdentiferLit ->FloatLit ->BoolLit ->NilLit ->TypeLit ->PairLit ->ArrayLit ->ObjectLit]]))
@@ -13,12 +13,12 @@
   "Parses the rule:  pair := String ':' expr"
   (<s> (<?> (bind [key (<|> string-lit identifier)
                    _ colon
-                   value (fwd nanoweave.parsers.expr/expr)
+                   value (fwd-expr)
                    ps pop-span] (return ((ps ->PairLit) key value)))
             "pair")))
 (def array-lit
   "Parses the rule:  array := '[' (expr (',' expr)*)* ']'"
-  (<s> (<?> (brackets (bind [members (comma-sep (fwd nanoweave.parsers.expr/expr))
+  (<s> (<?> (brackets (bind [members (comma-sep (fwd-expr))
                              ps pop-span]
                             (return ((ps ->ArrayLit) members))))
             "array")))
@@ -59,4 +59,3 @@
                    ps pop-span]
                   (return ((ps ->TypeLit) type-name)))
             "type")))
-

@@ -1,7 +1,7 @@
 (ns ^{:doc "Represents either a success value or an error value.", :author "Sean Dawson"}
  nanoweave.monadic.either
-  (:require [schema.core :as s]
-            [nanoweave.monadic.base :refer [defmonad]]))
+  (:require [schema.core :as s :include-macros true]
+            #?(:clj [nanoweave.monadic.base :refer [defmonad]])))
 
 ;; TODO: Can we use conditional or an error schema or something to clean this up?
 (s/defrecord Either [ok :- s/Bool error :- s/Any value :- s/Any])
@@ -30,9 +30,9 @@
     this))
 
 #_{:clj-kondo/ignore [:unused-binding]}
-(defmonad either-m
-  "Monad describing computations with possible failures. Failure is
+#?(:clj (defmonad either-m
+          "Monad describing computations with possible failures. Failure is
     represented by a 'left' value, a 'right' value is considered valid. As soon as
     a step returns a eft, the whole computation will yield the left value."
-  [m-return return
-   m-bind >>=])
+          [m-return return
+           m-bind >>=]))

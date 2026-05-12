@@ -1,15 +1,16 @@
 (ns
  ^{:doc "Functions to help with resolver errors", :author "Sean Dawson"}
  nanoweave.resolvers.errors
-  (:require [nanoweave.ast.base :refer [->ErrorWithContext]])
-  (:import [clojure.lang IExceptionInfo]
-           [nanoweave.ast.base ErrorWithContext]))
+  (:require [nanoweave.ast.base :refer [->ErrorWithContext #?@(:cljs [ErrorWithContext])]])
+  #?(:clj (:import [clojure.lang IExceptionInfo]
+                   [nanoweave.ast.base ErrorWithContext])))
 
 (defn unwrap-resolve-error
   "If ex is a valid resolve error, will unwrap the error data,
    otherwise it will return nil"
   [ex]
-  (when (instance? IExceptionInfo ex)
+  (when #?(:clj (instance? IExceptionInfo ex)
+           :cljs (some? (ex-data ex)))
     (when-let [error-data (ex-data ex)]
       (when (instance? ErrorWithContext error-data)
         error-data))))

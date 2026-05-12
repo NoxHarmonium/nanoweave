@@ -2,7 +2,7 @@
       :doc "Parses operations that manipulate the values available in the scope of expressions."}
  nanoweave.parsers.scope
   (:require [blancas.kern.core :refer [<?> bind fail fwd look-ahead return]]
-            [nanoweave.parsers.base :refer [<s> pop-span]]
+            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
             [blancas.kern.lexer.java-style
              :refer
              [colon comma-sep string-lit sym token]]
@@ -10,12 +10,11 @@
             [nanoweave.ast.scope
              :refer
              [->Binding ->Expression ->ImportOp ->Indexing ->When ->WhenClause]]
-            [nanoweave.parsers.pattern-matching :refer [binding-target]]
-            [nanoweave.utils :refer [declare-extern]]))
+            [nanoweave.parsers.pattern-matching :refer [binding-target]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parsers.expr/expr)
+; (declare-extern replaced by fwd-expr for cross-platform support)
 
 ; Scopes
 
@@ -23,7 +22,7 @@
   "Parses a binding of an expression result to a target"
   (<s> (<?> (bind [target binding-target
                    _ (sym \=)
-                   body (fwd nanoweave.parsers.expr/expr)
+                   body (fwd-expr)
                    ps pop-span]
                   (return (partial (ps ->Binding) target body)))
             "variable binding")))
@@ -37,15 +36,15 @@
   (<s> (<?> (bind [_ (token "let")
                    bindings binding-list
                    _ colon
-                   body (fwd nanoweave.parsers.expr/expr)
+                   body (fwd-expr)
                    ps pop-span]
                   (return ((ps ->Expression) (bindings body))))
             "let statement")))
 (def when-clause
   "An expression and an associated body that will be evaluated if the expression evaluates truthy"
-  (<s> (<?> (bind [condition (fwd nanoweave.parsers.expr/expr)
+  (<s> (<?> (bind [condition (fwd-expr)
                    _ colon
-                   body (fwd nanoweave.parsers.expr/expr)
+                   body (fwd-expr)
                    ps pop-span]
                   (return ((ps ->WhenClause) condition body)))
             "when clause")))
@@ -80,4 +79,3 @@
                    ps pop-span]
                   (return ((ps ->ImportOp) class)))
             "import")))
-

@@ -1,10 +1,10 @@
 (ns nanoweave.resolvers.scope
-  (:require [nanoweave.ast.scope]
+  (:require [nanoweave.ast.scope #?@(:cljs [:refer [Binding Expression ImportOp Indexing When]])]
             [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.resolvers.errors :refer [throw-resolve-error]]
-            [nanoweave.utils :refer [dynamically-load-class]])
-  (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When]))
+            #?(:clj [nanoweave.utils :refer [dynamically-load-class]]))
+  #?(:clj (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When])))
 
 (extend-protocol Resolvable
   Binding
@@ -28,9 +28,9 @@
         :else nil)))
   ImportOp
   (resolve-value [this _]
-    (let [class-name (:class-name this)
-          class (dynamically-load-class class-name)]
-      class))
+    (let [class-name (:class-name this)]
+      #?(:clj (let [class (dynamically-load-class class-name)] class)
+         :cljs (do (js/console.warn "Java import not supported in ClojureScript:" class-name) nil))))
   When
   (resolve-value [this input]
     (letfn [(find-matching-clause [clauses]

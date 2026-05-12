@@ -1,14 +1,22 @@
 (ns ^{:doc "Parses the basic structure of a transform definition.", :author "Sean Dawson"}
  nanoweave.parsers.base
-  (:require [blancas.kern.core :refer [<|> bind put-state return]]
-            [nanoweave.ast.base :refer [->AstPos ->AstSpan]]
-            [nanoweave.utils :refer [declare-extern]]
-            [schema.core :refer [validate]])
-  (:import [nanoweave.ast.base AstSpan]))
+  (:require [blancas.kern.core :refer [<|> bind fwd put-state return]]
+            [nanoweave.ast.base :refer [->AstPos ->AstSpan #?@(:cljs [AstSpan])]]
+            #?(:clj [nanoweave.utils :refer [declare-extern]])
+            [schema.core :refer [validate] :include-macros true])
+  #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parsers.expr/expr)
+#?(:clj (declare-extern nanoweave.parsers.expr/expr))
+#?(:cljs (def fwd-expr-atom (atom nil)))
+
+(defn fwd-expr
+  "Returns a parser that lazily references the main expression parser.
+   Used to break the circular namespace dependency in ClojureScript."
+  []
+  #?(:clj (fwd nanoweave.parsers.expr/expr)
+     :cljs (fn [s] (@fwd-expr-atom s))))
 
 ;; Utility
 
@@ -58,7 +66,7 @@
 (defn chainl1*
   "Specialisation of Kern's chainl1 function that ensures that binary operator AST
    have spans the cover both sides of the operator.
-   
+
    Parses p; as long as there is a binary operator op, reads the op and
    another instance of p, then applies the operator on both values.
    The operator associates to the left."

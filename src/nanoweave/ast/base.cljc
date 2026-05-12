@@ -3,7 +3,7 @@
   so that in the future they can be extended with more features such as
   better error handling and type validation.", :author "Sean Dawson"}
  nanoweave.ast.base
-  (:require [schema.core :as s]))
+  (:require [schema.core :as s :include-macros true]))
 
 (defprotocol Resolvable
   "Describes an AST node that can be resolved with an input.

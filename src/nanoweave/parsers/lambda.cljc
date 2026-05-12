@@ -6,13 +6,12 @@
              [comma-sep identifier parens token sym lexeme]]
             [nanoweave.ast.lambda :refer [->Lambda ->NoArgsLambda ->FunCall ->ArgList]]
             [nanoweave.ast.literals :refer [->IdentiferLit]]
-            [nanoweave.parsers.base :refer [<s> pop-span]]
-            [nanoweave.parsers.literals :refer [object-lit]]
-            [nanoweave.utils :refer [declare-extern]]))
+            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+            [nanoweave.parsers.literals :refer [object-lit]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parsers.expr/expr)
+; (declare-extern replaced by fwd-expr for cross-platform support)
 
 ; Lambdas
 
@@ -23,7 +22,7 @@
        "lambda argument list"))
 (def lambda-body
   "The body of a lambda that is executed when the lambda is called"
-  (<?> (<|> (parens (fwd nanoweave.parsers.expr/expr)) object-lit)
+  (<?> (<|> (parens (fwd-expr)) object-lit)
        "lambda body"))
 (def lambda
   "A self contained function that binds an expression to arguments"
@@ -62,7 +61,7 @@
           (fail "expected ("))))
 (def function-arguments
   "A list of expressions passed to function application"
-  (<s> (<?> (bind [arguments (comma-sep (fwd nanoweave.parsers.expr/expr))
+  (<s> (<?> (bind [arguments (comma-sep (fwd-expr))
                    ps pop-span]
                   (return ((ps ->ArgList) arguments)))
             "function arguments")))

@@ -1,9 +1,9 @@
 (ns ^{:doc "Syntax that represents literal values."
       :author "Sean Dawson"}
  nanoweave.ast.literals
-  (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.base AstSpan]))
+  (:require [schema.core :as s :include-macros true]
+            [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
+  #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
 (s/defrecord IdentiferLit [span :- AstSpan value :- s/Str static-prefix :- s/Bool])
 (s/defrecord StringLit [span :- AstSpan value :- s/Str])

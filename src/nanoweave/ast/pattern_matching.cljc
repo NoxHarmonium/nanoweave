@@ -1,9 +1,9 @@
 (ns ^{:doc "Syntax that match patterns and extract values from input."
       :author "Sean Dawson"}
  nanoweave.ast.pattern-matching
-  (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.base AstSpan]))
+  (:require [schema.core :as s :include-macros true]
+            [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
+  #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
 (s/defrecord ListPatternMatchOp [span :- AstSpan targets :- [Resolvable]])
 (s/defrecord MapPatternMatchOp [span :- AstSpan targets :- [Resolvable]])

@@ -12,8 +12,9 @@
   "Parses an octal escape code; the result is the encoded char."
   (>>= (<+> (many1 oct-digit))
        (fn [x]
-         (let [n (Integer/parseInt x 8)]
-           (if (<= n 0377)
+         (let [n #?(:clj (Integer/parseInt x 8)
+                    :cljs (js/parseInt x 8))]
+           (if (<= n 255)
              (return (char n))
              (fail "bad octal sequence"))))))
 
@@ -26,12 +27,13 @@
 (def esc-uni
   "Parses a unicode escape code; the result is the encoded char."
   (>>= (<+> (>> (sym* \u) (times 4 hex-digit)))
-       (fn [x] (return (aget (Character/toChars (Integer/parseInt x 16)) 0)))))
+       (fn [x] (return #?(:clj (aget (Character/toChars (Integer/parseInt x 16)) 0)
+                          :cljs (.fromCodePoint js/String (js/parseInt x 16)))))))
 
 (defn string-char
   "Parses an unquoted Java character literal. Characters in terminators must be escaped."
   [terminators]
-  (<?> (<|> (satisfy #(and (not-any? (partial = %) terminators) (not= % \\) (>= (int %) space-ascii)))
+  (<?> (<|> (satisfy #(and (not-any? (partial = %) terminators) (not= % \\) (>= #?(:clj (int %) :cljs (.charCodeAt % 0)) space-ascii)))
             (>> (sym* \\)
                 (<?> (<|> esc-char esc-oct esc-uni)
                      "escaped code: b, t, n, f, r, ', \\, ooo, hhhh")))
@@ -41,5 +43,5 @@
   "Parses a character for a regex literal. Forward slashes must be escaped."
   []
   (<?> (<|> (bind [_ (token- "\\/")] (return \/))
-            (satisfy #(and (not= % \/) (>= (int %) space-ascii))))
+            (satisfy #(and (not= % \/) (>= #?(:clj (int %) :cljs (.charCodeAt % 0)) space-ascii))))
        "regex literal"))

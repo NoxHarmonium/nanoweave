@@ -1,9 +1,9 @@
 (ns ^{:doc "Syntax that represents manipulating the values available for operations."
       :author "Sean Dawson"}
  nanoweave.ast.scope
-  (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.base AstSpan]))
+  (:require [schema.core :as s :include-macros true]
+            [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
+  #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
 (s/defrecord Binding [span :- AstSpan match :- Resolvable value :- Resolvable body :- Resolvable])
 (s/defrecord Expression [span :- AstSpan body :- Resolvable])

@@ -1,10 +1,10 @@
 (ns nanoweave.resolvers.lambda
-  (:require [nanoweave.ast.lambda]
+  (:require [nanoweave.ast.lambda #?@(:cljs [:refer [Lambda NoArgsLambda FunCall ArgList]])]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.resolvers.errors :refer [throw-resolve-error]]
             [nanoweave.java-interop :as j]
             [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.lambda Lambda NoArgsLambda FunCall ArgList]))
+  #?(:clj (:import [nanoweave.ast.lambda Lambda NoArgsLambda FunCall ArgList])))
 
 (defn- check-param-count
   "Checks that the expected number of arguments are passed to a function"
@@ -50,7 +50,7 @@
           resolved-args (get args :resolved-arguments [args])]
       (cond
         (fn? target) (apply target (cons input resolved-args))
-        (instance? java.lang.Class target) (j/call-java-constructor target resolved-args)
+        #?(:clj (instance? java.lang.Class target) :cljs false) (j/call-java-constructor target resolved-args)
         :else (throw-resolve-error (str "Not sure how to call [" target "] (" (type target) ")") this))))
   ArgList
   (resolve-value [this input]

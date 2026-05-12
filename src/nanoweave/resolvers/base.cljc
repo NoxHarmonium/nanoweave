@@ -12,7 +12,7 @@
     (if (satisfies? Resolvable resolver)
       (try
         (resolve-value resolver input)
-        (catch Exception ex
+        (catch #?(:clj Exception :cljs :default) ex
           ; If the error already came from a resolve error then just throw it back up the stack
           ; no need to double handle it and mess with the AstSpan
           (if (resolve-error? ex) (throw ex)

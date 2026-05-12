@@ -1,8 +1,8 @@
 (ns nanoweave.resolvers.binary-arithmetic
-  (:require [nanoweave.ast.binary-arithmetic]
+  (:require [nanoweave.ast.binary-arithmetic #?@(:cljs [:refer [AddOp SubOp MultOp DivOp ModOp]])]
             [nanoweave.resolvers.base :refer [handle-bin-op]]
             [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.binary_arithmetic AddOp SubOp MultOp DivOp ModOp]))
+  #?(:clj (:import [nanoweave.ast.binary_arithmetic AddOp SubOp MultOp DivOp ModOp])))
 
 (extend-protocol Resolvable
   AddOp

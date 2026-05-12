@@ -7,20 +7,19 @@
             [blancas.kern.lexer.java-style :refer [lexeme]]
             [nanoweave.ast.scope :refer [->Expression]]
             [nanoweave.ast.text :refer [->InterpolatedString ->Regex]]
-            [nanoweave.parsers.base :refer [<s> pop-span]]
-            [nanoweave.parsers.custom-lexing :refer [string-char regex-char]]
-            [nanoweave.utils :refer [declare-extern]]))
+            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
+            [nanoweave.parsers.custom-lexing :refer [string-char regex-char]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parsers.expr/expr)
+; (declare-extern replaced by fwd-expr for cross-platform support)
 
 ; Interpolated String
 
 (def interpolated-string-expression
   "Parses an expression embedded within a string"
   (<s> (<?> (bind [_ (token* "#{")
-                   body (fwd nanoweave.parsers.expr/expr)
+                   body (fwd-expr)
                    _ (token* "}")
                    ps pop-span]
                   (return ((ps ->Expression) body))) "interpolated string expression")))
@@ -45,5 +44,4 @@
                                ps pop-span]
                               (try
                                 (return ((ps ->Regex) (re-pattern pattern)))
-                                (catch Exception e (fail (.getMessage e)))))))))
-
+                                (catch #?(:clj Exception :cljs :default) e (fail (.getMessage e)))))))))

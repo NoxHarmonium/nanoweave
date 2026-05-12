@@ -1,9 +1,9 @@
 (ns nanoweave.resolvers.text
-  (:require [nanoweave.ast.text]
+  (:require [nanoweave.ast.text #?@(:cljs [:refer [InterpolatedString Regex]])]
             [clojure.string :as str]
             [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]])
-  (:import [nanoweave.ast.text InterpolatedString Regex]))
+  #?(:clj (:import [nanoweave.ast.text InterpolatedString Regex])))
 
 (extend-protocol Resolvable
   InterpolatedString

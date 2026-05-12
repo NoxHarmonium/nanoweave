@@ -2,26 +2,25 @@
       :author "Sean Dawson"}
  nanoweave.parsers.pattern-matching
   (:require [blancas.kern.core :refer [bind <|> <:> <?> fwd return]]
-            [nanoweave.parsers.base :refer [<s> pop-span]]
+            [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
             [blancas.kern.lexer.java-style :refer
              [identifier colon brackets comma-sep braces token]]
             [nanoweave.parsers.text :refer [regex]]
             [nanoweave.ast.pattern-matching :refer
              [->LiteralMatchOp ->VariableMatchOp ->KeyMatchOp
               ->KeyValueMatchOp ->ListPatternMatchOp ->MapPatternMatchOp
-              ->MatchClause ->Match ->RegexMatchOp]]
-            [nanoweave.utils :refer [declare-extern]]))
+              ->MatchClause ->Match ->RegexMatchOp]]))
 
 ; Forward declarations
 
-(declare-extern nanoweave.parsers.expr/expr)
+; (declare-extern replaced by fwd-expr for cross-platform support)
 
 ; Scopes
 
 (declare binding-target)
 (def literal-match
   "pareses an expression that pattern matches against a literal variable"
-  (<s> (<?> (bind [target (fwd nanoweave.parsers.expr/expr)
+  (<s> (<?> (bind [target (fwd-expr)
                    ps pop-span]
                   (return ((ps ->LiteralMatchOp) target)))
             "literal pattern match")))
@@ -82,7 +81,7 @@
   "A pattern match expression and an associated body that will be evaluated if the match succeeds"
   (<s> (<?> (bind [match binding-target
                    _ colon
-                   body (fwd nanoweave.parsers.expr/expr)
+                   body (fwd-expr)
                    ps pop-span]
                   (return ((ps ->MatchClause) match body)))
             "match clause")))

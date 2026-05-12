@@ -2,9 +2,9 @@
             that can be done on two expressions."
       :author "Sean Dawson"}
  nanoweave.ast.binary-functions
-  (:require [schema.core :as s]
-            [nanoweave.ast.base :refer [Resolvable]])
-  (:import [nanoweave.ast.base AstSpan]))
+  (:require [schema.core :as s :include-macros true]
+            [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
+  #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
 (s/defrecord MapOp [span :- AstSpan left :- Resolvable right :- Resolvable])
 (s/defrecord FilterOp [span :- AstSpan left :- Resolvable right :- Resolvable])
