@@ -98,4 +98,4 @@
 (def single-expression (<< expr eof))
 
 ; Wire up the CLJS forward reference to allow recursive grammar definitions
-#?(:cljs (reset! nanoweave.parsers.base/fwd-expr-atom single-expression))
+#?(:cljs (reset! nanoweave.parsers.base/fwd-expr-atom expr))

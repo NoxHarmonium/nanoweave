@@ -26,9 +26,14 @@
                    n))))
 
      (defn safe-type
-       "Returns the type of a value as a string, or 'Nil' for nil."
+       "Returns the type of a value as a string.
+        Uses the JS constructor name (e.g. \"Number\") when available,
+        falling back to (str (type x)) for types without a named constructor."
        [anything]
-       (if (nil? anything) "Nil" (str (type anything))))
+       (if (nil? anything)
+         "null"
+         (let [n (.-name (type anything))]
+           (if (seq n) n (str (type anything))))))
 
      (defn map-vals
        "Build map k -> (f v) for [k v] in map, preserving the initial type"

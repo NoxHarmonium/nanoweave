@@ -8,4 +8,4 @@
 (s/defrecord Lambda [span :- AstSpan param-list :- [s/Str] body :- Resolvable])
 (s/defrecord NoArgsLambda [span :- AstSpan body :- Resolvable])
 (s/defrecord FunCall [span :- AstSpan target :- Resolvable args :- [Resolvable]])
-(s/defrecord ArgList [span :- AstSpan arguments :- [Resolvable]])
+(s/defrecord ArgList [span :- AstSpan arg-exprs :- [Resolvable]])

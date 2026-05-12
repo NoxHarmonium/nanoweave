@@ -54,5 +54,5 @@
         :else (throw-resolve-error (str "Not sure how to call [" target "] (" (type target) ")") this))))
   ArgList
   (resolve-value [this input]
-    (let [arguments (:arguments this)]
-      {:resolved-arguments (map #(safe-resolve-value % input) arguments)})))
+    (let [arg-exprs (:arg-exprs this)]
+      {:resolved-arguments (map #(safe-resolve-value % input) arg-exprs)})))

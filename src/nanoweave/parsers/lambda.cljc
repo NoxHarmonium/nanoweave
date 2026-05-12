@@ -61,7 +61,7 @@
           (fail "expected ("))))
 (def function-arguments
   "A list of expressions passed to function application"
-  (<s> (<?> (bind [arguments (comma-sep (fwd-expr))
+  (<s> (<?> (bind [arg-exprs (comma-sep (fwd-expr))
                    ps pop-span]
-                  (return ((ps ->ArgList) arguments)))
+                  (return ((ps ->ArgList) arg-exprs)))
             "function arguments")))
