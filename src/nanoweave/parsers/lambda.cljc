@@ -1,7 +1,7 @@
 (ns ^{:doc "Parses operations to define functions and call them."
       :author "Sean Dawson"}
  nanoweave.parsers.lambda
-  (:require [blancas.kern.core :refer [bind <|> <+> <?> fwd return fail look-ahead many1 digit]]
+  (:require [blancas.kern.core :refer [bind <|> <+> <?> return fail look-ahead many1 digit]]
             [blancas.kern.lexer.java-style :refer
              [comma-sep identifier parens token sym lexeme]]
             [nanoweave.ast.lambda :refer [->Lambda ->NoArgsLambda ->FunCall ->ArgList]]

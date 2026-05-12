@@ -1,7 +1,7 @@
 (ns ^{:doc "Pareses literal values."
       :author "Sean Dawson"}
  nanoweave.parsers.literals
-  (:require [blancas.kern.core :refer [bind <?> <|> fwd optional sym* return]]
+  (:require [blancas.kern.core :refer [bind <?> <|> optional sym* return]]
             [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
             [blancas.kern.lexer.java-style :refer
              [identifier float-lit bool-lit nil-lit token braces brackets colon comma-sep identifier string-lit]]

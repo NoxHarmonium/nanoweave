@@ -1,6 +1,6 @@
 (ns ^{:doc "Parses the basic structure of a transform definition.", :author "Sean Dawson"}
  nanoweave.parsers.base
-  (:require [blancas.kern.core :refer [<|> bind fwd put-state return]]
+  (:require [blancas.kern.core :refer [<|> bind put-state return #?@(:clj [fwd])]]
             [nanoweave.ast.base :refer [->AstPos ->AstSpan #?@(:cljs [AstSpan])]]
             #?(:clj [nanoweave.utils :refer [declare-extern]])
             [schema.core :refer [validate] :include-macros true])

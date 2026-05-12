@@ -3,7 +3,7 @@
  nanoweave.parsers.text
   (:require [blancas.kern.core
              :refer
-             [<+> <?> <|> between bind fwd many return sym* token* fail]]
+             [<+> <?> <|> between bind many return sym* token* fail]]
             [blancas.kern.lexer.java-style :refer [lexeme]]
             [nanoweave.ast.scope :refer [->Expression]]
             [nanoweave.ast.text :refer [->InterpolatedString ->Regex]]
@@ -44,4 +44,4 @@
                                ps pop-span]
                               (try
                                 (return ((ps ->Regex) (re-pattern pattern)))
-                                (catch #?(:clj Exception :cljs :default) e (fail (.getMessage e)))))))))
+                                (catch #?(:clj Exception :cljs :default) e (fail (ex-message e)))))))))

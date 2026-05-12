@@ -14,7 +14,7 @@
 
 (s/defrecord AstPos [line :- s/Int col :- s/Int src :- s/Str])
 (s/defrecord AstSpan [start :- AstPos end :- AstPos])
-(s/defrecord ErrorWithContext [message :- s/Str type :- error-types ast-node :- Resolvable span :- AstSpan cause :- Exception input :- s/Str])
+(s/defrecord ErrorWithContext [message :- s/Str type :- error-types ast-node :- Resolvable span :- AstSpan cause :- #?(:clj Exception :cljs s/Any) input :- s/Str])
 
 (defn wrap-uncaught-error
   "In the unlikely case where an uncaught error slips through while resolving the AST

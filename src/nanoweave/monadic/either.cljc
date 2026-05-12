@@ -1,4 +1,5 @@
-(ns ^{:doc "Represents either a success value or an error value.", :author "Sean Dawson"}
+(ns ^{:doc "Represents either a success value or an error value.", :author "Sean Dawson"
+      :clj-kondo/config {:linters {:unused-binding {:level :off}}}}
  nanoweave.monadic.either
   (:require [schema.core :as s :include-macros true]
             #?(:clj [nanoweave.monadic.base :refer [defmonad]])))

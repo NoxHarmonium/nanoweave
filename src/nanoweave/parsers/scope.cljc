@@ -1,7 +1,7 @@
 (ns ^{:author "Sean Dawson"
       :doc "Parses operations that manipulate the values available in the scope of expressions."}
  nanoweave.parsers.scope
-  (:require [blancas.kern.core :refer [<?> bind fail fwd look-ahead return]]
+  (:require [blancas.kern.core :refer [<?> bind fail look-ahead return]]
             [nanoweave.parsers.base :refer [<s> pop-span fwd-expr]]
             [blancas.kern.lexer.java-style
              :refer
