@@ -1,0 +1,17 @@
+{:source-paths ["src"]
+
+ :dependencies [[org.blancas/kern "1.2.0"]
+                [prismatic/schema "1.4.1"]
+                [org.clojure/tools.macro "0.1.0"]]
+
+ :builds
+ {:demo {:target     :browser
+         :output-dir "public/js"
+         :asset-path "/js"
+         :modules    {:main {:init-fn nanoweave.demo.core/init}}}
+
+  :release {:target       :browser
+            :output-dir   "public/js"
+            :asset-path   "/js"
+            :modules      {:main {:init-fn nanoweave.demo.core/init}}
+            :compiler-options {:optimizations :advanced}}}}
