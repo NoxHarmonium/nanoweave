@@ -1,38 +1,10 @@
 (ns nanoweave.utils
-  (:require [clojure.walk :refer [prewalk]]
-            [cheshire.core :refer [parse-string]]
-            [clojure.string :refer [split-lines join]]))
+  (:require [clojure.string :refer [split-lines join]]))
 
-(defn read-json-with-doubles
-  "Reads JSON but makes sure that numbers are read as doubles.
-   In nanoweave we currently deal with all numbers as doubles,
-   like in Javascript. This may change in the future but keeps
-   it simple for now."
-  [string]
-  (let [json-map (parse-string string)]
-    (prewalk #(if (number? %1) (double %1) %1) json-map)))
+; Thanks: https://stackoverflow.com/a/4831170/1153203
 
-(defn convert-to-number
-  "You can coerce strings or other number types in to a Nanoweave Number type/
-   This makes sure that the conversion is done in a 'smart' way.
-   It will try very hard to do the conversion, even converting it to a string first,
-   but it will still blow up if the input doesn't make sense"
-  [anything]
-  (cond
-    (number? anything) (double anything)
-    (string? anything) (Double/parseDouble anything)
-    (boolean? anything) (if anything 1.0 0.0)
-    (nil? anything) anything
-    :else (try
-            (Double/parseDouble (str anything))
-            (catch Exception _ (str "Cannot convert type '" (type anything) "' to a number.")))))
-
-(defn safe-type
-  "Does the same thing as the built-in Clojure type function,
-   but will return 'Nil' instead of an empty string if it is passed
-   a nil value"
-  [anything]
-  (if (nil? anything) "Nil" (str (type anything))))
+(defn find-thing [needle haystack]
+  (keep-indexed #(when (= %2 needle) %1) haystack))
 
 ; From https://github.com/Prismatic/plumbing/
 (defn map-vals
@@ -45,13 +17,6 @@
     (persistent! (reduce-kv (fn [out-m k v] (assoc! out-m k (f v))) (transient {}) m))
     :else nil))
 
-(defn dynamically-load-class
-  "Loads a Java class into the current namespace and returns it"
-  [class-name]
-  (.importClass (the-ns *ns*)
-                (clojure.lang.RT/classForName class-name))
-  (clojure.lang.RT/classForName class-name))
-
 ; Thanks: https://stackoverflow.com/a/27914262
 
 (defn contains-many?
@@ -59,27 +24,13 @@
   [m ks]
   (every? #(contains? m %) ks))
 
-; Thanks: https://stackoverflow.com/a/20054111
-
-(defmacro declare-extern
-  [& syms]
-  (let [n (ns-name *ns*)]
-    `(do
-       ~@(for [s syms]
-           `(do
-              (ns ~(symbol (namespace s)))
-              (declare ~(symbol (name s)))))
-       (in-ns '~n))))
-
-; Thanks: https://stackoverflow.com/a/4831170/1153203
-
-(defn find-thing [needle haystack]
-  (keep-indexed #(when (= %2 needle) %1) haystack))
+(defn all-sequential? [coll]
+  (reduce #(and (sequential? %1) %2) coll))
 
 ;; Code Frame
 ; Inspired by https://babeljs.io/docs/en/babel-code-frame
 
-(def eol (System/getProperty "line.separator"))
+(def eol #?(:clj (System/getProperty "line.separator") :cljs "\n"))
 (def code-frame-options {:lines-above 2
                          :lines-below 3
                          :gutter "| "})
@@ -87,7 +38,7 @@
 (defn format-line
   "Formats a line of code for a code frame"
   [gutter lines line-number]
-  ; Line number is one based, the lines array is zero based 
+  ; Line number is one based, the lines array is zero based
   ; So we need to subtract one from the line number
   (str line-number gutter (get lines (dec line-number))))
 
@@ -121,14 +72,14 @@
                  [(format-line gutter lines line-num)
                   ; This strangeness is to support spans that go over a single line
                   (cond
-                     ; Single line - just highlight from min -> max column numbers
+                    ; Single line - just highlight from min -> max column numbers
                     (= min-line max-line) (format-highlight-cols gutter-length min-col max-col)
                     ; Multi line
-                    ; the highlighting on the first line goes from the start of the span to the end of the line 
+                    ; the highlighting on the first line goes from the start of the span to the end of the line
                     (= line-num min-line) (format-highlight-cols gutter-length min-col line-length)
                     ; The highlighting on the last line goes from the start of the line to the end of the span
                     (= line-num max-line) (format-highlight-cols gutter-length 1 max-col)
-                    ; the lhighlighting for the lines in the middle span the entire line because they are in the middle of the multi line span
+                    ; the highlighting for the lines in the middle span the entire line because they are in the middle of the multi line span
                     :else (format-highlight-cols gutter-length 1 line-length))])) line-range)]
     (join eol (flatten formatted-lines))))
 
@@ -201,8 +152,7 @@
   [{:keys [message span input]}]
   (let [{:keys [start end]} span
         {:keys [line col src]} start
-        preamble (format "Compliation failure: (ln: %d col: %d src: %s)\n"
-                         line col src)]
+        preamble (str "Compliation failure: (ln: " line " col: " col " src: " src ")\n")]
     (if (= start end)
       (format-code-frame line col input preamble message)
       (format-code-frame-span span input preamble message))))

@@ -1,11 +1,9 @@
 (ns nanoweave.resolvers.binary-other
   (:require [nanoweave.ast.binary-other :refer [DotOp ConcatOp OpenRangeOp ClosedRangeOp IsOp AsOp]]
             [nanoweave.resolvers.base :refer [handle-bin-op handle-prop-access safe-resolve-value]]
-            [nanoweave.utils :refer [convert-to-number]]
+            [nanoweave.io-utils :refer [convert-to-number]]
+            [nanoweave.utils :refer [all-sequential?]]
             [nanoweave.ast.base :refer [Resolvable]]))
-
-(defn- all-sequential? [coll]
-  (reduce #(and (sequential? %1) %2) coll))
 
 (extend-protocol Resolvable
   DotOp

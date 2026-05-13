@@ -3,7 +3,7 @@
             [nanoweave.ast.base :refer [Resolvable]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.resolvers.errors :refer [throw-resolve-error]]
-            #?(:clj [nanoweave.utils :refer [dynamically-load-class]]))
+            #?(:clj [nanoweave.io-utils :refer [dynamically-load-class]]))
   #?(:clj (:import [nanoweave.ast.scope Binding Expression ImportOp Indexing When])))
 
 (extend-protocol Resolvable

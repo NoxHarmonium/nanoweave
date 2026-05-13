@@ -1,7 +1,7 @@
 (ns nanoweave.fixture-test
   (:require [clojure.test :refer [deftest is testing]]
             [clojure.java.io :as io]
-            [nanoweave.utils :refer [read-json-with-doubles]]
+            [nanoweave.io-utils :refer [read-json-with-doubles]]
             [nanoweave.transformers.file-transformer :as transformer]
             [diff-eq.core :as de]))
 
