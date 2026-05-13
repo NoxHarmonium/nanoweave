@@ -1,6 +1,7 @@
 (ns nanoweave.demo.core
   (:require [nanoweave.demo.editor :refer [make-editor set-content]]
-            [nanoweave.transformers.string-transformer :refer [transform-strings]])
+            [nanoweave.transformers.string-transformer :refer [transform-strings]]
+            [nanoweave.utils :refer [format-error-with-context]])
   (:require-macros [nanoweave.demo.examples :refer [load-examples]]))
 
 (def examples (load-examples))
@@ -23,7 +24,7 @@
       (set-content output-view
                    (js/JSON.stringify (clj->js (:value result)) nil 2))
       (set-content output-view
-                   (str "Error: " (:message (:error result)))))))
+                   (format-error-with-context (:error result))))))
 
 ;; Debounce
 
