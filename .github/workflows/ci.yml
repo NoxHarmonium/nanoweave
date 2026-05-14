@@ -1,0 +1,88 @@
+name: CI
+
+on:
+    push:
+        branches: ["master"]
+    pull_request:
+        branches: ["master"]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Set up Java 21
+              uses: actions/setup-java@v4
+              with:
+                  distribution: temurin
+                  java-version: "21"
+
+            - name: Set up Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "24"
+                  cache: npm
+
+            - name: Install Leiningen
+              uses: DeLaGuardo/setup-clojure@13
+              with:
+                  lein: latest
+
+            - name: Cache Maven deps
+              uses: actions/cache@v4
+              with:
+                  path: ~/.m2
+                  key: m2-${{ hashFiles('project.clj') }}
+                  restore-keys: m2-
+
+            # The project uses a fork of kern that must be installed locally
+            - name: Install kern fork
+              run: |
+                  git clone https://github.com/NoxHarmonium/kern.git /tmp/kern
+                  cd /tmp/kern
+                  lein install
+
+            - name: Install npm deps
+              run: npm ci --legacy-peer-deps
+
+            - name: Lint and type-check (JVM)
+              run: |
+                  lein check
+                  lein eastwood
+                  lein clj-kondo
+                  lein cljfmt check
+
+            - name: JVM tests
+              run: lein test
+
+            - name: Compile CLJS test runner
+              run: npx shadow-cljs compile node-test
+
+            - name: CLJS tests
+              run: node target/node-test/tests.js
+
+            - name: Build demo
+              run: npx shadow-cljs release demo
+
+            - name: Upload demo artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: public/
+
+    # Separate job so the pages permission is scoped tightly
+    deploy-pages:
+        needs: test
+        if: github.ref == 'refs/heads/master'
+        runs-on: ubuntu-latest
+        permissions:
+            pages: write
+            id-token: write
+        environment:
+            name: github-pages
+            url: ${{ steps.deploy.outputs.page_url }}
+        steps:
+            - name: Deploy to GitHub Pages
+              id: deploy
+              uses: actions/deploy-pages@v4

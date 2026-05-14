@@ -78,3 +78,11 @@ node_modules
 .lsp/
 
 # End of https://www.gitignore.io/api/clojure,intellij,sublimetext,visualstudiocode
+
+
+# Shadow JS
+.shadow-cljs/
+public/js/
+
+# Macos
+.DS_Store

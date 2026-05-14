@@ -1,9 +1,10 @@
-(defproject nanoweave "1.2.8"
+(defproject nanoweave "1.2.8" ; x-release-please-version
   :description "A data transformation tool"
   :url "http://github.com/noxharmonium/nanoweave"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0"}
   :dependencies [[org.clojure/clojure "1.12.4"]
+                 [org.clojure/clojurescript "1.12.134"]
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "1.4.256"]
                  [prismatic/schema "1.4.1"]
@@ -37,5 +38,3 @@
                                ; No matter what I do, I can't get this error to be ignored via disable-warning or ignored-faults
                                :suspicious-expression]}
   :cljfmt {:remove-multiple-non-indenting-spaces? true})
-
-

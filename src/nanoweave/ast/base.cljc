@@ -1,0 +1,26 @@
+(ns ^{:doc "Defines the base protocol for the syntax that is parsed from the transform file.
+  The tokens are parsed to first class records rather than just clojure functions
+  so that in the future they can be extended with more features such as
+  better error handling and type validation.", :author "Sean Dawson"}
+ nanoweave.ast.base
+  (:require [schema.core :as s :include-macros true]))
+
+(defprotocol Resolvable
+  "Describes an AST node that can be resolved with an input.
+  Used to transform AST trees into a final value."
+  (resolve-value [this input] "Takes an input and resolves it to a final value."))
+
+(def error-types (s/enum :resolve-error :parse-error :input-read-error :nweave-read-error :write-error))
+
+(s/defrecord AstPos [line :- s/Int col :- s/Int src :- s/Str])
+(s/defrecord AstSpan [start :- AstPos end :- AstPos])
+; Note: In Javascript we can technically throw anything, there is no enforcement that you throw a js/Error. However, since this is for code we own, we can make sure we don't
+; do throw anything weird, so I think it is safe to type cause as js/Error
+(s/defrecord ErrorWithContext [message :- s/Str type :- error-types ast-node :- (s/protocol Resolvable) span :- AstSpan cause :- #?(:clj Exception :cljs js/Error) input :- s/Str])
+
+(defn wrap-uncaught-error
+  "In the unlikely case where an uncaught error slips through while resolving the AST
+   this function will wrap that generic error in a contextual error.
+   It won't be very useful because we don't know the node where the error was thrown."
+  [error-type ex root-node]
+  (->ErrorWithContext (ex-message ex) error-type root-node (:span root-node) ex nil))

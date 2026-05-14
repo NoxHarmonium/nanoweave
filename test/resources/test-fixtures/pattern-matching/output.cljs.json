@@ -1,0 +1,10 @@
+{
+    "lists": "1-2-3",
+    "maps": "4-5-6",
+    "key value pattern match": "match",
+    "mix identifiers and literals": "pass: 2 [4]",
+    "nested map pattern match": 3,
+    "match array": "correct",
+    "nested list pattern match": 10,
+    "head/tail": "head: 1 tail: [2 3]"
+}

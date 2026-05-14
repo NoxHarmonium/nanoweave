@@ -3,7 +3,7 @@
   (:require [blancas.kern.core :refer [parse]]
             [cheshire.core :refer [generate-string]]
             [nanoweave.ast.base :refer [wrap-uncaught-error]]
-            [nanoweave.utils :refer [read-json-with-doubles]]
+            [nanoweave.io-utils :refer [read-json-with-doubles]]
             [nanoweave.resolvers.base :refer [safe-resolve-value]]
             [nanoweave.parsers.expr :refer [single-expression]]
             [nanoweave.parsers.errors :refer [convert-pstate-to-error-with-context]]

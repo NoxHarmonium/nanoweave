@@ -3,7 +3,8 @@
  nanoweave.diagnostics.ast-dumper
   (:require
    [rhizome.viz :as r]
-   [nanoweave.utils :refer [read-json-with-doubles find-thing]]
+   [nanoweave.io-utils :refer [read-json-with-doubles]]
+   [nanoweave.utils :refer [find-thing]]
    [nanoweave.transformers.file-transformer :as transformer]
    [clojure.pprint :as pp])
   (:import [nanoweave.ast.literals StringLit FloatLit BoolLit]))
