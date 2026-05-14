@@ -14,7 +14,9 @@
 
 (s/defrecord AstPos [line :- s/Int col :- s/Int src :- s/Str])
 (s/defrecord AstSpan [start :- AstPos end :- AstPos])
-(s/defrecord ErrorWithContext [message :- s/Str type :- error-types ast-node :- Resolvable span :- AstSpan cause :- #?(:clj Exception :cljs s/Any) input :- s/Str])
+; Note: In Javascript we can technically throw anything, there is no enforcement that you throw a js/Error. However, since this is for code we own, we can make sure we don't
+; do throw anything weird, so I think it is safe to type cause as js/Error
+(s/defrecord ErrorWithContext [message :- s/Str type :- error-types ast-node :- Resolvable span :- AstSpan cause :- #?(:clj Exception :cljs js/Error) input :- s/Str])
 
 (defn wrap-uncaught-error
   "In the unlikely case where an uncaught error slips through while resolving the AST
