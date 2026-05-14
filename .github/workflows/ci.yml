@@ -31,7 +31,7 @@ jobs:
                   lein: latest
 
             - name: Cache Maven deps
-              uses: actions/cache@v4
+              uses: actions/cache@v5
               with:
                   path: ~/.m2
                   key: m2-${{ hashFiles('project.clj') }}
