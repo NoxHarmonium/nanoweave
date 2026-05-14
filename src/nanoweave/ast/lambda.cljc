@@ -5,7 +5,7 @@
             [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
   #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
-(s/defrecord Lambda [span :- AstSpan param-list :- [s/Str] body :- Resolvable])
-(s/defrecord NoArgsLambda [span :- AstSpan body :- Resolvable])
-(s/defrecord FunCall [span :- AstSpan target :- Resolvable args :- [Resolvable]])
-(s/defrecord ArgList [span :- AstSpan arg-exprs :- [Resolvable]])
+(s/defrecord Lambda [span :- AstSpan param-list :- [s/Str] body :- (s/protocol Resolvable)])
+(s/defrecord NoArgsLambda [span :- AstSpan body :- (s/protocol Resolvable)])
+(s/defrecord FunCall [span :- AstSpan target :- (s/protocol Resolvable) args :- (s/protocol Resolvable)])
+(s/defrecord ArgList [span :- AstSpan arg-exprs :- [(s/protocol Resolvable)]])

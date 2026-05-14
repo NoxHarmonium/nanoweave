@@ -5,5 +5,5 @@
             [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
   #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
-(s/defrecord InterpolatedString [span :- AstSpan body :- [Resolvable]])
-(s/defrecord Regex [span :- AstSpan regex :- #?(:clj [java.util.regex.Pattern] :cljs s/Any)])
+(s/defrecord InterpolatedString [span :- AstSpan body :- [(s/protocol Resolvable)]])
+(s/defrecord Regex [span :- AstSpan regex :- #?(:clj java.util.regex.Pattern :cljs js/RegExp)])

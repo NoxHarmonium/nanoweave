@@ -29,13 +29,18 @@
         (err inner-error)
         (err (wrap-uncaught-error :resolve-error ex ast))))))
 
+(defn parse-nweave-definition
+  "Takes a string with a nanoweave definition and parses it to an AST tree."
+  [nweave-definition filename]
+  (parse single-expression nweave-definition filename))
+
 (defn transform-strings
   "Takes an input JSON string and a nanoweave transform string,
    parses and resolves them, and returns an either monad result.
    On success the value is a JS-serialisable Clojure value.
    On failure the value is an ErrorWithContext record."
   [input-str transform-str]
-  (let [pstate (parse single-expression transform-str "<string>")]
+  (let [pstate (parse-nweave-definition transform-str "<string>")]
     (if (:ok pstate)
       (let [ast (:value pstate)
             input (read-json-with-doubles input-str)

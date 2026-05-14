@@ -5,6 +5,6 @@
             [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
   #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
-(s/defrecord NotOp [span :- AstSpan value :- Resolvable])
-(s/defrecord NegOp [span :- AstSpan value :- Resolvable])
-(s/defrecord TypeOfOp [span :- AstSpan value :- Resolvable])
+(s/defrecord NotOp [span :- AstSpan value :- (s/protocol Resolvable)])
+(s/defrecord NegOp [span :- AstSpan value :- (s/protocol Resolvable)])
+(s/defrecord TypeOfOp [span :- AstSpan value :- (s/protocol Resolvable)])

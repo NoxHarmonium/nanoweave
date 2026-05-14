@@ -6,8 +6,8 @@
             [nanoweave.ast.base :refer [Resolvable #?@(:cljs [AstSpan])]])
   #?(:clj (:import [nanoweave.ast.base AstSpan])))
 
-(s/defrecord AddOp [span :- AstSpan left :- Resolvable right :- Resolvable])
-(s/defrecord SubOp [span :- AstSpan left :- Resolvable right :- Resolvable])
-(s/defrecord MultOp [span :- AstSpan left :- Resolvable right :- Resolvable])
-(s/defrecord DivOp [span :- AstSpan left :- Resolvable right :- Resolvable])
-(s/defrecord ModOp [span :- AstSpan left :- Resolvable right :- Resolvable])
+(s/defrecord AddOp [span :- AstSpan left :- (s/protocol Resolvable) right :- (s/protocol Resolvable)])
+(s/defrecord SubOp [span :- AstSpan left :- (s/protocol Resolvable) right :- (s/protocol Resolvable)])
+(s/defrecord MultOp [span :- AstSpan left :- (s/protocol Resolvable) right :- (s/protocol Resolvable)])
+(s/defrecord DivOp [span :- AstSpan left :- (s/protocol Resolvable) right :- (s/protocol Resolvable)])
+(s/defrecord ModOp [span :- AstSpan left :- (s/protocol Resolvable) right :- (s/protocol Resolvable)])

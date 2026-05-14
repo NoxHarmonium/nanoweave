@@ -1,7 +1,10 @@
 (ns nanoweave.fixture-cljs-test
   (:require [cljs.test :refer [deftest is testing]]
+            [clojure.walk :refer [postwalk]]
             [nanoweave.io-utils :refer [read-json-with-doubles]]
-            [nanoweave.transformers.string-transformer :refer [transform-strings]]))
+            [nanoweave.transformers.string-transformer :refer [transform-strings parse-nweave-definition]]
+            [schema.core :as s]
+            [schema.utils :refer [record? class-schema]]))
 
 (defn- read-file [path]
   (let [fs (js/require "fs")]
@@ -19,6 +22,15 @@
        (read-file cljs-path)
        (read-file default-path)))))
 
+(defn- validate-ast-tree [ast]
+  (postwalk
+   (fn [node]
+     (when (record? node)
+       (when-let [schema (class-schema (type node))]
+         (s/validate schema node)))
+     node)
+   ast))
+
 (defn run-test-fixture [test-folder]
   (println "Running CLJS test fixture: " test-folder)
   (let [input-str (read-file (fixture-path test-folder "input.json"))
@@ -26,7 +38,11 @@
         nweave-str (read-file (fixture-path test-folder "transform.nweave"))
         actual (transform-strings input-str nweave-str)]
     (is (= (:ok actual) true) (str test-folder " - expected ok result"))
-    (is (= expected (:value actual)) (str test-folder " - value mismatch"))))
+    (is (= expected (:value actual)) (str test-folder " - value mismatch")))
+  (let [nweave-str (read-file (fixture-path test-folder "transform.nweave"))
+        pstate (parse-nweave-definition nweave-str (str "test-fixtures/" test-folder "/transform.nweave"))]
+    (is (= (:ok pstate) true) (str test-folder " - expected parse ok"))
+    (is (validate-ast-tree (:value pstate)) (str test-folder " - ast validation"))))
 
 (deftest fixture-test
   (testing "Structure Transformation"
