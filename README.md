@@ -1,7 +1,4 @@
 # nanoweave
-
-[![CircleCI](https://circleci.com/gh/NoxHarmonium/nanoweave.svg?style=svg)](https://circleci.com/gh/NoxHarmonium/nanoweave)
-
 A JSONesqe language for transforming
 the structure and values of documents.
 
@@ -21,6 +18,10 @@ the transformations between services.
 This is an ambitious goal
 at the moment is more of a project
 to learn Clojure and AST parsing.
+
+## Demo
+
+You can try an interactive browser based demo here: https://www.seandawson.info/nanoweave/
 
 ## Todo List
 
