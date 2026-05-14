@@ -12,8 +12,8 @@
     "@codemirror/language": "^6.11.0",
     "@codemirror/state": "^6.5.2",
     "@codemirror/view": "^6.36.3",
-    "@lezer/highlight": "1.2.1",
-    "shadow-cljs": "3.4.9"
+    "@lezer/highlight": "1.2.3",
+    "shadow-cljs": "3.4.10"
   },
   "dependencies": {
     "@codemirror/theme-one-dark": "^6.1.3"
