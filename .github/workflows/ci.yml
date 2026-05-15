@@ -67,7 +67,7 @@ jobs:
               run: npx shadow-cljs release demo
 
             - name: Upload demo artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@v5
               with:
                   path: public/
 
