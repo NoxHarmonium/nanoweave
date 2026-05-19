@@ -45,7 +45,7 @@ jobs:
                   lein install
 
             - name: Install npm deps
-              run: npm ci --legacy-peer-deps
+              run: npm ci --min-release-age=7
 
             - name: Lint and type-check (JVM)
               run: |
