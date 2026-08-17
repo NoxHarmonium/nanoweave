@@ -7,7 +7,7 @@
                  [org.clojure/clojurescript "1.12.145"]
                  [org.blancas/kern "1.1.0"]
                  [org.clojure/tools.cli "1.4.256"]
-                 [prismatic/schema "1.4.1"]
+                 [prismatic/schema "1.4.2"]
                  [rhizome "0.2.9"]
                  [cheshire "6.2.0"]
                  [org.clojure/data.xml "0.0.8"]
